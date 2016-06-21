@@ -2,8 +2,8 @@
 
 
 Yii::import('application.modules.aegameauthor.models.*');
-Yii::import('application.modules.aelogic.components.*');
-Yii::import('application.modules.aelogic.components.views.*');
+Yii::import('application.modules.aelogic.article.components.*');
+Yii::import('application.modules.aelogic.article.components.views.*');
 
 class ArticleFactory {
 

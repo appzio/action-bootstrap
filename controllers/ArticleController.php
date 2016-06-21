@@ -3,7 +3,7 @@
 
 Yii::import('application.modules.aegameauthor.models.*');
 Yii::import('application.modules.aegameauthor.components.*');
-Yii::import('application.modules.aelogic.components.*');
+Yii::import('application.modules.aelogic.article.components.*');
 
 class ArticleController {
 

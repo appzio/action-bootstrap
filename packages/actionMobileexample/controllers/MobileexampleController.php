@@ -22,7 +22,7 @@
 */
 
 Yii::import('application.modules.aegameauthor.models.*');
-Yii::import('application.modules.aelogic.components.*');
+Yii::import('application.modules.aelogic.article.components.*');
 Yii::import('application.modules.aelogic.packages.actionMobileregister.models.*');
 Yii::import('application.modules.aelogic.packages.actionMobilelogin.models.*');
 

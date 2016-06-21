@@ -1,6 +1,6 @@
 <?php
 
-Yii::import('application.modules.aelogic.components.*');
+Yii::import('application.modules.aelogic.article.components.*');
 
 class ArticleGallery extends ArticleComponent {
 

@@ -1,6 +1,6 @@
 <?php
 
-Yii::import('application.modules.aelogic.components.*');
+Yii::import('application.modules.aelogic.article.components.*');
 
 class Article_View_Imagebutton extends ArticleComponent {
 
