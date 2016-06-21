@@ -1,0 +1,9 @@
+vendor
+.idea
+.bash_history
+.bash_profile
+.gitconfig
+.lesshst
+.viminfo
+composer.lock
+

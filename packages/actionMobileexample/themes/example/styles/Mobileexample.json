@@ -1,0 +1,146 @@
+{
+
+
+  "ui_register_field_error": {
+    "font-ios": "Roboto-Regular",
+    "font-android": "Roboto",
+    "font-size": "12",
+    "color": "#f31919"
+  },
+
+  "text_link": {
+    "font-size": "12",
+    "alignment": "left",
+    "color": "#ffffff",
+    "font-ios": "Roboto-Regular",
+    "font-android": "Roboto",
+    "vertical-align": "middle",
+    "height": "35"
+  },
+
+  "text_link_right": {
+    "font-size": "12",
+    "alignment": "left",
+    "color": "#ffffff",
+    "font-ios": "Roboto-Regular",
+    "font-android": "Roboto",
+    "vertical-align": "middle",
+    "floating": "1",
+    "float": "right",
+    "height": "35"
+  },
+
+
+
+  "field-with-icon": {
+    "height": "45",
+    "margin": "10 40 0 40",
+    "vertical-align": "middle",
+    "background-color": "#ffffff",
+    "border-radius": "4"
+  },
+
+  "field-with-icon-error": {
+    "height": "45",
+    "margin": "10 40 0 40",
+    "vertical-align": "middle",
+    "background-color": "#ffffff",
+    "border-radius": "4",
+    "border-color": "#e51414",
+    "border-width": "1"
+  },
+
+  "register_field": {
+    "font-size": "12",
+    "alignment": "left",
+    "color": "#000000",
+    "font-ios": "Roboto-Regular",
+    "font-android": "Roboto",
+    "vertical-align": "middle",
+    "height": "35"
+  },
+
+  "general_button_style": {
+    "font-size": "12",
+    "font-style": "normal",
+    "background-color": "#ffffff",
+    "text-align": "center",
+    "color": "#f31919",
+    "font-ios": "Roboto-Regular",
+    "font-android": "Roboto",
+    "border-radius": "4",
+    "height": "45",
+    "vertical-align": "middle",
+    "margin": "5 40 5 40"
+  },
+
+  "general_textarea": {
+    "font-size": "12",
+    "font-style": "normal",
+    "background-color": "#ffffff",
+    "text-align": "center",
+    "color": "#000000",
+    "font-ios": "Roboto-Regular",
+    "font-android": "Roboto",
+    "border-radius": "4",
+    "height": "75",
+    "vertical-align": "middle",
+    "padding": "9 4 9 4",
+    "margin": "5 40 5 40"
+  },
+
+  "button_imate_red": {
+    "font-size": "12",
+    "font-style": "normal",
+    "background-color": "#f31919",
+    "text-align": "center",
+    "color": "#ffffff",
+    "font-ios": "Roboto-Regular",
+    "font-android": "Roboto",
+    "border-radius": "4",
+    "height": "45",
+    "padding": "9 4 9 4",
+    "margin": "5 40 5 40"
+  },
+
+
+  "register_field_error": {
+    "font-size": "12",
+    "font-style": "italic",
+    "background-color": "#f1c6c6",
+    "alignment": "center",
+    "color": "#474747",
+    "font-ios": "Roboto-Regular",
+    "font-android": "Roboto",
+    "border-color": "#474747",
+    "border-radius": "8",
+    "padding": "4 4 4 4",
+    "margin": "10 53 0 53"
+  },
+
+  "register_field_error_text": {
+    "font-size": "12",
+    "font-style": "italic",
+    "alignment": "center",
+    "color": "#df1c1c",
+    "font-ios": "Roboto-Regular",
+    "font-android": "Roboto",
+    "border-color": "#474747",
+    "border-radius": "8",
+    "padding": "4 4 4 4",
+    "margin": "10 53 0 53"
+  },
+
+  "register_fb_image": {
+    "border-radius": "8",
+    "padding": "4 4 4 4",
+    "margin": "53 53 0 53"
+  },
+
+  "register_menu" : {
+    "margin": "10 0 10 0"
+  },
+  "register_menu_2" : {
+    "margin": "7 0 10 0"
+  }
+}
