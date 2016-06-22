@@ -630,7 +630,6 @@ class ArticleController {
         return $output;
     }
 
-
     public function controlRefreshAction(){
         $onload['action'] = 'submit-form-content';
         return $onload;
