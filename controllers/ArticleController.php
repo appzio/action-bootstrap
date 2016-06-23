@@ -358,6 +358,13 @@ class ArticleController {
         }
     }
 
+    public function getFullPageLoader($color='#000000'){
+        $col[] = $this->getSpacer('80');
+        $col[] = $this->getLoader('',array('color' => $color));
+        $col[] = $this->getText('{#loading#}',array('style' => 'loader-text'));
+        return $this->getColumn($col);
+    }
+
     public function getVariable($varid){
         if(isset($this->submitvariables[$varid]) AND $this->submitvariables[$varid]){
             return $this->submitvariables[$varid];

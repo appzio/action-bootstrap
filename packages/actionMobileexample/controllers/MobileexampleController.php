@@ -31,11 +31,9 @@ class MobileexampleController extends ArticleController {
     public $data;
     public $theme;
 
-
-
-
     public function tab1(){
         $this->data = new StdClass();
+        $this->data->scroll[] = $this->getText('Hello World!');
         return $this->data;
     }
 
