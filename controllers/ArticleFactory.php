@@ -392,7 +392,8 @@ class ArticleFactory {
 
 
         /* preloading views */
-        if ( !empty($this->tabsimages) ) {
+
+        if(method_exists($this->childobj,'tab2')){
             $output = $this->getTabsView();
         } else {
             $output = $this->getDefaultView();
@@ -428,23 +429,23 @@ class ArticleFactory {
 
         $tabs = $this->tabsimages;
         $onload = array();
+        $key = 1;
 
-        foreach ($tabs as $key => $t) {
+        while ($key < 6) {
             $tabname = 'tab' . $key;
+            $key++;
 
             /* satisfy all others from cache except for the currently active tab */
-            //if ( $this->current_tab == $key AND method_exists($this->childobj,$tabname) ) {
+            if(method_exists($this->childobj,$tabname) ) {
                 $tabcontent = $this->childobj->$tabname();
 
-                if(isset($tabcontent->onload)){
-                    $onload = array_merge($onload,$tabcontent->onload);
+                if (isset($tabcontent->onload)) {
+                    $onload = array_merge($onload, $tabcontent->onload);
                 }
 
-                $tabcontent = $this->addTabJson($tabcontent,$key);
-                $output[$tabname] = (object) $tabcontent;
-/*            } else {
-                $output[$tabname] = (object) $this->getTabCache($tabname,$key);
-            }*/
+                $tabcontent = $this->addTabJson($tabcontent, $key);
+                $output[$tabname] = (object)$tabcontent;
+            }
         }
 
 
