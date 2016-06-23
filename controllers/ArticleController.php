@@ -470,6 +470,61 @@ class ArticleController {
         return $this->returnComponent('swipenavi','field','',$params);
     }
 
+
+    public function getTabs($content,$params=array(),$divider=false){
+        /* you can configure the needed params here */
+
+        if(count($content) == 1){
+            $width = '100%';
+        } elseif(count($content) == 2){
+            $width = '50%';
+        } elseif(count($content) == 3){
+            $width = '33%';
+        } elseif(count($content) == 4){
+            $width = '25%';
+        } elseif(count($content) == 5){
+            $width = '20%';
+        } else {
+            $width = '10%';
+        }
+
+        $count = 1;
+
+        foreach($content as $item){
+            $onclick = new StdClass();
+            $onclick->action = 'open-tab';
+            $onclick->action_config = $count;
+            $onclick->id = $count .'11';
+
+            $btn[] = $this->getText($item,array('padding' => '10 10 10 10',
+                'color' => $this->colors['top_bar_text_color'],'text-align' => 'center','width' => $width,
+                'onclick' => $onclick
+                ));
+
+            if($this->current_tab == $count){
+                $btn[] = $this->getText('',array('height' => '2','background-color' => $this->colors['top_bar_text_color'],'width' => $width));
+            } else {
+                $btn[] = $this->getText('',array('height' => '2','background-color' => $this->color_topbar,'width' => $width));
+            }
+
+            $col[] = $this->getColumn($btn);
+
+            if($divider){
+                $col[] = $this->getVerticalSpacer(1,array('background-color' => $this->colors['top_bar_text_color']));
+            }
+
+                        $count++;
+
+        }
+
+        if(isset($col)){
+            $row = $this->getRow($col,array('background-color' => $this->color_topbar));
+            return $row;
+        }
+
+    }
+
+
     public function rewriteActionConfigField($field,$newcontent){
         $this->rewriteconfigs[$field] = $newcontent;
     }
@@ -637,7 +692,6 @@ class ArticleController {
         return $output;
     }
 
-
     public function controlRefreshAction(){
         $onload['action'] = 'submit-form-content';
         return $onload;
@@ -708,7 +762,7 @@ class ArticleController {
         return $this->returnComponent('text','field','',$params);
     }
 
-    public function getVerticalSpacer($width){
+    public function getVerticalSpacer($width,$params=array()){
         $params['width'] = $width;
         return $this->returnComponent('text','field','',$params);
     }

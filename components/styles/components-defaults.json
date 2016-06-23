@@ -140,7 +140,7 @@
     "border-radius": "4",
     "vertical-align": "middle",
     "padding": "9 15 9 15",
-    "margin": "5 10 5 10"
+    "margin": "25 10 5 10"
   },
   "register-text-step-error": {
     "font-size": "13",
