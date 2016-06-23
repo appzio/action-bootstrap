@@ -34,9 +34,14 @@ class MobileexampleController extends ArticleController {
     public function tab1(){
         $this->data = new StdClass();
         $this->data->scroll[] = $this->getText('Hello World!');
+        $this->data->scroll[] = $this->getExampleString();
         return $this->data;
     }
 
+
+	public function getExampleString(){
+		return $this->getText('Hello from the main controller');
+	}
 
 
 }
