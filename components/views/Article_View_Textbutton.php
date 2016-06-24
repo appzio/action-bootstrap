@@ -31,28 +31,36 @@ class Article_View_Textbutton extends ArticleComponent {
         $producttype_android = $this->addParam('producttype_android',$this->options,false);
         $producttype_ios = $this->addParam('producttype_ios',$this->options,false);
 
-        $par['onclick'] = new StdClass();
-        $par['onclick']->id = $id;
-        $par['onclick']->state = 'active';
-        $par['onclick']->action = $action;
 
-        ( $config ? $par['onclick']->action_config = $config : false );
-        ( $open_popup ? $par['onclick']->open_popup = $open_popup : false );
-        ( $sync_open ? $par['onclick']->sync_open = $sync_open : false );
-        ( $sync_close ? $par['onclick']->sync_close = $sync_close : false );
-        ( $sync_upload ? $par['onclick']->sync_upload = $sync_upload : false );
-        ( $back_button ? $par['onclick']->back_button = $back_button : false );
-        ( $variable ? $par['onclick']->variable = $variable : false );
-        ( $product_id_ios ? $par['onclick']->product_id_ios = $product_id_ios : false );
-        ( $product_id_android ? $par['onclick']->product_id_android = $product_id_android : false );
-        ( $producttype_android ? $par['onclick']->producttype_android = $producttype_android : false );
-        ( $producttype_ios ? $par['onclick']->producttype_ios = $producttype_ios : false );
+        $onclick = $this->addParam('onclick',$this->options,false);
 
-        $par['onclick']->text = $this->content;
+        if(is_object($onclick)){
+            $par['onclick'] = $onclick;
+        } else {
+            $par['onclick'] = new StdClass();
+            $par['onclick']->id = $id;
+            $par['onclick']->state = 'active';
+            $par['onclick']->action = $action;
 
-        if($action == 'upload-image'){
-            $par['onclick']->max_dimensions = $max_dimensions;
+            ( $config ? $par['onclick']->action_config = $config : false );
+            ( $open_popup ? $par['onclick']->open_popup = $open_popup : false );
+            ( $sync_open ? $par['onclick']->sync_open = $sync_open : false );
+            ( $sync_close ? $par['onclick']->sync_close = $sync_close : false );
+            ( $sync_upload ? $par['onclick']->sync_upload = $sync_upload : false );
+            ( $back_button ? $par['onclick']->back_button = $back_button : false );
+            ( $variable ? $par['onclick']->variable = $variable : false );
+            ( $product_id_ios ? $par['onclick']->product_id_ios = $product_id_ios : false );
+            ( $product_id_android ? $par['onclick']->product_id_android = $product_id_android : false );
+            ( $producttype_android ? $par['onclick']->producttype_android = $producttype_android : false );
+            ( $producttype_ios ? $par['onclick']->producttype_ios = $producttype_ios : false );
+
+            $par['onclick']->text = $this->content;
+
+            if($action == 'upload-image'){
+                $par['onclick']->max_dimensions = $max_dimensions;
+            }
         }
+
 
         $item = new StdClass;
         $item->id = $id;
