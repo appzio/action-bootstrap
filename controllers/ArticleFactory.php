@@ -118,7 +118,7 @@ class ArticleFactory {
 
     public function actionInit(){
 
-        $this->current_tab = $this->getParam('tabid',$this->submit);
+        $this->current_tab = $this->getParam('tabid',$this->submit) ? $this->getParam('tabid',$this->submit) : 1;
         $this->menuid = $this->getParam('menuid',$this->submit);
         $vars = $this->getParam('variables',$this->submit);
 

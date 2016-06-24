@@ -358,10 +358,12 @@ class ArticleController {
         }
     }
 
-    public function getFullPageLoader($color='#000000'){
+    public function getFullPageLoader($color='#000000',$text=false){
+        $color = $color ? $color : '#000000';
+        $text = $text ? $text : '{#loading#}';
         $col[] = $this->getSpacer('80');
         $col[] = $this->getLoader('',array('color' => $color));
-        $col[] = $this->getText('{#loading#}',array('style' => 'loader-text'));
+        $col[] = $this->getText($text,array('style' => 'loader-text'));
         return $this->getColumn($col);
     }
 
@@ -463,6 +465,12 @@ class ArticleController {
         return $this->returnComponent('text','field',$content,$params);
     }
 
+    public function getStatisticsBox($content,$params=array()){
+        /* you can configure the needed params here */
+        return $this->returnComponent('statisticsbox','field',$content,$params);
+    }
+
+
     public function getSwipeNavi($totalcount,$currentitem,$params){
         /* you can configure the needed params here */
         $params['totalcount'] = $totalcount;
@@ -471,21 +479,21 @@ class ArticleController {
     }
 
 
-    public function getTabs($content,$params=array(),$divider=false){
+    public function getTabs($content,$params=array(),$divider=false,$indicatorontop=false){
         /* you can configure the needed params here */
 
         if(count($content) == 1){
-            $width = '100%';
+            $width = $this->screen_width;
         } elseif(count($content) == 2){
-            $width = '50%';
+            $width = round($this->screen_width/2,0);
         } elseif(count($content) == 3){
-            $width = '33%';
+            $width = round($this->screen_width/3,0);
         } elseif(count($content) == 4){
-            $width = '25%';
+            $width = round($this->screen_width/4,0);
         } elseif(count($content) == 5){
-            $width = '20%';
+            $width = round($this->screen_width/5,0);
         } else {
-            $width = '10%';
+            $width = round($this->screen_width/6,0);
         }
 
         $count = 1;
@@ -496,24 +504,32 @@ class ArticleController {
             $onclick->action_config = $count;
             $onclick->id = $count .'11';
 
-            $btn[] = $this->getText($item,array('padding' => '10 10 10 10',
-                'color' => $this->colors['top_bar_text_color'],'text-align' => 'center','width' => $width,
+            $btn1 = $this->getText($item,array('padding' => '10 10 10 10',
+                'color' => $this->colors['top_bar_text_color'],'text-align' => 'center',
                 'onclick' => $onclick
                 ));
 
             if($this->current_tab == $count){
-                $btn[] = $this->getText('',array('height' => '2','background-color' => $this->colors['top_bar_text_color'],'width' => $width));
+                $btn2 = $this->getText('',array('height' => '3','background-color' => $this->color_topbar_hilite,'width' => $width));
             } else {
-                $btn[] = $this->getText('',array('height' => '2','background-color' => $this->color_topbar,'width' => $width));
+                $btn2 = $this->getText('',array('height' => '3','background-color' => $this->color_topbar,'width' => $width));
             }
 
-            $col[] = $this->getColumn($btn);
+            if($indicatorontop){
+                $btn = array($btn2,$btn1);
+            } else {
+                $btn = array($btn1,$btn2);
+
+            }
+
+            $col[] = $this->getColumn($btn,array('width' => $width));
+            unset($btn);
 
             if($divider){
                 $col[] = $this->getVerticalSpacer(1,array('background-color' => $this->colors['top_bar_text_color']));
             }
 
-                        $count++;
+            $count++;
 
         }
 
@@ -1046,6 +1062,8 @@ class ArticleController {
 
         return $vars;
     }
+
+
 
 
     /* depreceated */

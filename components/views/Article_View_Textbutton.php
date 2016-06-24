@@ -26,6 +26,11 @@ class Article_View_Textbutton extends ArticleComponent {
         $smalltext = $this->addParam('small_text',$this->options,false);
         $icon = $this->addParam('icon',$this->options,false);
 
+        $product_id_ios = $this->addParam('product_id_ios',$this->options,false);
+        $product_id_android = $this->addParam('product_id_android',$this->options,false);
+        $producttype_android = $this->addParam('producttype_android',$this->options,false);
+        $producttype_ios = $this->addParam('producttype_ios',$this->options,false);
+
         $par['onclick'] = new StdClass();
         $par['onclick']->id = $id;
         $par['onclick']->state = 'active';
@@ -38,7 +43,10 @@ class Article_View_Textbutton extends ArticleComponent {
         ( $sync_upload ? $par['onclick']->sync_upload = $sync_upload : false );
         ( $back_button ? $par['onclick']->back_button = $back_button : false );
         ( $variable ? $par['onclick']->variable = $variable : false );
-        ( $submit_menu_id ? $par['onclick']->submit_menu_id = $submit_menu_id : false );
+        ( $product_id_ios ? $par['onclick']->product_id_ios = $product_id_ios : false );
+        ( $product_id_android ? $par['onclick']->product_id_android = $product_id_android : false );
+        ( $producttype_android ? $par['onclick']->producttype_android = $producttype_android : false );
+        ( $producttype_ios ? $par['onclick']->producttype_ios = $producttype_ios : false );
 
         $par['onclick']->text = $this->content;
 
