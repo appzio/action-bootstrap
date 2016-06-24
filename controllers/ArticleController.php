@@ -142,7 +142,7 @@ class ArticleController {
 
     public function saveVariable($variable,$value){
         if ( !is_numeric($variable) ) {
-            $variable = $this->getVariableId($variable)
+            $variable = $this->getVariableId($variable);
         }
 
         AeplayVariable::updateWithId($this->playid,$variable,$value);
