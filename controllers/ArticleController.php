@@ -140,8 +140,12 @@ class ArticleController {
         $this->appkeyvaluestorage->game_id = $this->gid;
     }
 
-    public function saveVariable($variablename,$value){
-        AeplayVariable::updateWithId($this->playid,$this->getVariableId($variablename),$value);
+    public function saveVariable($variable,$value){
+        if ( !is_numeric($variable) ) {
+            $variable = $this->getVariableId($variable)
+        }
+
+        AeplayVariable::updateWithId($this->playid,$variable,$value);
         $this->loadVariableContent(true);
     }
 
