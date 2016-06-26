@@ -510,7 +510,7 @@ class ArticleController {
 
             $btn1 = $this->getText($item,array('padding' => '10 10 10 10',
                 'color' => $this->colors['top_bar_text_color'],'text-align' => 'center',
-                'onclick' => $onclick
+                'onclick' => $onclick,'font-size' => '14','font-ios' => 'Roboto-Regular'
                 ));
 
             if($this->current_tab == $count){
