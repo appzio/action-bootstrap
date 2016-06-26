@@ -75,7 +75,7 @@ class ArticleUserinfo extends ArticleComponent {
                 }
             }
             
-            if($userinfo){
+            if($userinfo AND is_string($userinfo)){
                 $userpic = $this->factoryobj->getUserPic($user);
                 $columns[] = $this->factoryobj->getImage( $userpic,array('crop' => 'round','width' => '80'));
                 $columns[] = $this->factoryobj->getText( 'Author: ' . $userinfo ,$style);
