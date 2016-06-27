@@ -488,16 +488,22 @@ class ArticleController {
 
         if(count($content) == 1){
             $width = $this->screen_width;
+            $fontsize = '14';
         } elseif(count($content) == 2){
             $width = round($this->screen_width/2,0);
+            $fontsize = '14';
         } elseif(count($content) == 3){
             $width = round($this->screen_width/3,0);
+            $fontsize = '14';
         } elseif(count($content) == 4){
             $width = round($this->screen_width/4,0);
+            $fontsize = '12';
         } elseif(count($content) == 5){
             $width = round($this->screen_width/5,0);
+            $fontsize = '10';
         } else {
             $width = round($this->screen_width/6,0);
+            $fontsize = '10';
         }
 
         $count = 1;
@@ -510,7 +516,7 @@ class ArticleController {
 
             $btn1 = $this->getText($item,array('padding' => '10 10 10 10',
                 'color' => $this->colors['top_bar_text_color'],'text-align' => 'center',
-                'onclick' => $onclick,'font-size' => '14','font-ios' => 'Roboto-Regular'
+                'onclick' => $onclick,'font-size' => $fontsize,'font-ios' => 'Roboto-Regular'
                 ));
 
             if($this->current_tab == $count){
