@@ -51,6 +51,9 @@ class MobileexampleController extends ArticleController {
         $this->setHeader();
         $value = $this->getSubmitVariable('searchterm') ? $this->getSubmitVariable('searchterm') : '';
         $row[] = $this->getImage('search-icon-for-field.png',array('height' => '25'));
+
+        Yii::import('application.modules.aelogic.packages.actionMobileexample.models.*');
+
         $row[] = $this->getFieldtext($value,array('style' => 'example_searchbox_text',
             'hint' => '{#free_text_search#}','id' => 'searchbox','variable' => 'searchterm',
             'suggestions' => MobileexampleAccessor::getInitialWordList(10),
