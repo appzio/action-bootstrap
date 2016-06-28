@@ -11,7 +11,7 @@ class MobileexampleAccessor extends ArticleModel {
 
 
     public static function getInitialWordList($limit){
-        $array = self::getLetter('',$limit);
+        $array = self::getLetter('',false,$limit);
         return $array;
     }
 
