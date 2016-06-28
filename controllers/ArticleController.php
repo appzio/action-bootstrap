@@ -654,6 +654,7 @@ class ArticleController {
         $file = $path .'/countriesToCities.json';
         $cities = file_get_contents($file);
         $cities = json_decode($cities,true);
+        sort($cities);
         return $cities;
     }
 
