@@ -282,7 +282,11 @@ class ArticleChat extends ArticleComponent {
         $msg = end($this->chat_content['msgs']);
         $message_text = $msg['msg'];
 
-        $message_id = $this->factoryobj->mobilechatobj->addMessage( $message_text );
+        $offset = Helper::getTimezoneOffset('Europe/London','Europe/Sofia');
+        $current_time = time() + $offset - 3600;
+        $time = date('Y-m-d H:i:s', $current_time);
+
+        $message_id = $this->factoryobj->mobilechatobj->addMessage( $message_text, $time );
 
         if ( isset($msg['attachment']) and !empty($msg['attachment']) ) {
             $this->factoryobj->mobilechatobj->addAttachment( $message_id, $msg['attachment'] );
@@ -381,7 +385,7 @@ class ArticleChat extends ArticleComponent {
             }
 
             $columns[] = $this->factoryobj->getColumn(array(
-                    $this->factoryobj->getImagebutton( 'sendbutton.png', '969696', false, array( 'sync_upload' => 1 ) )
+                    $this->factoryobj->getImagebutton( 'sendbutton.png', 'submit-msg', false, array( 'sync_upload' => 1 ) )
                 ), array( 'width' => '13%','margin'=>'0 10 0 2' ));
 
             $output[] = $this->factoryobj->getRow($columns,array('margin' => '10 0 10 0'));
