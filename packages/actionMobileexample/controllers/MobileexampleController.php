@@ -54,21 +54,22 @@ class MobileexampleController extends ArticleController {
 
         Yii::import('application.modules.aelogic.packages.actionMobileexample.models.*');
 
+        $loader[] = $this->getLoader('Loading',array('color' => '#000000'));
+
         $row[] = $this->getFieldtext($value,array('style' => 'example_searchbox_text',
             'hint' => '{#free_text_search#}','id' => 'searchbox','variable' => 'searchterm',
             'suggestions' => MobileexampleAccessor::getInitialWordList(10),
             'suggestions_style_row' => 'example_list_row','suggestions_text_style' => 'example_list_text',
-            'submit_on_select' => '1'
+            'submit_on_select' => '1',
+            'loading-content' => $loader
             ));
         $col[] = $this->getRow($row,array('style' => 'example_searchbox'));
         $col[] = $this->getTextbutton('Search',array('style' => 'example_searchbtn','id' => 'dosearch'));
         $this->data->header[] = $this->getRow($col,array('background-color' => $this->color_topbar));
-
-
-
-
         $this->data->scroll[] = $this->getText('This should submit on each entry');
-        $value = $this->getSubmitVariable('searchterm') ? $this->getSubmitVariable('searchterm') : '';
+
+
+/*        $value = $this->getSubmitVariable('searchterm') ? $this->getSubmitVariable('searchterm') : '';
         $row[] = $this->getImage('search-icon-for-field.png',array('height' => '25'));
         $row[] = $this->getFieldtext($value,array('style' => 'example_searchbox_text',
             'hint' => '{#free_text_search#}','id' => 'searchbox','variable' => 'searchterm',
@@ -78,7 +79,7 @@ class MobileexampleController extends ArticleController {
         ));
         $col[] = $this->getRow($row,array('style' => 'example_searchbox'));
         $col[] = $this->getTextbutton('Search',array('style' => 'example_searchbtn','id' => 'dosearch'));
-        $this->data->scroll[] = $this->getRow($col,array('background-color' => $this->color_topbar));
+        $this->data->scroll[] = $this->getRow($col,array('background-color' => $this->color_topbar));*/
 
 
         return $this->data;
