@@ -58,7 +58,8 @@ class MobileexampleController extends ArticleController {
 
         $row[] = $this->getFieldtext($value,array('style' => 'example_searchbox_text',
             'hint' => '{#free_text_search#}','submit_menu_id' => 'searchbox','variable' => 'searchterm',
-            'suggestions' => MobileexampleAccessor::getInitialWordList(10),'id' => 'something',
+            //'suggestions' => MobileexampleAccessor::getInitialWordList(10),
+            'id' => 'something',
             'suggestions_style_row' => 'example_list_row','suggestions_text_style' => 'example_list_text',
             'submit_on_entry' => '1',
             'loading-content' => $loader
