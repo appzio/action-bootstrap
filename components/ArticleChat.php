@@ -56,6 +56,19 @@ class ArticleChat extends ArticleComponent {
         $this->context_key = $this->addParam('context_key',$this->options,false);
         
         $this->factoryobj->initMobileChat( $this->context, $this->context_key );
+
+        /*
+        $page = 1;
+
+        if ( isset($this->submit['next_page_id']) ) {
+            $page = $this->submit['next_page_id'];
+        }
+
+        $num_rec_per_page = 10;
+        $start_from = ($page-1) * $num_rec_per_page;
+        $content = $this->factoryobj->mobilechatobj->getChatContent( $start_from, $num_rec_per_page );
+        */
+
         $content = $this->factoryobj->mobilechatobj->getChatContent();
 
         // App specific settings
@@ -101,20 +114,31 @@ class ArticleChat extends ArticleComponent {
     private function getChat() {
 
         $this->saveChatMsg( $this->submitvariables );
+        $this->markMsgsAsRead();
 
-        $items = $this->renderChatMsgs( );
+        $items = $this->renderChatMsgs();
+
+        // Still some work to be done here ..
+        // $next_page_id = 2;
+
+        // if ( isset($this->submit['next_page_id']) ) {
+        //     $next_page_id = $this->submit['next_page_id'] + 1;
+        // }
+        // $output[] = $this->factoryobj->getInfinitescroll( $items, array( 'next_page_id' => $next_page_id ) );
+
         $output = array();
-
 
         foreach ($items as $item) {
             $output[] = $item;
         }
 
+        $output[] = $this->factoryobj->getSpacer( 10 );
+
         return $output;
     }
 
 
-    private function renderChatMsgs( ){
+    private function renderChatMsgs() {
 
         $output = array();
 
@@ -123,13 +147,18 @@ class ArticleChat extends ArticleComponent {
             return $output;
         }
 
-        $msgs = (object)array_reverse($this->chat_content['msgs']);
-        $count = 0;
+        $msgs = (object) $this->chat_content['msgs'];
+        $count = count( $msgs );
 
-        foreach ($msgs as $msg) {
+        foreach ($msgs as $i => $msg) {
 
             if ( !isset($msg['name']) OR !is_string($msg['name']) ) {
                 continue;
+            }
+
+            $seen_text = '';
+            if ( $count == ($i+1) AND $this->userIsOwner( $msg ) ) {
+                $seen_text = $this->checkIfSeen( $msg );
             }
 
             $userInfo = $this->getUserInfo( $msg );
@@ -159,40 +188,29 @@ class ArticleChat extends ArticleComponent {
                     $this->factoryobj->getImage('flipped-beak.png')
                 ), array( 'style' => 'chat-column-2' ));
 
-            if ( $this->isPersonalMessage( $msg ) ) {
-                $output[] = $this->factoryobj->getRow(array($column3, $column4, $column1), array( 'style' => 'chat-row-msg-mine' ));  
+            if ( $this->userIsOwner( $msg ) ) {
+                $output[] = $this->factoryobj->getRow(array($column3, $column4, $column1), array( 'style' => 'chat-row-msg-mine' ));
+                if ( $seen_text ) {
+                    $output[] = $seen_text;
+                }
             } else {
                 $output[] = $this->factoryobj->getRow(array($column1, $column2, $column3),array( 'style' => 'chat-row-msg' ));
             }
 
             unset($colitems);
-            $count++;
-
-            $cc = (array)$msgs;
-
-            if(isset($this->submit['menuid'])){
-                if($this->submit['menuid'] == 667){
-                    $showall = true;
-                }
-            }
-
-            if($count == 10 AND $cc > 11 AND !isset($showall)){
-                // $output[] = $this->factoryobj->getRefresh('Load rest of the messages');
-                // break;
-            }
         }
 
         return $output;
     }
 
 
-    private function isPersonalMessage( $message ) {
+    private function userIsOwner( $message ) {
 
         if ( is_array($message) ) {
             $message = (object) $message;
         }
 
-        if ( $message->name == 'Administrator' ) {
+        if ( $message->user == $this->playid ) {
             return true;
         }
 
@@ -260,7 +278,7 @@ class ArticleChat extends ArticleComponent {
             $new['date'] = date('D, j. \of M @ H:i');
             $new['profilepic'] = $this->factoryobj->getImageFileName($pic);
             $new['msg'] = $msg['66666660'];
-            $new['user'] = $this->playobj->user_id;
+            $new['user'] = $this->playid;
 
             $var = AeplayVariable::getArrayOfPlayvariables($this->playid);
 
@@ -282,8 +300,7 @@ class ArticleChat extends ArticleComponent {
         $msg = end($this->chat_content['msgs']);
         $message_text = $msg['msg'];
 
-        $offset = Helper::getTimezoneOffset('Europe/London','Europe/Sofia');
-        $current_time = time() + $offset - 3600;
+        $current_time = Helper::getCurrentTime();
         $time = date('Y-m-d H:i:s', $current_time);
 
         $message_id = $this->factoryobj->mobilechatobj->addMessage( $message_text, $time );
@@ -399,6 +416,34 @@ class ArticleChat extends ArticleComponent {
         }
 
         return $output;
+    }
+
+    public function checkIfSeen( $message ) {
+
+        $is_seen = $this->factoryobj->mobilechatobj->checkMessageStatus( $message['id'] );
+
+        if ( $is_seen ) {
+            return $this->factoryobj->getText( 'Seen', array( 'style' => 'message-status-text' ) );
+        }
+
+        return $this->factoryobj->getText( 'Delivered', array( 'style' => 'message-status-text' ) );
+    }
+
+    public function markMsgsAsRead() {
+
+        foreach ($this->chat_content['msgs'] as $message) {
+            
+            if ( $this->userIsOwner( $message ) ) {
+                continue;
+            }
+
+            if ( $message['msg_is_read'] ) {
+                continue;
+            }
+
+            $this->factoryobj->mobilechatobj->updateMessageStatus( $message['id'] );
+        }
+
     }
 
     private function stripUrls($msg){
