@@ -25,7 +25,6 @@
   "chat-column-3": {
     "width": "78%",
     "vertical-align": "top",
-    "text-align": "left",
     "margin": "12 0 0 0",
     "padding": "0 0 0 0",
     "background-color": "#f4f4f4",
@@ -43,7 +42,6 @@
   "chat-msg-info": {
     "font-size": "9",
     "font-style": "normal",
-    "text-align": "left",
     "color": "#949494",
     "font-ios": "Roboto-Regular",
     "font-android": "Roboto",
@@ -53,7 +51,6 @@
   "chat-msg-text": {
     "font-size": "13",
     "font-style": "normal",
-    "text-align": "left",
     "color": "#474747",
     "font-ios": "Roboto-Regular",
     "font-android": "Roboto",
@@ -82,5 +79,13 @@
     "font-ios": "Roboto-Regular",
     "font-android": "Roboto",
     "margin": "5 15 5 15"
+  },
+
+  "message-status-text": {
+    "font-size": "10",
+    "color": "#949494",
+    "text-align": "right",
+    "margin": "2 80 2 15"
   }
+  
 }

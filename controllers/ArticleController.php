@@ -96,6 +96,9 @@ class ArticleController {
     /* @var Aechat */
     public $mobilechatobj;
 
+    /* @var AeplayDatastorage */
+    public $playdatastorage;
+
     /* @var AeplayKeyvaluestorage */
     public $playkeyvaluestorage;
 
@@ -131,6 +134,10 @@ class ArticleController {
     }
 
     public function initKeyValueStorage(){
+        /* user-specific values ( extended storage ) */
+        $this->playdatastorage = new AeplayDatastorage();
+        $this->playdatastorage->play_id = $this->playid;
+
         /* user-specific values */
         $this->playkeyvaluestorage = new AeplayKeyvaluestorage();
         $this->playkeyvaluestorage->play_id = $this->playid;
@@ -658,28 +665,30 @@ class ArticleController {
         return $cities;
     }
 
-    public function getCheckbox($varname, $title,$error=false){
+    public function getCheckbox($varname, $title, $error = false, $params = false){
         $styles = array(
             'width' => '120',
             'text-align' => 'left',
-            'font-ios' => 'Roboto-Bold'
+            'font-ios' => 'Roboto-Regular',
+            'font-android' => 'Roboto',
         );
 
-        if ( isset($this->fontstyle) AND !empty($this->fontstyle) ) {
-            $styles = array_merge($styles, $this->fontstyle);
+        if ( !empty($params) ) {
+            $styles = array_merge($styles, $params);
         }
 
         $columns[] = $this->getText($title, $styles);
-        $columns[] = $this->getFieldonoff($this->getSavedVariable($varname),array('alignment' => 'left','margin'=>'0 0 0 0',
+        $columns[] = $this->getFieldonoff($this->getSavedVariable($varname),array(
             'value' => $this->getSavedVariable($varname),
-            'variable' => $this->getVariableId($varname)));
+            'variable' => $this->getVariableId($varname))
+        );
 
-        if($error){
-            $row[] = $this->getRow($columns,array('margin' => '5 10 5 30'));
-            $row[] = $this->getText($error,array( 'style' => 'register-text-step-error'));
+        if ($error) {
+            $row[] = $this->getRow($columns, array('margin' => '5 10 5 30'));
+            $row[] = $this->getText($error, array( 'style' => 'register-text-step-error'));
             return $this->getColumn($row);
         } else {
-            return $this->getRow($columns,array('margin' => '5 10 5 30'));
+            return $this->getRow($columns, array('margin' => '5 10 5 30'));
         }
     }
 
