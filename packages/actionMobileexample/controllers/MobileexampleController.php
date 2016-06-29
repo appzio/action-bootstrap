@@ -57,16 +57,28 @@ class MobileexampleController extends ArticleController {
         $loader[] = $this->getLoader('Loading',array('color' => '#000000'));
 
         $row[] = $this->getFieldtext($value,array('style' => 'example_searchbox_text',
-            'hint' => '{#free_text_search#}','id' => 'searchbox','variable' => 'searchterm',
-            'suggestions' => MobileexampleAccessor::getInitialWordList(10),
+            'hint' => '{#free_text_search#}','submit_menu_id' => 'searchbox','variable' => 'searchterm',
+            'suggestions' => MobileexampleAccessor::getInitialWordList(10),'id' => 'something',
             'suggestions_style_row' => 'example_list_row','suggestions_text_style' => 'example_list_text',
-            'submit_on_select' => '1',
+            'submit_on_entry' => '1',
             'loading-content' => $loader
             ));
         $col[] = $this->getRow($row,array('style' => 'example_searchbox'));
         $col[] = $this->getTextbutton('Search',array('style' => 'example_searchbtn','id' => 'dosearch'));
         $this->data->header[] = $this->getRow($col,array('background-color' => $this->color_topbar));
-        $this->data->scroll[] = $this->getText('This should submit on each entry');
+
+        if($this->menuid == 'searchbox'){
+            if(isset($this->submitvariables['searchterm']) AND strlen($this->submitvariables['searchterm']) > 0){
+                $searchterm = $this->submitvariables['searchterm'];
+                $wordlist = MobileexampleAccessor::getLetter($searchterm,10);
+
+                foreach($wordlist as $word){
+                    $this->data->scroll[] = $this->getText($word);
+                }
+            }
+        } else {
+            $this->data->scroll[] = $this->getText('This should submit on each entry');
+        }
 
 
 /*        $value = $this->getSubmitVariable('searchterm') ? $this->getSubmitVariable('searchterm') : '';

@@ -29,14 +29,16 @@ class MobileexampleAccessor extends ArticleModel {
             if($loosematch){
                 if(strstr($word,$key)){
                     if(!isset($output[$pointer]) OR count($output[$pointer]) < $limit){
-                        $output[$pointer][] = $word;
+                        $output[] = $word;
+                        //$output[$pointer][] = $word;
                     }
                 }
             } else {
                 $wordpart = substr($word,0,$len);
                 if($wordpart == $key){
                     if(!isset($output[$pointer]) OR count($output[$pointer]) < $limit) {
-                        $output[$pointer][] = $word;
+                        //$output[$pointer][] = $word;
+                        $output[] = $word;
                     }
                 }
             }
