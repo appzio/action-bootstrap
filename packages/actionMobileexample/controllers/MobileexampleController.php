@@ -62,7 +62,7 @@ class MobileexampleController extends ArticleController {
             'id' => 'something',
             'suggestions_style_row' => 'example_list_row','suggestions_text_style' => 'example_list_text',
             'submit_on_entry' => '1',
-            'loading-content' => $loader
+            'loading_content' => $loader
             ));
         $col[] = $this->getRow($row,array('style' => 'example_searchbox'));
         $col[] = $this->getTextbutton('Search',array('style' => 'example_searchbtn','id' => 'dosearch'));
