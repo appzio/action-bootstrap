@@ -80,10 +80,14 @@ class MobileexampleController extends ArticleController {
                 }
             }
         } else {
-            $this->data->scroll[] = $this->getText('This should submit on each entry',array('visibility' => 'delay','visibility_delay' => '0.5'));
+            $this->data->scroll[] = $this->getText('This should submit on each entry',array(
+                'visibility' => 'delay','visibility_delay' => '0.5',
+                'transition' => 'pop', 'time_to_live' => '5'
+            ));
         }
 
-        $this->data->scroll[] = $this->getText('This should appear after a bit',array('visibility' => 'delay','visibility_delay' => '1.5'));
+        $this->data->scroll[] = $this->getText('This should appear after a bit',array(
+            'visibility' => 'delay','visibility_delay' => '1.5','transition' => 'fade'));
 
 /*        $value = $this->getSubmitVariable('searchterm') ? $this->getSubmitVariable('searchterm') : '';
         $row[] = $this->getImage('search-icon-for-field.png',array('height' => '25'));

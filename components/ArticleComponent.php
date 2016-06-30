@@ -191,7 +191,16 @@ class ArticleComponent {
         if ( isset($this->options['visibility_delay']) ) {
             $obj->visibility_delay = $this->options['visibility_delay'];
         }
-        
+
+        if ( isset($this->options['transition']) ) {
+            $obj->transition = $this->options['transition'];
+        }
+
+        if ( isset($this->options['time_to_live']) ) {
+            $obj->time_to_live = $this->options['time_to_live'];
+        }
+
+
         return $this->addStyles($obj,$this->options);
 
     }
