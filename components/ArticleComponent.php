@@ -184,6 +184,14 @@ class ArticleComponent {
             }
         }
 
+        if ( isset($this->options['visibility']) ) {
+            $obj->visibility = $this->options['visibility'];
+        }
+
+        if ( isset($this->options['visibility_delay']) ) {
+            $obj->visibility_delay = $this->options['visibility_delay'];
+        }
+        
         return $this->addStyles($obj,$this->options);
 
     }
