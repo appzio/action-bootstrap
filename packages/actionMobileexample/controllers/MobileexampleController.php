@@ -54,7 +54,7 @@ class MobileexampleController extends ArticleController {
 
         Yii::import('application.modules.aelogic.packages.actionMobileexample.models.*');
 
-        $loader[] = $this->getLoader('Loading',array('color' => '#000000'));
+        $loader = $this->getLoader('Loading',array('color' => '#000000'));
 
         $row[] = $this->getFieldtext($value,array('style' => 'example_searchbox_text',
             'hint' => '{#free_text_search#}','submit_menu_id' => 'searchbox','variable' => 'searchterm',
@@ -67,6 +67,8 @@ class MobileexampleController extends ArticleController {
         $col[] = $this->getRow($row,array('style' => 'example_searchbox'));
         $col[] = $this->getTextbutton('Search',array('style' => 'example_searchbtn','id' => 'dosearch'));
         $this->data->header[] = $this->getRow($col,array('background-color' => $this->color_topbar));
+
+        $this->os->whatever->soon = 'ykis';
 
         if($this->menuid == 'searchbox'){
             if(isset($this->submitvariables['searchterm']) AND strlen($this->submitvariables['searchterm']) > 0){
