@@ -68,7 +68,7 @@ class MobileexampleController extends ArticleController {
         $col[] = $this->getTextbutton('Search',array('style' => 'example_searchbtn','id' => 'dosearch'));
         $this->data->header[] = $this->getRow($col,array('background-color' => $this->color_topbar));
 
-        $this->os->whatever->soon = 'ykis';
+        //$this->os->whatever->soon = 'ykis';
 
         if($this->menuid == 'searchbox'){
             if(isset($this->submitvariables['searchterm']) AND strlen($this->submitvariables['searchterm']) > 0){
