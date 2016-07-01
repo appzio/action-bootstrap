@@ -431,6 +431,10 @@ class ArticleChat extends ArticleComponent {
 
     public function markMsgsAsRead() {
 
+        if ( empty($this->chat_content['msgs']) ) {
+            return false;
+        }
+
         foreach ($this->chat_content['msgs'] as $message) {
             
             if ( $this->userIsOwner( $message ) ) {
