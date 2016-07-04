@@ -234,7 +234,7 @@ class ArticleChat extends ArticleComponent {
 
                 $name = $user_msg['name'];
 
-                if($this->firstname_only === true){
+                if ( $this->firstname_only ) {
                     $name = $this->getFirstName($name);
                 }
             }
@@ -258,7 +258,7 @@ class ArticleChat extends ArticleComponent {
 
         $username = isset($this->varcontent['name']) ? $this->varcontent['name']:$this->varcontent['real_name'];
 
-        if ( $this->firstname_only === true ) {
+        if ( $this->firstname_only ) {
             $username = $this->getFirstName($username);
         }
 
