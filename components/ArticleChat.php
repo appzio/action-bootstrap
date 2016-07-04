@@ -423,10 +423,10 @@ class ArticleChat extends ArticleComponent {
         $is_seen = $this->factoryobj->mobilechatobj->checkMessageStatus( $message['id'] );
 
         if ( $is_seen ) {
-            return $this->factoryobj->getText( 'Seen', array( 'style' => 'message-status-text' ) );
+            return $this->factoryobj->getText( '{#seen#}', array( 'style' => 'message-status-text' ) );
         }
 
-        return $this->factoryobj->getText( 'Delivered', array( 'style' => 'message-status-text' ) );
+        return $this->factoryobj->getText( '{#delivered#}', array( 'style' => 'message-status-text' ) );
     }
 
     public function markMsgsAsRead() {
