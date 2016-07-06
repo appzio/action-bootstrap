@@ -68,7 +68,7 @@ class ArticleChat extends ArticleComponent {
         $start_from = ($page-1) * $num_rec_per_page;
         $content = $this->factoryobj->mobilechatobj->getChatContent( $start_from, $num_rec_per_page );
         */
-
+        $this->saveChatMsg( $this->submitvariables );
         $content = $this->factoryobj->mobilechatobj->getChatContent();
 
         // App specific settings
@@ -113,7 +113,6 @@ class ArticleChat extends ArticleComponent {
 
     private function getChat() {
 
-        $this->saveChatMsg( $this->submitvariables );
         $this->markMsgsAsRead();
 
         $items = $this->renderChatMsgs();
@@ -148,6 +147,7 @@ class ArticleChat extends ArticleComponent {
         }
 
         $msgs = (object) $this->chat_content['msgs'];
+
         $count = count( $msgs );
 
         foreach ($msgs as $i => $msg) {
@@ -186,6 +186,9 @@ class ArticleChat extends ArticleComponent {
             $column3 = $this->factoryobj->getColumn(
                     $colitems,
                 array( 'style' => 'chat-column-3' ));
+            $column5 = $this->factoryobj->getColumn(
+                $colitems,
+                array( 'style' => 'chat-column-5' ));
             $column4 = $this->factoryobj->getColumn(array(
                     $this->factoryobj->getImage('flipped-beak.png')
                 ), array( 'style' => 'chat-column-2' ));
@@ -196,7 +199,7 @@ class ArticleChat extends ArticleComponent {
                     $output[] = $seen_text;
                 }
             } else {
-                $output[] = $this->factoryobj->getRow(array($column1, $column2, $column3),array( 'style' => 'chat-row-msg' ));
+                $output[] = $this->factoryobj->getRow(array($column1, $column2, $column5),array( 'style' => 'chat-row-msg' ));
             }
 
             unset($colitems);
@@ -289,17 +292,16 @@ class ArticleChat extends ArticleComponent {
                 AeplayVariable::deleteWithName($this->custom_play_id,'chat_upload_temp',$this->gid);
             }
 
+            //array_unshift($this->chat_content['msgs'],$new);
             $this->chat_content['msgs'][] = $new;
-            $this->saveData();
+            $this->saveData($new);
         }
 
         return $this->chat_content;
     }
 
-    public function saveData(){
+    public function saveData($msg){
         $this->factoryobj->initMobileMatching( $this->other_user_play_id );
-
-        $msg = end($this->chat_content['msgs']);
         $message_text = $msg['msg'];
 
         $current_time = Helper::getCurrentTime();
