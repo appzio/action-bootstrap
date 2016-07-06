@@ -1108,7 +1108,7 @@ class ArticleController {
             $desired_format
         );
 
-        if(is_int($stamp)){
+        if(!is_int($stamp)){
             return $stamp;
         }
 
