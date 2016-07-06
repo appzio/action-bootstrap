@@ -167,8 +167,10 @@ class ArticleChat extends ArticleComponent {
                 $this->msgadded = false;
             }
 
+            $date = $this->factoryobj->getLocalizedDate( 'D, j. \of M @ H:i', $msg['date'] );
+
             $img_params = array('imgwidth' => 640, 'imgheight' => 400, 'width' => '96%', 'radius' => 4, 'margin' => '4 4 4 4');
-            $colitems[] = $this->factoryobj->getText($userInfo['name'] .', ' . $msg['date'],array('style' => 'chat-msg-info'));
+            $colitems[] = $this->factoryobj->getText($userInfo['name'] .', ' . $date,array('style' => 'chat-msg-info'));
             $colitems[] = $this->factoryobj->getText($msg['msg'],array('style' => 'chat-msg-text'));
             
             if ( isset($msg['attachment']) ) {
