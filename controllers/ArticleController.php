@@ -1108,6 +1108,10 @@ class ArticleController {
             $desired_format
         );
 
+        if(is_int($stamp)){
+            return $stamp;
+        }
+
         $date_int = date( $result, $stamp );
 
         $result = preg_replace_callback('~({--\d})~', function( $matches ) use($days) {
