@@ -69,6 +69,7 @@ class ArticleChat extends ArticleComponent {
         $content = $this->factoryobj->mobilechatobj->getChatContent( $start_from, $num_rec_per_page );
         */
 
+        $this->saveChatMsg();
         $content = $this->factoryobj->mobilechatobj->getChatContent();
 
         // App specific settings
@@ -113,7 +114,6 @@ class ArticleChat extends ArticleComponent {
 
     private function getChat() {
 
-        $this->saveChatMsg();
         $this->markMsgsAsRead();
 
         $items = $this->renderChatMsgs();
@@ -166,7 +166,7 @@ class ArticleChat extends ArticleComponent {
             if ( $this->msgadded === true) {
                 $this->msgadded = false;
             }
-            
+
             $date = $this->factoryobj->getLocalizedDate( 'D, j. \of M @ H:i', $msg['date'] );
 
             $img_params = array('imgwidth' => 640, 'imgheight' => 400, 'width' => '96%', 'radius' => 4, 'margin' => '4 4 4 4');
@@ -190,6 +190,9 @@ class ArticleChat extends ArticleComponent {
             $column4 = $this->factoryobj->getColumn(array(
                     $this->factoryobj->getImage('flipped-beak.png')
                 ), array( 'style' => 'chat-column-2' ));
+            $column5 = $this->factoryobj->getColumn(
+                    $colitems,
+                array( 'style' => 'chat-column-5' ));
 
             if ( $this->userIsOwner( $msg ) ) {
                 $output[] = $this->factoryobj->getRow(array($column3, $column4, $column1), array( 'style' => 'chat-row-msg-mine' ));
@@ -197,7 +200,7 @@ class ArticleChat extends ArticleComponent {
                     $output[] = $seen_text;
                 }
             } else {
-                $output[] = $this->factoryobj->getRow(array($column1, $column2, $column3),array( 'style' => 'chat-row-msg' ));
+                $output[] = $this->factoryobj->getRow(array($column1, $column2, $column5),array( 'style' => 'chat-row-msg' ));
             }
 
             unset($colitems);
