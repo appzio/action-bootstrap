@@ -13,7 +13,7 @@
   "chat-column-1": {
     "width": "50",
     "height": "50",
-    "margin": "12 5 5 5",
+    "margin": "20 5 5 5",
     "crop": "round"
   },
   "chat-column-2": {
@@ -23,16 +23,26 @@
     "text-align": "right"
   },
   "chat-column-3": {
-    "width": "78%",
+    "width": "75%",
     "vertical-align": "top",
-    "margin": "12 0 0 0",
+    "margin": "12 0 0 7",
     "padding": "0 0 0 0",
     "background-color": "#f4f4f4",
     "border-radius": "4"
   },
+
+  "chat-column-5": {
+    "width": "73%",
+    "vertical-align": "top",
+    "margin": "12 4 0 0",
+    "padding": "0 0 0 0",
+    "background-color": "#f4f4f4",
+    "border-radius": "4"
+  },
+
   "chat-row-msg": {
     "vertical-align": "top",
-    "margin": "0 0 0 0",
+    "margin": "0 10 0 0",
     "text-align": "left"
   },
   "chat-row-msg-mine": {

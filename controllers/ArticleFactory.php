@@ -258,7 +258,7 @@ class ArticleFactory {
                 AeplayVariable::updateWithName($this->playid,'screen_height',$_REQUEST['screen_height'],$this->gid,$this->userid);
             }
 
-        } elseif(isset($this->varcontent['screen_width']) AND isset($this->varcontent['screen_height'])){
+        } elseif(isset($this->varcontent['screen_width']) AND isset($this->varcontent['screen_height']) AND $this->varcontent['screen_width'] > 0 AND $this->varcontent['screen_height'] > 0){
             $this->aspect_ratio = round($this->varcontent['screen_width'] / $this->varcontent['screen_height'],3);
             $this->screen_width = $this->varcontent['screen_width'];
             $this->screen_height = $this->varcontent['screen_height'];
