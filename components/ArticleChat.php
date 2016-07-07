@@ -46,6 +46,8 @@ class ArticleChat extends ArticleComponent {
 
     public function template() {
 
+        $this->factoryobj->rewriteActionField( 'keep_scroll_in_bottom', 1 );
+
         // Init the Chat based on the currently requested context
         $this->custom_play_id = isset($this->options['custom_play_id']) ? $this->options['custom_play_id'] : $this->playid;
 
@@ -164,9 +166,7 @@ class ArticleChat extends ArticleComponent {
             if ( $this->msgadded === true) {
                 $this->msgadded = false;
             }
-
-            // $date = date( 'D, j. \of M @ H:i', $msg['date'] );
-            // $date = $msg['date'];
+            
             $date = $this->factoryobj->getLocalizedDate( 'D, j. \of M @ H:i', $msg['date'] );
 
             $img_params = array('imgwidth' => 640, 'imgheight' => 400, 'width' => '96%', 'radius' => 4, 'margin' => '4 4 4 4');
@@ -290,7 +290,7 @@ class ArticleChat extends ArticleComponent {
         }
 
         $new['name'] = $username;
-        $new['date'] = date('D, j. \of M @ H:i');
+        $new['date'] = time();
         $new['profilepic'] = $this->factoryobj->getImageFileName($pic);
         $new['msg'] = $msg['66666660'];
         $new['user'] = $this->playid;

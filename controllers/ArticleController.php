@@ -1085,6 +1085,10 @@ class ArticleController {
 
     public function getLocalizedDate( $format, $stamp ) {
 
+        if ( !is_int($stamp) ) {
+            $stamp = strtotime( $stamp );
+        }
+
         $months = array(
             '{#january#}', '{#february#}', '{#march#}', '{#april#}', '{#may#}', '{#june#}', '{#july#}', '{#august#}', '{#september#}', '{#october#}', '{#november#}', '{#december#}'
         );
@@ -1105,10 +1109,6 @@ class ArticleController {
             array_values($replaces), 
             $format
         );
-
-        if(!is_int($stamp)){
-            return $stamp;
-        }
 
         $date_int = date( $result, $stamp );
 
