@@ -31,8 +31,6 @@ class ArticleChat extends ArticleComponent {
     public $pic_permission;
     public $strip_urls;
 
-    public $is_admin = false;
-
     public $required_params = array( 'context', 'context_key' );
 
     public $context;
@@ -113,7 +111,7 @@ class ArticleChat extends ArticleComponent {
 
     private function getChat() {
 
-        $this->saveChatMsg( $this->submitvariables );
+        $this->saveChatMsg();
         $this->markMsgsAsRead();
 
         $items = $this->renderChatMsgs();
@@ -167,10 +165,13 @@ class ArticleChat extends ArticleComponent {
                 $this->msgadded = false;
             }
 
+            // $date = date( 'D, j. \of M @ H:i', $msg['date'] );
+            // $date = $msg['date'];
             $date = $this->factoryobj->getLocalizedDate( 'D, j. \of M @ H:i', $msg['date'] );
 
             $img_params = array('imgwidth' => 640, 'imgheight' => 400, 'width' => '96%', 'radius' => 4, 'margin' => '4 4 4 4');
-            $colitems[] = $this->factoryobj->getText($userInfo['name'] .', ' . $date,array('style' => 'chat-msg-info'));
+            $colitems[] = $this->factoryobj->getText($userInfo['name'] . ', ' . $date, array('style' => 'chat-msg-info'));
+
             $colitems[] = $this->factoryobj->getText($msg['msg'],array('style' => 'chat-msg-text'));
             
             if ( isset($msg['attachment']) ) {
@@ -248,50 +249,59 @@ class ArticleChat extends ArticleComponent {
         );
     }
 
-    private function saveChatMsg( $msg ){
+    private function saveChatMsg(){
 
-        if ( $this->strip_urls ){
-            $msg = $this->stripUrls($msg);
+        if ( !isset($this->factoryobj->menuid) OR empty($this->factoryobj->menuid) ) {
+            return false;
         }
 
         if ( !isset($this->varcontent['name']) AND !isset($this->varcontent['real_name']) ){
             return false;
         }
 
+        // Make sure all previously uploaded images are deleted
+        // AeplayVariable::deleteWithName($this->custom_play_id,'chat_upload_temp',$this->gid);
+
+        $msg = $this->submitvariables;
+
+        $var = AeplayVariable::getArrayOfPlayvariables($this->playid);
+
+        // Do nothing if both Image and Message are empty
+        if (
+            ( !isset($var['chat_upload_temp']) AND empty($var['chat_upload_temp']) ) AND
+            empty($msg['66666660'])
+        ) {
+            return false;
+        }
+
         $username = isset($this->varcontent['name']) ? $this->varcontent['name']:$this->varcontent['real_name'];
+        $pic = 'anonymous.png';
 
         if ( $this->firstname_only ) {
             $username = $this->getFirstName($username);
         }
 
-        // If the current is user is admin
-        if ( $this->is_admin ) {
-            $username = 'Administrator';
+        if ( $this->strip_urls AND $msg ){
+            $msg = $this->stripUrls($msg);
         }
 
-        if(isset($this->varcontent['profilepic'])){
+        if (isset($this->varcontent['profilepic'])) {
             $pic = $this->varcontent['profilepic'];
-        } else {
-            $pic = 'anonymous.png';
         }
 
-        if(isset($msg['66666660']) AND $msg['66666660']) {
-            $new['name'] = $username;
-            $new['date'] = date('D, j. \of M @ H:i');
-            $new['profilepic'] = $this->factoryobj->getImageFileName($pic);
-            $new['msg'] = $msg['66666660'];
-            $new['user'] = $this->playid;
+        $new['name'] = $username;
+        $new['date'] = date('D, j. \of M @ H:i');
+        $new['profilepic'] = $this->factoryobj->getImageFileName($pic);
+        $new['msg'] = $msg['66666660'];
+        $new['user'] = $this->playid;
 
-            $var = AeplayVariable::getArrayOfPlayvariables($this->playid);
-
-            if ( isset($var['chat_upload_temp']) AND $var['chat_upload_temp'] ) {
-                $new['attachment'] = $var['chat_upload_temp'];
-                AeplayVariable::deleteWithName($this->custom_play_id,'chat_upload_temp',$this->gid);
-            }
-
-            $this->chat_content['msgs'][] = $new;
-            $this->saveData();
+        if ( isset($var['chat_upload_temp']) AND $var['chat_upload_temp'] ) {
+            $new['attachment'] = $var['chat_upload_temp'];
+            AeplayVariable::deleteWithName($this->custom_play_id,'chat_upload_temp',$this->gid);
         }
+
+        $this->chat_content['msgs'][] = $new;
+        $this->saveData();
 
         return $this->chat_content;
     }
@@ -312,7 +322,7 @@ class ArticleChat extends ArticleComponent {
         }
 
         if ( $this->other_user_play_id ) {
-            $this->factoryobj->initMobileMatching( $this->other_user_play_id,true );
+            $this->factoryobj->initMobileMatching( $this->other_user_play_id, true );
             $this->factoryobj->mobilematchingobj->saveMatch();
 
             $notify = AeplayVariable::fetchWithName($this->playid,'notify',$this->gid);
@@ -443,7 +453,7 @@ class ArticleChat extends ArticleComponent {
                 continue;
             }
 
-            if ( $message['msg_is_read'] ) {
+            if ( !isset($message['msg_is_read']) OR empty($message['msg_is_read']) ) {
                 continue;
             }
 
