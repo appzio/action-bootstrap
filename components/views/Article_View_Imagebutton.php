@@ -16,6 +16,7 @@ class Article_View_Imagebutton extends ArticleComponent {
         $variable = $this->addParam('variable',$this->options,false);
         $sync_open = $this->addParam('sync_open',$this->options,0);
         $sync_close = $this->addParam('sync_close',$this->options,0);
+        $scroll_bottom = $this->addParam('scroll_bottom',$this->options,0);
         $back_button = $this->addParam('back_button',$this->options,1);
         $fallbackimage = $this->addParam('fallbackimage',$this->options,'');
         $style = $this->addParam('style',$this->options,'');
@@ -38,6 +39,7 @@ class Article_View_Imagebutton extends ArticleComponent {
         $item->open_popup = $open_popup;
         $item->sync_open = $sync_open;
         $item->sync_close = $sync_close;
+        $item->scroll_bottom = $scroll_bottom;
 
         if($context){
             $item->context = $context;

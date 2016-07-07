@@ -372,6 +372,7 @@ class ArticleChat extends ArticleComponent {
         $options = array(
             'action' => 'upload-image',
             'sync_upload' => true,
+            'scroll_bottom' => true,
             'max_dimensions'=> '600',
             'allow_delete' => true,
             'variable' => $this->factoryobj->getVariableId('chat_upload_temp')
@@ -417,7 +418,7 @@ class ArticleChat extends ArticleComponent {
             }
 
             $columns[] = $this->factoryobj->getColumn(array(
-                    $this->factoryobj->getImagebutton( 'sendbutton.png', 'submit-msg', false, array( 'sync_upload' => 1 ) )
+                    $this->factoryobj->getImagebutton( 'sendbutton.png', 'submit-msg', false, array( 'sync_upload' => 1, 'scroll_bottom' => 1 ) )
                 ), array( 'width' => '13%','margin'=>'0 10 0 2' ));
 
             $output[] = $this->factoryobj->getRow($columns,array('margin' => '10 0 10 0'));
