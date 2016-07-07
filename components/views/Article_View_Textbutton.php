@@ -14,7 +14,7 @@ class Article_View_Textbutton extends ArticleComponent {
         $variable = $this->addParam('variable',$this->options,false);
         $sync_open = $this->addParam('sync_open',$this->options,0);
         $sync_close = $this->addParam('sync_close',$this->options,0);
-        $scroll_bottom = $this->addParam('scroll_bottom',$this->options,0);
+        $viewport = $this->addParam('viewport',$this->options,'current');
         $back_button = $this->addParam('back_button',$this->options,1);
         $fallbackimage = $this->addParam('fallbackimage',$this->options,'');
         $style = $this->addParam('style',$this->options,'');
@@ -47,7 +47,7 @@ class Article_View_Textbutton extends ArticleComponent {
             ( $open_popup ? $par['onclick']->open_popup = $open_popup : false );
             ( $sync_open ? $par['onclick']->sync_open = $sync_open : false );
             ( $sync_close ? $par['onclick']->sync_close = $sync_close : false );
-            ( $scroll_bottom ? $par['onclick']->scroll_bottom = $scroll_bottom : false );
+            ( $viewport ? $par['onclick']->viewport = $viewport : 'current' );
             ( $sync_upload ? $par['onclick']->sync_upload = $sync_upload : false );
             ( $back_button ? $par['onclick']->back_button = $back_button : false );
             ( $variable ? $par['onclick']->variable = $variable : false );
