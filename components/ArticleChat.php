@@ -157,7 +157,7 @@ class ArticleChat extends ArticleComponent {
             }
 
             $seen_text = '';
-            if ( $count == ($i+1) AND $this->userIsOwner( $msg ) ) {
+            if ( $count == $i AND $this->userIsOwner( $msg ) ) {
                 $seen_text = $this->checkIfSeen( $msg );
             }
 
@@ -457,9 +457,9 @@ class ArticleChat extends ArticleComponent {
                 continue;
             }
 
-            if ( !isset($message['msg_is_read']) OR empty($message['msg_is_read']) ) {
+            if ( !isset($message['msg_is_read']) ) {
                 continue;
-            }
+            }            
 
             $this->factoryobj->mobilechatobj->updateMessageStatus( $message['id'] );
         }
