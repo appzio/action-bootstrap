@@ -1070,7 +1070,12 @@ class ArticleController {
         $this->reloadData();
     }
 
-    public function getPlayVariables($playid){
+    public function getPlayVariables( $playid = false ) {
+
+        if ( empty($playid) ) {
+            $playid = $this->playid;
+        }
+
         $cache = Appcaching::getUserCache($playid,$this->gid,'playvariables');
 
         if ( $cache ) {

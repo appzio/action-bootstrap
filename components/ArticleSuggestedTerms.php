@@ -22,7 +22,7 @@ class ArticleSuggestedTerms {
             $pointerlength = $len+1;
             $pointer = substr($word,0,$pointerlength);
 
-            if($loosematch){
+            if ($loosematch) {
                 if(strstr($word,$key)){
                     if(!isset($output[$pointer]) OR count($output[$pointer]) < $limit){
                         $output[] = $word;
