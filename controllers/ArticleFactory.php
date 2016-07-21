@@ -433,7 +433,6 @@ class ArticleFactory {
 
         while ($key < 6) {
             $tabname = 'tab' . $key;
-            $key++;
 
             /* satisfy all others from cache except for the currently active tab */
             if(method_exists($this->childobj,$tabname) ) {
@@ -443,9 +442,11 @@ class ArticleFactory {
                     $onload = array_merge($onload, $tabcontent->onload);
                 }
 
-                $tabcontent = $this->addTabJson($tabcontent, $key);
+                $tabcontent = $this->addTabJson($tabcontent,$key);
                 $output[$tabname] = (object)$tabcontent;
             }
+
+            $key++;
         }
 
 
