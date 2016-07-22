@@ -252,9 +252,13 @@ class ArticleFactory {
 
             if(!isset($this->varcontent['screen_width'])){
                 AeplayVariable::updateWithName($this->playid,'screen_width',$_REQUEST['screen_width'],$this->gid,$this->userid);
+            } elseif(isset($this->varcontent['screen_width']) AND $this->varcontent['screen_width'] != $this->screen_width){
+                AeplayVariable::updateWithName($this->playid,'screen_width',$_REQUEST['screen_width'],$this->gid,$this->userid);
             }
 
             if(!isset($this->varcontent['screen_height'])){
+                AeplayVariable::updateWithName($this->playid,'screen_height',$_REQUEST['screen_height'],$this->gid,$this->userid);
+            } elseif(isset($this->varcontent['screen_height']) AND $this->varcontent['screen_height'] != $this->screen_height){
                 AeplayVariable::updateWithName($this->playid,'screen_height',$_REQUEST['screen_height'],$this->gid,$this->userid);
             }
 
