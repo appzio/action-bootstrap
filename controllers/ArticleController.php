@@ -361,6 +361,12 @@ class ArticleController {
         return false;
     }
 
+    public function collectPushPermission(){
+        $onclick = new StdClass();
+        $onclick->action = 'push-permission';
+        return $onclick;
+    }
+
     public function getVariableId($varname){
         if(isset($this->vars[$varname])){
             return $this->vars[$varname];
@@ -982,7 +988,6 @@ class ArticleController {
                 $onclick->sync_close = true;
                 $onclick->action_config = $actionid;
                 $onclick->config = $actionid;
-
                 $onclick2 = new StdClass();
                 $onclick2->action = 'submit-form-content';
                 $onclick2->id = 'update-push-permission';
