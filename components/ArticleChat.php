@@ -56,6 +56,19 @@ class ArticleChat extends ArticleComponent {
         $this->context_key = $this->addParam('context_key',$this->options,false);
         
         $this->factoryobj->initMobileChat( $this->context, $this->context_key );
+        
+        /* we look for the user's playid using from the chat id */
+        $otheruser = explode('-chat-',$this->context_key);
+
+        if(count($otheruser) == 2){
+            foreach($otheruser as $user){
+                if($user != $this->playid){
+                    if(is_numeric($user)){
+                        $this->other_user_play_id = $user;
+                    }
+                }
+            }
+        }
 
         /*
         $page = 1;
@@ -79,19 +92,6 @@ class ArticleChat extends ArticleComponent {
 
         $this->pic_permission = $this->addParam('pic_permission',$this->options,false);
         $this->strip_urls = $this->addParam('strip_urls',$this->options,false);
-
-        /* we look for the user's playid using from the chat id */
-        $otheruser = explode('-chat-',$this->context_key);
-
-        if(count($otheruser) == 2){
-            foreach($otheruser as $user){
-                if($user != $this->playid){
-                    if(is_numeric($user)){
-                        $this->other_user_play_id = $user;
-                    }
-                }
-            }
-        }
 
         if ( !empty($content) ) {
             $this->chat_content['msgs'] = $content;

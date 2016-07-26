@@ -769,6 +769,10 @@ class ArticleController {
         return $this->returnComponent('swipestack','field',$content,$params);
     }
 
+    public function getRangeslider($content,$params=array()){
+        return $this->returnComponent('rangeslider','field',$content,$params);
+    }
+
     public function getInfinitescroll($content,$params=array()){
         return $this->returnComponent('infinitescroll','field',$content,$params);
     }
