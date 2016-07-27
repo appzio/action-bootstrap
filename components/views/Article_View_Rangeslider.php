@@ -13,7 +13,7 @@ class Article_View_Rangeslider extends ArticleComponent {
         $obj->type = 'slider';
 
         $params = array(
-            'variable', 'min_value', 'max_value', 'value', 'step', 'left_track_color', 'right_track_color', 'thumb_color', 'thumb_image', 'thumb_height'
+            'variable', 'min_value', 'max_value', 'value', 'step', 'left_track_color', 'right_track_color', 'thumb_color', 'thumb_image', 'track_height'
         );
 
         foreach ($params as $param) {
