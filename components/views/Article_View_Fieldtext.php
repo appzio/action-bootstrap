@@ -14,8 +14,7 @@ class Article_View_Fieldtext extends ArticleComponent {
         $params = array(
             'hint', 'height','submit_menu_id','maxlength',
             'suggestions','suggestions_style_row','suggestions_text_style','submit_on_select','submit_on_entry','submit_on_outfocus','id',
-            'loading_content'
-
+            'loading_content', 'input_type'
         );
 
         foreach ($params as $param) {

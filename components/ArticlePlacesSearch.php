@@ -337,6 +337,7 @@ class ArticlePlacesSearch {
     }
 
     public function getResults( $url ) {
+
         $curl = curl_init();
 
         $options = array(
