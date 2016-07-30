@@ -13,6 +13,17 @@ class Article_View_Text extends ArticleComponent {
         $obj->type = 'msg-plain';
         $obj->content = $this->content;
 
+        $params = array(
+            'selected_state','variable'
+        );
+
+        foreach ($params as $param) {
+            if ( isset($this->options[$param]) ) {
+                $obj->$param  = $this->options[$param];
+            }
+        }
+
+
         return $obj;
 	}
 

@@ -803,6 +803,13 @@ class ArticleController {
         return $this->returnComponent('topbar','field',$content,$params);
     }
 
+    public function getCompleteAction(){
+        $out = new StdClass();
+        $out->action = 'complete-action';
+        return $out;
+    }
+
+
     public function getSpacer($height){
         $params['height'] = $height;
         return $this->returnComponent('text','field','',$params);
