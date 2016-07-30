@@ -844,11 +844,10 @@ class ArticleController {
 
     public function getFacebookSignInButton($id,$submitmenu=false){
         if($submitmenu){
-            return $this->getButtonWithIcon('f-icon.png','do-fb-login','{#sign_in_with_facebook#}',array('style' => 'facebook_button_style'),array('style' => 'fbbutton_text_style'));
+            return $this->getButtonWithIcon('f-icon.png', $id, '{#sign_in_with_facebook#}', array('style' => 'facebook_button_style'),array('style' => 'fbbutton_text_style'));
         } else {
-            return $this->getButtonWithIcon('f-icon.png','do-fb-login','{#sign_in_with_facebook#}',array('style' => 'facebook_button_style','action' => 'fb-login','sync_open' => true),array('style' => 'fbbutton_text_style'));
+            return $this->getButtonWithIcon('f-icon.png', $id, '{#sign_in_with_facebook#}', array('style' => 'facebook_button_style','action' => 'fb-login','sync_open' => true),array('style' => 'fbbutton_text_style'));
         }
-
     }
 
     public function getButtonWithIcon($image,$id,$text,$buttonstyle=array(),$textstyle=array()){
