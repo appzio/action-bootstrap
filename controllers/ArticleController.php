@@ -381,7 +381,7 @@ class ArticleController {
         $col[] = $this->getSpacer('80');
         $col[] = $this->getLoader('',array('color' => $color));
         $col[] = $this->getText($text,array('style' => 'loader-text'));
-        return $this->getColumn($col);
+        return $this->getColumn($col,array('text-align' => 'center'));
     }
 
     public function getVariable($varid){
