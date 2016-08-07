@@ -271,6 +271,9 @@ class ArticleFactory {
             $this->aspect_ratio = round($this->varcontent['screen_width'] / $this->varcontent['screen_height'],3);
             $this->screen_width = $this->varcontent['screen_width'];
             $this->screen_height = $this->varcontent['screen_height'];
+        } else {
+            $this->screen_width = 750;
+            $this->screen_height = 1136;
         }
     }
 
