@@ -199,8 +199,13 @@ class ArticleFactory {
             $this->rerun_list_branches = true;
         }
 
-        $this->rewriteconfigs = $this->childobj->rewriteconfigs;
-        $this->rewriteactionfield = $this->childobj->rewriteactionfield;
+        if(isset($this->childobj->rewriteconfigs)){
+            $this->rewriteconfigs = $this->childobj->rewriteconfigs;
+        }
+
+        if(isset($this->childobj->rewriteactionfield)){
+            $this->rewriteactionfield = $this->childobj->rewriteactionfield;
+        }
 
         return $op;
     }
