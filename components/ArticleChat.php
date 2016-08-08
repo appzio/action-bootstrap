@@ -293,7 +293,7 @@ class ArticleChat extends ArticleComponent {
         }
 
         $new['name'] = $username;
-        $new['date'] = time();
+        $new['date'] = Helper::getCurrentTime();
         $new['profilepic'] = $this->factoryobj->getImageFileName($pic);
         $new['msg'] = $msg['66666660'];
         $new['user'] = $this->playid;
@@ -398,7 +398,7 @@ class ArticleChat extends ArticleComponent {
             //$hint = 'chatid:'.$this->factoryobj->mobilechatobj->getChatId() .'other:' .$this->other_user_play_id . 'mine: ' .$this->playid;
 
             $columns[] = $this->factoryobj->getColumn(array(
-                    $this->factoryobj->getFieldTextarea( '', array('hint' => $hint, 'style' => 'chat-comment-field', 'variable' => '66666660' ,'value' => ''))
+                    $this->factoryobj->getFieldTextarea( '', array( 'submit_menu_id' => 'submit-msg', 'hint' => $hint, 'style' => 'chat-comment-field', 'variable' => '66666660' ,'value' => ''))
                 ), array( 'style' => 'chat-comment-field-wrap' ));
 
             /* if permission is required from both users for sending pictures */
