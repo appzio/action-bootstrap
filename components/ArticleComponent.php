@@ -144,7 +144,7 @@ class ArticleComponent {
             'text-align',
 
             'floating',
-            'float'
+            'float',
 
         );
     }
@@ -194,6 +194,10 @@ class ArticleComponent {
 
         if ( isset($this->options['transition']) ) {
             $obj->transition = $this->options['transition'];
+        }
+
+        if ( isset($this->options['animation']) ) {
+            $obj->transition = $this->options['animation'];
         }
 
         if ( isset($this->options['time_to_live']) ) {

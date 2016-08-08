@@ -381,7 +381,7 @@ class ArticleController {
         $col[] = $this->getSpacer('80');
         $col[] = $this->getLoader('',array('color' => $color));
         $col[] = $this->getText($text,array('style' => 'loader-text'));
-        return $this->getColumn($col);
+        return $this->getColumn($col,array('text-align' => 'center'));
     }
 
     public function getVariable($varid){
@@ -699,11 +699,21 @@ class ArticleController {
     }
 
     /* little helper function for generating a field with an icon */
-    public function getFieldWithIcon($image='icon_email.png',$id,$fieldname,$error=false,$type='text',$submit_menu_id=false){
+    public function getFieldWithIcon($image='icon_email.png',$id,$fieldname,$error=false,$type='text',$submit_menu_id=false,$textfield_inputtype=false){
 
         $params['style'] = ( $error ? 'field-with-icon-error' : 'field-with-icon' );
 
         $class = ( $error ? 'field-icon-column-right-error' : 'field-icon-column-right' );
+
+        $textfieldparams['submit_menu_id'] = $submit_menu_id;
+        $textfieldparams['style'] = 'register_field';
+        $textfieldparams['hint'] = $fieldname;
+        $textfieldparams['id'] = $id;
+        $textfieldparams['variable'] = $id;
+
+        if($textfield_inputtype){
+            $textfieldparams['input_type'] = $textfield_inputtype;
+        }
 
         $column_image = $this->getColumn(array(
             $this->getImage( $image )
@@ -716,7 +726,7 @@ class ArticleController {
         } else {
             $var = $this->getSubmitVariable($id) ? $this->getSubmitVariable($id) : $this->getVariable($id);
             $column_data = $this->getColumn(array(
-                $this->getFieldtext($var, array( 'submit_menu_id' => $submit_menu_id,'style' => 'register_field', 'hint' => $fieldname, 'id' => $id, 'variable' => $id )),
+                $this->getFieldtext($var,  $textfieldparams ),
             ), array( 'style' => $class,'submit_menu_id' => $submit_menu_id ));
         }
 
@@ -802,6 +812,13 @@ class ArticleController {
         $params['colors'] = $this->colors;
         return $this->returnComponent('topbar','field',$content,$params);
     }
+
+    public function getCompleteAction(){
+        $out = new StdClass();
+        $out->action = 'complete-action';
+        return $out;
+    }
+
 
     public function getSpacer($height){
         $params['height'] = $height;

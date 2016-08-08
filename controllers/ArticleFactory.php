@@ -199,8 +199,13 @@ class ArticleFactory {
             $this->rerun_list_branches = true;
         }
 
-        $this->rewriteconfigs = $this->childobj->rewriteconfigs;
-        $this->rewriteactionfield = $this->childobj->rewriteactionfield;
+        if(isset($this->childobj->rewriteconfigs)){
+            $this->rewriteconfigs = $this->childobj->rewriteconfigs;
+        }
+
+        if(isset($this->childobj->rewriteactionfield)){
+            $this->rewriteactionfield = $this->childobj->rewriteactionfield;
+        }
 
         return $op;
     }
@@ -266,6 +271,9 @@ class ArticleFactory {
             $this->aspect_ratio = round($this->varcontent['screen_width'] / $this->varcontent['screen_height'],3);
             $this->screen_width = $this->varcontent['screen_width'];
             $this->screen_height = $this->varcontent['screen_height'];
+        } else {
+            $this->screen_width = 750;
+            $this->screen_height = 1136;
         }
     }
 
