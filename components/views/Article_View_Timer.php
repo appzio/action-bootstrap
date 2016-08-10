@@ -10,7 +10,7 @@ class Article_View_Timer extends ArticleComponent {
         $obj->content = $this->content;
 
         $params = array(
-            'submit_menu_id', 'mode'
+            'timer_id', 'submit_menu_id', 'mode'
         );
 
         foreach ($params as $param) {
