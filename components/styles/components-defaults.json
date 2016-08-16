@@ -64,6 +64,25 @@
     "border-width": "1"
   },
 
+  "field-with-icon-phone": {
+    "height": "45",
+    "margin": "10 40 0 40",
+    "vertical-align": "middle",
+    "background-color": "#ffffff",
+    "border-radius": "4"
+  },
+
+  "field-with-icon-error-phone": {
+    "height": "45",
+    "margin": "10 40 0 40",
+    "vertical-align": "middle",
+    "background-color": "#ffffff",
+    "border-radius": "4",
+    "border-color": "#e51414",
+    "border-width": "1"
+  },
+
+
 
   "field-icon-column-left": {
     "width": "15%",
@@ -151,6 +170,16 @@
     "color": "#e12929",
     "padding": "4 4 0 4",
     "margin": "0 42 3 42"
+  },
+
+  "phone_register_field_country": {
+    "font-size": "13",
+    "font-ios": "Roboto-Regular",
+    "font-android": "Roboto",
+    "background-color": "#CCEDE9",
+    "padding": "3 6 3 6",
+    "border-radius": "4"
+
   }
 
 }

@@ -381,7 +381,7 @@ class ArticleController {
         $col[] = $this->getSpacer('80');
         $col[] = $this->getLoader('',array('color' => $color));
         $col[] = $this->getText($text,array('style' => 'loader-text'));
-        return $this->getColumn($col,array('text-align' => 'center'));
+        return $this->getColumn($col,array('text-align' => 'center','width' => '100%','align' => 'center'));
     }
 
     public function getVariable($varid){
@@ -667,9 +667,26 @@ class ArticleController {
         $file = $path .'/countriesToCities.json';
         $cities = file_get_contents($file);
         $cities = json_decode($cities,true);
-        sort($cities);
         return $cities;
     }
+
+    public function getCountryCodes(){
+        $path = Yii::getPathOfAlias('application.modules.aelogic.packages.actionMobileregister2.sql');
+        $file = $path .'/countrycodes.json';
+        $cities = file_get_contents($file);
+        $cities = json_decode($cities,true);
+        $output = array();
+
+        foreach ($cities['countries'] as $country){
+            $name = $country['name'];
+            $output[$name] = $country['code'];
+        }
+
+        return $output;
+    }
+
+
+
 
     public function getCheckbox($varname, $title, $error = false, $params = false){
         $styles = array(
@@ -697,6 +714,58 @@ class ArticleController {
             return $this->getRow($columns, array('margin' => '5 10 5 30'));
         }
     }
+
+
+    /* little helper function for generating a field with an icon */
+    public function getPhoneNumberField($image='phone-icon-register.png',$id,$fieldname,$error=false,$type='text',$submit_menu_id=false,$textfield_inputtype=false){
+
+        $params['style'] = ( $error ? 'field-with-icon-error-phone' : 'field-with-icon-phone' );
+
+        $class = ( $error ? 'field-icon-column-right-error' : 'field-icon-column-right' );
+
+        $countrycodes = $this->getCountryCodes();
+        $mycountry = $this->getSavedVariable('country');
+
+        if(stristr($this->menuid,'countryselected_')){
+            $mycountry = str_replace('countryselected_','',$this->menuid);
+        }
+
+        if($mycountry){
+            $mycountrycode = $countrycodes[$mycountry];
+        } else {
+            $mycountrycode = '+44';
+        }
+
+        $textfieldparams['submit_menu_id'] = $submit_menu_id;
+        $textfieldparams['style'] = 'phone_register_field_number';
+        $textfieldparams['hint'] = $fieldname;
+        $textfieldparams['id'] = $id;
+        $textfieldparams['variable'] = $id;
+        $textfieldparams['input_type'] = 'number';
+
+        $data[] = $this->getColumn(array($this->getImage( $image )), array( 'style' => 'field-icon-column-left' ));
+
+        $var = $this->getSubmitVariable($id) ? $this->getSubmitVariable($id) : $this->getVariable($id);
+
+        $onclick = new stdClass();
+        $onclick->action = 'open-tab';
+        $onclick->action_config = '2';
+
+        $data[] = $this->getText($mycountrycode,array('style' => 'phone_register_field_country','onclick' => $onclick));
+        $data[] = $this->getFieldtext($var,  $textfieldparams );
+
+        $output = $this->getRow( $data, $params );
+
+        if($error){
+            $err = $this->getText($error,array( 'style' => 'register-text-step-error'));
+            $output = $this->getColumn(array($output,$err));
+        }
+
+        return $output;
+    }
+
+
+
 
     /* little helper function for generating a field with an icon */
     public function getFieldWithIcon($image='icon_email.png',$id,$fieldname,$error=false,$type='text',$submit_menu_id=false,$textfield_inputtype=false){
