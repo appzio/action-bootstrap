@@ -103,6 +103,7 @@ class ArticleChat extends ArticleComponent {
             $object->header[] = $this->handlePicPermission();
         }
 
+
         $object->scroll = $this->getChat();
         $object->footer = $this->getFooter();
 
@@ -128,6 +129,9 @@ class ArticleChat extends ArticleComponent {
 
         $output = array();
 
+        $vars = AeplayVariable::getArrayOfPlayvariables($this->other_user_play_id);
+        $output[] = $this->getMyMatchItem($vars,$this->other_user_play_id);
+
         foreach ($items as $item) {
             $output[] = $item;
         }
@@ -137,6 +141,39 @@ class ArticleChat extends ArticleComponent {
         return $output;
     }
 
+    public function getMyMatchItem($vars,$id,$search=false){
+        if(isset($vars['screen_name'])) {
+            $name = $vars['screen_name'];
+        }elseif(isset($vars['real_name'])){
+            $name = $this->getFirstName($vars['real_name']);
+        } else {
+            $name = '{#anonymous#}';
+        }
+
+
+        $name = isset($vars['city']) ? $name.', '.$vars['city'] : $name;
+
+        $imageparams['style'] = 'round_image_imate';
+        $imageparams['onclick'] = new StdClass();
+        $imageparams['onclick']->action = 'open-action';
+        $imageparams['onclick']->id = $id;
+        $imageparams['onclick']->back_button = true;
+        $imageparams['onclick']->sync_open = true;
+        $imageparams['onclick']->action_config = $this->factoryobj->getConfigParam('detail_view');
+
+        $textparams['style'] = 'imate_title';
+        $rowparams['padding'] = '0 40 0 40';
+        $rowparams['margin'] = '0 0 13 0';
+        $rowparams['vertical-align'] = 'middle';
+        $rowparams['height'] = '100';
+        $rowparams['background-color'] = '#f4f4f4';
+
+        $profilepic = isset($vars['profilepic']) ? $vars['profilepic'] : 'anonymous2.png';
+        $columns[] = $this->factoryobj->getImage($profilepic, $imageparams);
+        $columns[] = $this->factoryobj->getText($name, $textparams);
+
+        return $this->factoryobj->getRow($columns,$rowparams);
+    }
 
     private function renderChatMsgs() {
 
@@ -357,8 +394,9 @@ class ArticleChat extends ArticleComponent {
     private function handlePicPermission(){
         $pointer_me = $this->factoryobj->mobilechatobj->context_key .'-'.$this->playid;
 
+
         if(isset($this->factoryobj->menuid) AND $this->factoryobj->menuid == 'pic_permission'){
-            $this->factoryobj->appkeyvaluestorage->set($pointer_me,true);
+            $this->factoryobj->appkeyvaluestorage->set($pointer_me,1);
         }
 
         $other = $this->factoryobj->appkeyvaluestorage->get($pointer_me);
