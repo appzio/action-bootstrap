@@ -730,7 +730,7 @@ class ArticleController {
             $mycountry = str_replace('countryselected_','',$this->menuid);
         }
 
-        if($mycountry){
+        if($mycountry AND isset($countrycodes[$mycountry])){
             $mycountrycode = $countrycodes[$mycountry];
         } else {
             $mycountrycode = '+44';
