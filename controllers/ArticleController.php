@@ -285,6 +285,14 @@ class ArticleController {
     }
 
 
+    /* will swap background with one of the action's assets */
+    public function configureBackground($imagefield='actionimage1'){
+        if ( $this->getConfigParam( $imagefield ) ) {
+            $image_file = $this->getConfigParam($imagefield);
+            $this->rewriteActionField('background_image_portrait',$image_file);
+        }
+    }
+
     public function returnComponent($name,$type,$content=false,$params=array()){
         $name = str_replace(' ', '_', ucwords(str_replace('_', ' ', $name)));
 
