@@ -121,6 +121,26 @@
     "margin": "5 40 0 40"
   },
 
+  "instagram_button_style": {
+    "background-color": "#ffffff",
+    "text-align": "center",
+    "border-radius": "4",
+    "height": "45",
+    "vertical-align": "middle",
+    "margin": "5 40 0 40"
+  },
+
+  "instagram_text_style": {
+    "font-size": "12",
+    "font-style": "normal",
+    "text-align": "center",
+    "color": "#000000",
+    "font-ios": "Roboto-Regular",
+    "font-android": "Roboto"
+  },
+
+
+
   "alertbox":{
     "padding": "8 8 8 8",
     "background-color": "#911111",

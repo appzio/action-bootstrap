@@ -312,6 +312,8 @@ class ArticleController {
 
     public function addToDebug($msg){
         $this->debugMsgs[] = $msg;
+        
+
     }
 
     public function runLogic(){
@@ -929,17 +931,37 @@ class ArticleController {
         }
     }
 
-    public function getButtonWithIcon($image,$id,$text,$buttonstyle=array(),$textstyle=array()){
+    public function getInstagramSignInButton($actionid){
+
+        $onclick1 = new StdClass();
+        $onclick1->action = 'submit-form-content';
+        $onclick1->id = 'show-loader';
+
+        $onclick2 = new StdClass();
+        $onclick2->id = 'insta';
+        $onclick2->action = 'open-action';
+        $onclick2->action_config = $actionid;
+        $onclick2->sync_close = 1;
+
+        return $this->getButtonWithIcon('insta-logo.png', 'insta', '{#sign_in_with_instagram#}', array('style' => 'instagram_button_style'),array('style' => 'instagram_text_style'),array($onclick1,$onclick2));
+    }
+
+
+    public function getButtonWithIcon($image,$id,$text,$buttonstyle=array(),$textstyle=array(),$onclick=false){
         $params['priority'] = 1;
         $params['height'] = '30';
         $params['vertical-align'] = 'middle';
         $params['image'] = $this->getImageFileName($image,$params);
 
-        $buttonstyle['onclick'] = new StdClass();
-        $buttonstyle['onclick']->id = $id;
-        $buttonstyle['onclick']->action = $this->addParam('action',$buttonstyle,'submit-form-content');
-        $buttonstyle['onclick']->config = $this->addParam('config',$buttonstyle,'');
-        $buttonstyle['onclick']->sync_open = $this->addParam('sync_open',$buttonstyle,'');
+        if($onclick) {
+            $buttonstyle['onclick'] = $onclick;
+        } else {
+            $buttonstyle['onclick'] = new StdClass();
+            $buttonstyle['onclick']->id = $id;
+            $buttonstyle['onclick']->action = $this->addParam('action',$buttonstyle,'submit-form-content');
+            $buttonstyle['onclick']->config = $this->addParam('config',$buttonstyle,'');
+            $buttonstyle['onclick']->sync_open = $this->addParam('sync_open',$buttonstyle,'');
+        }
 
         $img = $this->getImage($image,$params);
 
