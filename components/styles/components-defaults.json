@@ -6,8 +6,6 @@
     "font-size": "20",
     "color": "#ffffff",
     "background-color": "#000000",
-    "font-ios": "Roboto-Regular",
-    "font-android": "Roboto",
     "border-width": "1",
     "border-color": "#000000",
     "children_style": {
@@ -22,7 +20,6 @@
 
   "loader-text": {
     "font-size": "16",
-    "font-ios": "Roboto-Regular",
     "font-style": "normal",
     "text-align": "center",
     "color": "#000000",
@@ -35,9 +32,7 @@
     "alignment": "center",
     "text-align": "center",
     "font-size": "17",
-    "color": "#000000",
-    "font-ios": "Roboto-Regular",
-    "font-android": "Roboto"
+    "color": "#000000"
   },
   "topbar-text": {
     "width": "100%",
@@ -107,9 +102,7 @@
     "font-size": "12",
     "font-style": "normal",
     "text-align": "center",
-    "color": "#ffffff",
-    "font-ios": "Roboto-Regular",
-    "font-android": "Roboto"
+    "color": "#ffffff"
   },
 
   "facebook_button_style": {
@@ -134,9 +127,7 @@
     "font-size": "12",
     "font-style": "normal",
     "text-align": "center",
-    "color": "#000000",
-    "font-ios": "Roboto-Regular",
-    "font-android": "Roboto"
+    "color": "#000000"
   },
 
 
@@ -148,15 +139,12 @@
   },
 
   "alertbox_text":{
-    "font-ios": "Roboto-Regular",
-    "font-android": "Roboto",
     "font-size": "13",
     "color" :"#ffffff"
   },
 
   "alertbox_close":{
-    "font-ios": "Roboto-Bold",
-    "font-android": "Roboto Bold",
+    "font-weight": "bold",
     "color":"#ffffff",
     "font-size": "20",
     "text-align": "center"
@@ -183,8 +171,6 @@
   },
   "register-text-step-error": {
     "font-size": "13",
-    "font-ios": "Roboto-Regular",
-    "font-android": "Roboto",
     "font-style": "normal",
     "text-align": "center",
     "color": "#e12929",
@@ -194,8 +180,6 @@
 
   "phone_register_field_country": {
     "font-size": "13",
-    "font-ios": "Roboto-Regular",
-    "font-android": "Roboto",
     "background-color": "#CCEDE9",
     "padding": "3 6 3 6",
     "border-radius": "4"

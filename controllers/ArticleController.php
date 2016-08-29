@@ -539,7 +539,7 @@ class ArticleController {
 
             $btn1 = $this->getText($item,array('padding' => '10 10 10 10',
                 'color' => $this->colors['top_bar_text_color'],'text-align' => 'center',
-                'onclick' => $onclick,'font-size' => $fontsize,'font-ios' => 'Roboto-Regular'
+                'onclick' => $onclick,'font-size' => $fontsize
                 ));
 
             if($this->current_tab == $count){
@@ -701,9 +701,7 @@ class ArticleController {
     public function getCheckbox($varname, $title, $error = false, $params = false){
         $styles = array(
             'width' => '120',
-            'text-align' => 'left',
-            'font-ios' => 'Roboto-Regular',
-            'font-android' => 'Roboto',
+            'text-align' => 'left'
         );
 
         if ( !empty($params) ) {

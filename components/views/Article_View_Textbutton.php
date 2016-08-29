@@ -85,8 +85,6 @@ class Article_View_Textbutton extends ArticleComponent {
             $sty['color'] = $color;
             $sty['text-align'] = 'center';
             $sty['vertical-align'] = 'middle';
-            $sty['font-ios'] = 'Roboto-Regular';
-            $sty['font-android'] = 'Roboto';
             $sty['width'] = '100%';
 
             if($smalltext){

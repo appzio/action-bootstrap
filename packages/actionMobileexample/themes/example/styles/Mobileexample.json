@@ -20,15 +20,15 @@
   },
 
   "example_searchbox_text":{
-    "font-ios": "Roboto-Regular",
-    "font-android": "Roboto",
+
+
     "font-size": "12",
     "margin" : "-5 0 0 10"
   },
 
   "example_searchfilter":{
-    "font-ios": "Roboto-Regular",
-    "font-android": "Roboto",
+
+
     "color": "#ffffff",
     "font-size": "12",
     "border-radius": "8",
@@ -39,8 +39,8 @@
   },
 
   "example_searchfilter_selected":{
-    "font-ios": "Roboto-Regular",
-    "font-android": "Roboto",
+
+
     "color": "#000000",
     "font-size": "12",
     "border-radius": "8",
@@ -53,16 +53,16 @@
 
 
   "example_searchbtn":{
-    "font-ios": "Roboto-Regular",
-    "font-android": "Roboto",
+
+
     "color": "#ffffff",
     "font-size": "16",
     "margin" : "0 10 0 10"
   },
 
   "general_example_text":{
-    "font-ios": "Roboto-Regular",
-    "font-android": "Roboto",
+
+
     "color": "#000000",
     "text-align": "center",
     "font-size": "14",

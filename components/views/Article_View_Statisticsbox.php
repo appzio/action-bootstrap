@@ -25,7 +25,7 @@ class Article_View_Statisticsbox extends ArticleComponent {
             'text-align' => 'center','padding' => '0 20 0 20',
             'background-color' => $this->factoryobj->color_topbar,
             'color' => $this->factoryobj->colors['top_bar_text_color'],
-            'font-size' => '78','font-ios' => 'Roboto-Light'
+            'font-size' => '78'
              ));
 
         $title = $this->addParam('title',$this->options,false);
@@ -35,7 +35,7 @@ class Article_View_Statisticsbox extends ArticleComponent {
                 'background-color' => $this->factoryobj->color_topbar,
                 'color' => $this->factoryobj->colors['top_bar_text_color'],
                 'font-size' => '14',
-                'padding' => '0 4 10 4','text-align' => 'center','font-ios' => 'Roboto-Light'
+                'padding' => '0 4 10 4','text-align' => 'center'
             ));
         }
 
@@ -63,14 +63,14 @@ class Article_View_Statisticsbox extends ArticleComponent {
             'width' => '50%',
             'background-color' => $bg,
             'color' => $color,
-            'font-size' => '34','font-ios' => 'Roboto-Light'
+            'font-size' => '34'
         ));
 
         $row[] = $this->factoryobj->getText($this->addParam('title',$this->options,'Title missing'),array(
             'color' => $color,
             'background-color' => $bg,
             'font-size' => '12',
-            'padding' => '27 4 10 4','text-align' => 'left','font-ios' => 'Roboto-Light'
+            'padding' => '27 4 10 4','text-align' => 'left'
         ));
 
         return $this->factoryobj->getRow($row);
