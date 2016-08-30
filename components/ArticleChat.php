@@ -127,7 +127,7 @@ class ArticleChat extends ArticleComponent {
     public function getChatError() {
         $output = array();
 
-        $output[] = $this->factoryobj->getText('Chat error!', array(
+        $output[] = $this->factoryobj->getText('Your plan has ended!', array(
             'padding' => '20 20 20 20',
             'font-size' => '18',
             'text-align' => 'center',
