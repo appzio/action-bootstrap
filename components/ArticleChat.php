@@ -192,7 +192,7 @@ class ArticleChat extends ArticleComponent {
 
         $textparams['color'] = $this->factoryobj->colors['top_bar_text_color'];
         $textparams['font-size'] = 15;
-        $textparams['text-align'] = 'center';
+        $textparams['text-align'] = 'left';
 
         $profilepic = isset($vars['profilepic']) ? $vars['profilepic'] : 'anonymous2.png';
         $columns[] = $this->factoryobj->getImage($profilepic, $imageparams);
