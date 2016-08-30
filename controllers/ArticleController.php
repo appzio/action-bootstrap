@@ -952,6 +952,17 @@ class ArticleController {
         return $this->getButtonWithIcon('insta-logo.png', 'insta', '{#sign_in_with_instagram#}', array('style' => 'instagram_button_style'),array('style' => 'instagram_text_style'),array($onclick1,$onclick2));
     }
 
+    public function getTwitterSignInButton(){
+
+        $onclick2 = new StdClass();
+        $onclick2->id = 'twitter';
+        $onclick2->action = 'twitter-login';
+        $onclick2->sync_open = 1;
+
+        return $this->getButtonWithIcon('twitter-icon.png', 'insta', '{#sign_in_with_twitter#}', array('style' => 'twitter_button_style'),array('style' => 'fbbutton_text_style'),$onclick2);
+    }
+
+
 
     public function getButtonWithIcon($image,$id,$text,$buttonstyle=array(),$textstyle=array(),$onclick=false){
         $params['priority'] = 1;
