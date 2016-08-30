@@ -127,7 +127,7 @@ class ArticleChat extends ArticleComponent {
     public function getChatError() {
         $output = array();
 
-        $output[] = $this->factoryobj->getText('Chat error!', array(
+        $output[] = $this->factoryobj->getText('Your plan has ended!', array(
             'padding' => '20 20 20 20',
             'font-size' => '18',
             'text-align' => 'center',
@@ -188,12 +188,13 @@ class ArticleChat extends ArticleComponent {
         $imageparams['onclick']->action_config = $this->factoryobj->getConfigParam('detail_view');
 
         $rowparams['padding'] = '0 0 5 15';
+        $rowparams['height'] = '50';
         $rowparams['vertical-align'] = 'middle';
         $rowparams['background-color'] = $this->factoryobj->color_topbar;
 
         $textparams['color'] = $this->factoryobj->colors['top_bar_text_color'];
         $textparams['font-size'] = 15;
-        $textparams['text-align'] = 'center';
+        $textparams['text-align'] = 'left';
 
         $profilepic = isset($vars['profilepic']) ? $vars['profilepic'] : 'anonymous2.png';
         $columns[] = $this->factoryobj->getImage($profilepic, $imageparams);
