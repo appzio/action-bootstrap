@@ -40,6 +40,9 @@ class ArticleChat extends ArticleComponent {
 
     public $chatid;
 
+    public $limit_monologue;
+    public $disable_chat = false;
+
     protected function requiredOptions() {
         return array();
     }
@@ -55,7 +58,8 @@ class ArticleChat extends ArticleComponent {
         $this->otheruser = $this->addParam('otheruser',$this->options,false);
         $this->context = $this->addParam('context',$this->options,false);
         $this->context_key = $this->addParam('context_key',$this->options,false);
-        
+        $this->limit_monologue = $this->addParam('limit_monologue',$this->options,false);
+
         $this->factoryobj->initMobileChat( $this->context, $this->context_key );
         
         /* we look for the user's playid using from the chat id */
@@ -85,6 +89,32 @@ class ArticleChat extends ArticleComponent {
 
         $this->saveChatMsg();
         $content = $this->factoryobj->mobilechatobj->getChatContent();
+
+
+        if($this->limit_monologue){
+            $reverse = array_reverse($content);
+            $count = 1;
+            $totalcount = 0;
+
+            foreach ($reverse AS $item){
+                if($totalcount > $this->limit_monologue){
+                    break;
+                }
+
+                if($item['user'] == $this->playid){
+                    $count++;
+                } else {
+                    $count = 0;
+                }
+            }
+
+            if($count > $this->limit_monologue){
+                $this->disable_chat = true;
+            }
+        }
+
+
+
 
         // App specific settings
         $this->save_match = $this->addParam('save_match',$this->options,false);
@@ -238,7 +268,7 @@ class ArticleChat extends ArticleComponent {
             $colitems[] = $this->factoryobj->getText($userInfo['name'] . ', ' . $date, array('style' => 'chat-msg-info'));
 
             $colitems[] = $this->factoryobj->getText($msg['msg'],array('style' => 'chat-msg-text'));
-            
+
             if ( isset($msg['attachment']) ) {
                 $colitems[] = $this->factoryobj->getImage($msg['attachment'], $img_params);
             }
@@ -450,6 +480,13 @@ class ArticleChat extends ArticleComponent {
     }
 
     private function getFooter(){
+
+        if($this->disable_chat === true){
+            $output = array();
+            $output[] = $this->factoryobj->getText('{#sorry_message_limit_reached#}',array('style' => 'chat-msg-text-centered'));
+            return $output;
+
+        }
 
         $this->debug = false;
         $output = array();

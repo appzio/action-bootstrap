@@ -61,6 +61,16 @@
     "margin": "3 7 7 7",
     "vertical-align": "top"
   },
+
+  "chat-msg-text-centered": {
+    "font-size": "13",
+    "font-style": "normal",
+    "color": "#474747",
+    "margin": "3 7 7 7",
+    "vertical-align": "top",
+    "text-align": "center"
+  },
+
   "chat-comment-field-wrap": {
     "width" : "60%",
     "margin": "3 8 5 8"
