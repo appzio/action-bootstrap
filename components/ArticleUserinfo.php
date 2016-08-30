@@ -38,8 +38,6 @@ class ArticleUserinfo extends ArticleComponent {
         $style = array(
             'font-size' => 13,
             'margin'=> '24 0 0 10',
-            'font-ios'=> 'Roboto-Regular',
-            'font-android'=> 'Roboto',
             'color'=> '#474747',
             'text_color'=> '#474747'
         );

@@ -281,7 +281,7 @@ class ArticleBookmarking extends ArticleComponent {
                     'vertical-align' => 'middle'));
 
                 $columns[] = $this->factoryobj->getText($type .':
-' .$title,array('margin' => '0 50 0 9','onclick' => $arr,'vertical-align' => 'middle','font-size' => 13,'font-ios' => 'Roboto-Regular', 'font-android' => 'Roboto'));
+' .$title,array('margin' => '0 50 0 9','onclick' => $arr,'vertical-align' => 'middle','font-size' => 13));
                 $columns[] = $this->factoryobj->getImageButton('del-bookmark.png',$action->id,false,array('width' => 50,'height' => 50,'vertical-align' => 'middle','floating' => '1', 'float' => 'right'));
                 $items[] = $this->factoryobj->getRow($columns,array('margin' => '18 35 5 15','width' => '89%'));
                 unset($columns);
@@ -294,7 +294,7 @@ class ArticleBookmarking extends ArticleComponent {
                 'crop' => 'round', 'defaultimage' => 'anonymous2.png',
                 'width' => 50, 'height' => 50,'margin' => '0 4 0 3'));
 
-            $columns[] = $this->factoryobj->getText('Available bookmark slot',array('margin' => '0 50 0 9','color' => '#a9a9a9','font-size' => 13,'font-ios' => 'Roboto-Regular', 'font-android' => 'Roboto'));
+            $columns[] = $this->factoryobj->getText('Available bookmark slot',array('margin' => '0 50 0 9','color' => '#a9a9a9','font-size' => 13));
             //$columns[] = $this->factoryobj->getImageButton('del-bookmark.png',123,false,array('width' => 50,'height' => 50));
             $items[] = $this->factoryobj->getRow($columns,array('margin' => '18 35 5 12','width' => '89%'));
 

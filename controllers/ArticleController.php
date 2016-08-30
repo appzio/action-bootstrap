@@ -285,6 +285,14 @@ class ArticleController {
     }
 
 
+    /* will swap background with one of the action's assets */
+    public function configureBackground($imagefield='actionimage1'){
+        if ( $this->getConfigParam( $imagefield ) ) {
+            $image_file = $this->getConfigParam($imagefield);
+            $this->rewriteActionField('background_image_portrait',$image_file);
+        }
+    }
+
     public function returnComponent($name,$type,$content=false,$params=array()){
         $name = str_replace(' ', '_', ucwords(str_replace('_', ' ', $name)));
 
@@ -312,6 +320,8 @@ class ArticleController {
 
     public function addToDebug($msg){
         $this->debugMsgs[] = $msg;
+        
+
     }
 
     public function runLogic(){
@@ -529,7 +539,7 @@ class ArticleController {
 
             $btn1 = $this->getText($item,array('padding' => '10 10 10 10',
                 'color' => $this->colors['top_bar_text_color'],'text-align' => 'center',
-                'onclick' => $onclick,'font-size' => $fontsize,'font-ios' => 'Roboto-Regular'
+                'onclick' => $onclick,'font-size' => $fontsize
                 ));
 
             if($this->current_tab == $count){
@@ -691,9 +701,7 @@ class ArticleController {
     public function getCheckbox($varname, $title, $error = false, $params = false){
         $styles = array(
             'width' => '120',
-            'text-align' => 'left',
-            'font-ios' => 'Roboto-Regular',
-            'font-android' => 'Roboto',
+            'text-align' => 'left'
         );
 
         if ( !empty($params) ) {
@@ -929,17 +937,37 @@ class ArticleController {
         }
     }
 
-    public function getButtonWithIcon($image,$id,$text,$buttonstyle=array(),$textstyle=array()){
+    public function getInstagramSignInButton($actionid){
+
+        $onclick1 = new StdClass();
+        $onclick1->action = 'submit-form-content';
+        $onclick1->id = 'show-loader';
+
+        $onclick2 = new StdClass();
+        $onclick2->id = 'insta';
+        $onclick2->action = 'open-action';
+        $onclick2->action_config = $actionid;
+        $onclick2->sync_close = 1;
+
+        return $this->getButtonWithIcon('insta-logo.png', 'insta', '{#sign_in_with_instagram#}', array('style' => 'instagram_button_style'),array('style' => 'instagram_text_style'),array($onclick1,$onclick2));
+    }
+
+
+    public function getButtonWithIcon($image,$id,$text,$buttonstyle=array(),$textstyle=array(),$onclick=false){
         $params['priority'] = 1;
         $params['height'] = '30';
         $params['vertical-align'] = 'middle';
         $params['image'] = $this->getImageFileName($image,$params);
 
-        $buttonstyle['onclick'] = new StdClass();
-        $buttonstyle['onclick']->id = $id;
-        $buttonstyle['onclick']->action = $this->addParam('action',$buttonstyle,'submit-form-content');
-        $buttonstyle['onclick']->config = $this->addParam('config',$buttonstyle,'');
-        $buttonstyle['onclick']->sync_open = $this->addParam('sync_open',$buttonstyle,'');
+        if($onclick) {
+            $buttonstyle['onclick'] = $onclick;
+        } else {
+            $buttonstyle['onclick'] = new StdClass();
+            $buttonstyle['onclick']->id = $id;
+            $buttonstyle['onclick']->action = $this->addParam('action',$buttonstyle,'submit-form-content');
+            $buttonstyle['onclick']->config = $this->addParam('config',$buttonstyle,'');
+            $buttonstyle['onclick']->sync_open = $this->addParam('sync_open',$buttonstyle,'');
+        }
 
         $img = $this->getImage($image,$params);
 

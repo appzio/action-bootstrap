@@ -4,8 +4,6 @@
     "font-style": "normal",
     "text-align": "center",
     "color": "#474747",
-    "font-ios": "Roboto-Regular",
-    "font-android": "Roboto",
     "margin": "60 15 60 15"
   },
 
@@ -53,8 +51,6 @@
     "font-size": "9",
     "font-style": "normal",
     "color": "#949494",
-    "font-ios": "Roboto-Regular",
-    "font-android": "Roboto",
     "margin": "7 7 0 7",
     "vertical-align": "top"
   },
@@ -62,8 +58,6 @@
     "font-size": "13",
     "font-style": "normal",
     "color": "#474747",
-    "font-ios": "Roboto-Regular",
-    "font-android": "Roboto",
     "margin": "3 7 7 7",
     "vertical-align": "top"
   },
@@ -76,8 +70,6 @@
     "font-style": "italic",
     "text-align": "left",
     "color": "#474747",
-    "font-ios": "Roboto-Regular",
-    "font-android": "Roboto",
     "padding": "4 4 4 4",
     "height": "33"
   },
@@ -86,8 +78,6 @@
     "font-style": "normal",
     "text-align": "center",
     "color": "#474747",
-    "font-ios": "Roboto-Regular",
-    "font-android": "Roboto",
     "margin": "5 15 5 15"
   },
 

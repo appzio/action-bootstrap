@@ -461,7 +461,7 @@ class ArticleChat extends ArticleComponent {
             //$hint = 'chatid:'.$this->factoryobj->mobilechatobj->getChatId() .'other:' .$this->other_user_play_id . 'mine: ' .$this->playid;
 
             $columns[] = $this->factoryobj->getColumn(array(
-                    $this->factoryobj->getFieldTextarea( '', array( 'submit_menu_id' => 'submit-msg', 'hint' => $hint, 'style' => 'chat-comment-field', 'variable' => '66666660' ,'value' => ''))
+                    $this->factoryobj->getFieldTextarea( '', array( 'submit_menu_id' => 'submit-msg', 'hint' => $hint, 'style' => 'chat-comment-field', 'variable' => '66666660' ,'value' => '', 'activation' => 'keep-open'))
                 ), array( 'style' => 'chat-comment-field-wrap' ));
 
             /* if permission is required from both users for sending pictures */
