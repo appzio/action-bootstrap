@@ -186,6 +186,7 @@ class ArticleChat extends ArticleComponent {
         $imageparams['onclick']->action_config = $this->factoryobj->getConfigParam('detail_view');
 
         $rowparams['padding'] = '0 0 5 15';
+        $rowparams['height'] = '50';
         $rowparams['vertical-align'] = 'middle';
         $rowparams['background-color'] = $this->factoryobj->color_topbar;
 
