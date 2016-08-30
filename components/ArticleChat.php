@@ -47,6 +47,7 @@ class ArticleChat extends ArticleComponent {
     public function template() {
 
         $this->factoryobj->rewriteActionField( 'keep_scroll_in_bottom', 1 );
+        $this->factoryobj->rewriteActionField('poll_update_view', 'all');
 
         // Init the Chat based on the currently requested context
         $this->custom_play_id = isset($this->options['custom_play_id']) ? $this->options['custom_play_id'] : $this->playid;
@@ -103,14 +104,36 @@ class ArticleChat extends ArticleComponent {
             $object->header[] = $this->handlePicPermission();
         }
 
+        $object->header[] = $this->getMyMatchItem( $this->other_user_play_id );
 
-        $object->scroll = $this->getChat();
-        $object->footer = $this->getFooter();
+        $chat_disabled = Appcaching::getGlobalCache( 'chat-flag-' . $this->context_key );
+
+        if ( $chat_disabled ) {
+            // $complete = new StdClass();
+            // $complete->action = 'list-branches';
+            // $this->data->onload[] = $complete;
+            $object->scroll = $this->getChatError();
+        } else {
+            $object->scroll = $this->getChat();
+            $object->footer = $this->getFooter();
+        }
 
         $this->chatid = $this->factoryobj->mobilechatobj->getChatId();
 
         $this->factoryobj->initMobileMatching( $this->other_user_play_id,true );
         return $object;
+    }
+
+    public function getChatError() {
+        $output = array();
+
+        $output[] = $this->factoryobj->getText('Chat error!', array(
+            'padding' => '20 20 20 20',
+            'font-size' => '18',
+            'text-align' => 'center',
+        ));
+
+        return $output;
     }
 
     private function getChat() {
@@ -129,9 +152,6 @@ class ArticleChat extends ArticleComponent {
 
         $output = array();
 
-        $vars = AeplayVariable::getArrayOfPlayvariables($this->other_user_play_id);
-        $output[] = $this->getMyMatchItem($vars,$this->other_user_play_id);
-
         foreach ($items as $item) {
             $output[] = $item;
         }
@@ -141,7 +161,10 @@ class ArticleChat extends ArticleComponent {
         return $output;
     }
 
-    public function getMyMatchItem($vars,$id,$search=false){
+    public function getMyMatchItem( $id ){
+
+        $vars = AeplayVariable::getArrayOfPlayvariables( $id );
+
         if(isset($vars['screen_name'])) {
             $name = $vars['screen_name'];
         }elseif(isset($vars['real_name'])){
@@ -150,10 +173,11 @@ class ArticleChat extends ArticleComponent {
             $name = '{#anonymous#}';
         }
 
-
         $name = isset($vars['city']) ? $name.', '.$vars['city'] : $name;
 
-        $imageparams['style'] = 'round_image_imate';
+        $imageparams['crop'] = 'round';
+        $imageparams['width'] = '40';
+        $imageparams['margin'] = '0 10 0 0';
         $imageparams['onclick'] = new StdClass();
         $imageparams['onclick']->action = 'open-action';
         $imageparams['onclick']->id = $id;
@@ -161,12 +185,13 @@ class ArticleChat extends ArticleComponent {
         $imageparams['onclick']->sync_open = true;
         $imageparams['onclick']->action_config = $this->factoryobj->getConfigParam('detail_view');
 
-        $textparams['style'] = 'imate_title';
-        $rowparams['padding'] = '0 40 0 40';
-        $rowparams['margin'] = '0 0 13 0';
+        $rowparams['padding'] = '0 0 5 15';
         $rowparams['vertical-align'] = 'middle';
-        $rowparams['height'] = '100';
-        $rowparams['background-color'] = '#f4f4f4';
+        $rowparams['background-color'] = $this->factoryobj->color_topbar;
+
+        $textparams['color'] = $this->factoryobj->colors['top_bar_text_color'];
+        $textparams['font-size'] = 15;
+        $textparams['text-align'] = 'center';
 
         $profilepic = isset($vars['profilepic']) ? $vars['profilepic'] : 'anonymous2.png';
         $columns[] = $this->factoryobj->getImage($profilepic, $imageparams);
