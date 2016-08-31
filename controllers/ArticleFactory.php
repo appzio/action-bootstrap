@@ -294,6 +294,28 @@ class ArticleFactory {
     }
 
 
+    /*
+
+    This is the colors array
+
+    [background_color] => #FFFFFFFF
+    [top_bar_color] => #FF34A343
+    [top_bar_text_color] => #FFFFFFFF
+    [top_bar_icon_color] => #FFFFFFFF
+    [button_color] => #FF34A343
+    [button_icon_color] => #FFFFFFFF
+    [button_text_color] => #FFFFFFFF
+    [button_more_info_color] => #FF000000
+    [button_more_info_icon_color] => #FFFFFFFF
+    [button_more_info_text_color] => #FFFFFFFF
+    [item_color] => #FFFFCDD2
+    [item_text_color] => #FFFFFFFF
+    [text_color] => #FF000000
+    [icon_color] => #FF000000
+    [side_menu_color] => #FF34A343
+    [side_menu_text_color] => #FFFFFFFF
+    [top_menu_color] => #FF34A343
+    [top_menu_text_color] => #FFFFFFFF*/
 
     public function setColors(){
 
@@ -323,6 +345,7 @@ class ArticleFactory {
             }
 
             $this->colors = $newcolors;
+
 
             Appcaching::setActionCache($this->action_id,$this->gid,'tabcolors',$colorarray);
         }
