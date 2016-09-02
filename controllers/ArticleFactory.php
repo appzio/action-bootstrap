@@ -368,6 +368,10 @@ class ArticleFactory {
         $class = ucfirst($actiontype) . 'Controller';
         $path = $dir_root . '.controllers.' . $class;
 
+        /* import also the models atuomatically */
+        $model = $dir_root . '.models.*';
+        Yii::import($model);
+
         $controller_included = false;
 
         // Check for subcontrollers
@@ -392,6 +396,7 @@ class ArticleFactory {
             Yii::import($path);
             $controller_included = true;
         }
+
 
         if ( !$controller_included ) {
             return array();
