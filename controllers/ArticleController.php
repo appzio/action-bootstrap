@@ -285,6 +285,13 @@ class ArticleController {
     }
 
 
+    public function getTextFieldWithTitle($submitvarname,$title,$value,$hint=false){
+        $col[] = $this->getText(strtoupper($title),array('style' => 'form-field-titletext'));
+        $col[] = $this->getFieldtext($value,array('variable' => $submitvarname,'hint' => $hint,'style' => 'form-field-textfield'));
+        $col[] = $this->getText('',array('style' => 'form-field-separator'));
+        return $this->getColumn($col,array('style' => 'form-field-row'));
+    }
+
     /* will swap background with one of the action's assets */
     public function configureBackground($imagefield='actionimage1'){
         if ( $this->getConfigParam( $imagefield ) ) {
