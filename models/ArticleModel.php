@@ -6,6 +6,8 @@
 class ArticleModel extends CActiveRecord {
 
 
+    public $configobj;
+    
     public function init(){
 
     }
@@ -77,5 +79,17 @@ class ArticleModel extends CActiveRecord {
         return true;
 
     }
+
+    public function getConfigParam($param,$default=false){
+
+        if (isset($this->configobj->$param)) {
+            return $this->configobj->$param;
+        } elseif ($default) {
+            return $default;
+        }
+
+        return false;
+    }
+
 
 }
