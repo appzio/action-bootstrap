@@ -284,6 +284,13 @@ class ArticleController {
 
     }
 
+    
+    public function getSettingsTitle($title){
+        $output[] = $this->getText(strtoupper($title),array('style' => 'form-field-section-title'));
+        $output[] = $this->getText('',array('height' => '1','background-color' => '#b5b5b5','margin' => '0 0 10 0'));
+        return $this->getColumn($output);
+    }
+
 
     public function getTextFieldWithTitle($submitvarname,$title,$value,$hint=false){
         $col[] = $this->getText(strtoupper($title),array('style' => 'form-field-titletext'));
