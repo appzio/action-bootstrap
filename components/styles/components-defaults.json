@@ -150,6 +150,15 @@
     "color": "#ffffff"
   },
 
+  "oauth_button_style": {
+    "background-color": "#22a085",
+    "text-align": "center",
+    "border-radius": "4",
+    "height": "45",
+    "vertical-align": "middle",
+    "margin": "5 40 0 40"
+  },
+
   "facebook_button_style": {
     "background-color": "#3b5998",
     "text-align": "center",

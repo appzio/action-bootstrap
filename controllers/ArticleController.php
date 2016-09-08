@@ -285,10 +285,10 @@ class ArticleController {
     }
 
     
-    public function getSettingsTitle($title){
+    public function getSettingsTitle($title,$columnparams=false){
         $output[] = $this->getText(strtoupper($title),array('style' => 'form-field-section-title'));
         $output[] = $this->getText('',array('height' => '1','background-color' => '#b5b5b5','margin' => '0 0 10 0'));
-        return $this->getColumn($output);
+        return $this->getColumn($output,$columnparams);
     }
 
 
@@ -391,6 +391,39 @@ class ArticleController {
         return $onclick;
     }
 
+    public function getOnclick($case='tab1',$back=false){
+        $onclick = new StdClass();
+
+        switch($case){
+            case 'tab1':
+                $onclick->action = 'open-tab';
+                $onclick->action_config = '1';
+                break;
+
+            case 'tab2':
+                $onclick->action = 'open-tab';
+                $onclick->action_config = '2';
+                break;
+
+            case 'tab3':
+                $onclick->action = 'open-tab';
+                $onclick->action_config = '3';
+                break;
+
+            case 'tab4':
+                $onclick->action = 'open-tab';
+                $onclick->action_config = '4';
+                break;
+        }
+
+        if($back){
+            $onclick->back_button = 1;
+        }
+
+        return $onclick;
+
+    }
+
     public function getVariableId($varname){
         if(isset($this->vars[$varname])){
             return $this->vars[$varname];
@@ -457,10 +490,13 @@ class ArticleController {
         $this->mobilechatobj->initChat();
     }
 
-    public function getSubmittedVariableByName($varname,$default=false){
+    public function getSubmittedVariableByName($varname,$default=false)
+    {
 
         if (isset($this->submitvariables[$this->getVariableId($varname)])) {
             return $this->submitvariables[$this->getVariableId($varname)];
+        } elseif(isset($this->submitvariables[$varname])){
+            return $this->submitvariables[$varname];
         } elseif ($default) {
             return $default;
         }
@@ -977,21 +1013,39 @@ class ArticleController {
     }
 
 
+    public function getOauthSignInButton(){
 
-    public function getButtonWithIcon($image,$id,$text,$buttonstyle=array(),$textstyle=array(),$onclick=false){
+        // myapp://open?action_id=12329&menuid=menuid
+
+        $md5 = md5($this->playid .$this->gid);
+        $url = $this->getConfigParam('app_link') .'://open?action_id=' .$this->getConfigParam('action_id') .'&menuid=' .$md5;
+
+        $onclick2 = new StdClass();
+        $onclick2->id = 'link';
+        $onclick2->action = 'open-url';
+        $onclick2->sync_open = 1;
+        $onclick2->action_config = $url;
+
+        return $this->getButtonWithIcon('gf-icon-logo.png', 'insta', '{#sign_in_with_golfriend#}', array('style' => 'oauth_button_style'),array('style' => 'fbbutton_text_style'),$onclick2);
+    }
+
+
+
+
+    public function getButtonWithIcon($image,$id,$text,$buttonparams=array(),$textparams=array(),$onclick=false){
         $params['priority'] = 1;
         $params['height'] = '30';
         $params['vertical-align'] = 'middle';
         $params['image'] = $this->getImageFileName($image,$params);
 
         if($onclick) {
-            $buttonstyle['onclick'] = $onclick;
+            $buttonparams['onclick'] = $onclick;
         } else {
-            $buttonstyle['onclick'] = new StdClass();
-            $buttonstyle['onclick']->id = $id;
-            $buttonstyle['onclick']->action = $this->addParam('action',$buttonstyle,'submit-form-content');
-            $buttonstyle['onclick']->config = $this->addParam('config',$buttonstyle,'');
-            $buttonstyle['onclick']->sync_open = $this->addParam('sync_open',$buttonstyle,'');
+            $buttonparams['onclick'] = new StdClass();
+            $buttonparams['onclick']->id = $id;
+            $buttonparams['onclick']->action = $this->addParam('action',$buttonparams,'submit-form-content');
+            $buttonparams['onclick']->config = $this->addParam('config',$buttonparams,'');
+            $buttonparams['onclick']->sync_open = $this->addParam('sync_open',$buttonparams,'');
         }
 
         $img = $this->getImage($image,$params);
@@ -999,10 +1053,10 @@ class ArticleController {
         //$column[] = $this->getColumn(array($img),array('vertical-align' => 'middle','width' => '30'));
         $column[] = $img;
         $column[] = $this->getVerticalSpacer('10');
-        $column[] = $this->getText($text,$textstyle);
+        $column[] = $this->getText($text,$textparams);
 
         if($params['image']){
-            return $this->getRow($column,$buttonstyle);
+            return $this->getRow($column,$buttonparams);
         } else {
             return $this->getError('Image not found');
         }

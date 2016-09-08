@@ -186,7 +186,12 @@ class ArticleFactory {
 
         /* output any errors to view */
         if(!empty($this->childobj->errorMsgs)){
-            $op->scroll = $this->childobj->errorMsgs+$op->scroll;
+            if(isset($op->scroll) AND is_array($op->scroll)){
+                $op->scroll = $this->childobj->errorMsgs+$op->scroll;
+            } else {
+                $op = new StdClass();
+                $op->scroll = $this->childobj->errorMsgs;
+            }
         }
 
         /* save debug to cache, so that it can be shown by the debug or delete if none is set */

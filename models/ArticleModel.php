@@ -7,6 +7,7 @@ class ArticleModel extends CActiveRecord {
 
 
     public $configobj;
+    public $varcontent;
     
     public function init(){
 
@@ -90,6 +91,18 @@ class ArticleModel extends CActiveRecord {
 
         return false;
     }
+
+    public function getSavedVariable($varname,$default=false){
+
+        if (isset($this->varcontent[$varname])) {
+            return $this->varcontent[$varname];
+        } elseif ($default) {
+            return $default;
+        }
+
+        return false;
+    }
+
 
 
 }
