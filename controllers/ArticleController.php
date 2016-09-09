@@ -391,6 +391,21 @@ class ArticleController {
         return $onclick;
     }
 
+    public function updateLocation($interval){
+
+        $updated = $this->getSavedVariable('location_update');
+
+        if($updated+$interval < time()){
+            $onclick = new stdClass();
+            $onclick->action = 'ask-location';
+            $this->saveVariable('location_update',time());
+            return $onclick;
+        }
+
+        return false;
+    }
+
+
     public function getOnclick($case='tab1',$back=false){
         $onclick = new StdClass();
 
