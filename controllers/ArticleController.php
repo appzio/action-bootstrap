@@ -1286,6 +1286,11 @@ class ArticleController {
         $this->reloadData();
     }
 
+    /*
+    * Retrieve all variables, which belong to a certain "playid"
+    * If you intend to use this method without passing a parameter,
+    * you may consider referring to $this->varcontent instead
+    */
     public function getPlayVariables( $playid = false ) {
 
         if ( empty($playid) ) {

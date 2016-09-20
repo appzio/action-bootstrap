@@ -136,9 +136,15 @@ class ArticleChat extends ArticleComponent {
 
         $object->header[] = $this->getMyMatchItem( $this->other_user_play_id );
 
-        $chat_disabled = Appcaching::getGlobalCache( 'chat-flag-' . $this->context_key );
+        $storage = new AeplayKeyvaluestorage();
+        
+        // Look whether the chat is disabled for a certain player
+        $chat_flag = $storage->findByAttributes(array(
+            'play_id' => $this->playid,
+            'key' => 'chat-flag',
+        ));
 
-        if ( $chat_disabled ) {
+        if ( !empty($chat_flag) AND $chat_flag->value == '1' ) {
             // $complete = new StdClass();
             // $complete->action = 'list-branches';
             // $this->data->onload[] = $complete;
