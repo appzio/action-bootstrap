@@ -244,8 +244,6 @@ class ArticleGallery extends ArticleComponent {
             }
         }
 
-
     }
-
 
 }
