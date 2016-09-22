@@ -820,11 +820,15 @@ class ArticleController {
 
         $var = $this->getSubmitVariable($id) ? $this->getSubmitVariable($id) : $this->getVariable($id);
 
-        $onclick = new stdClass();
-        $onclick->action = 'open-tab';
-        $onclick->action_config = '2';
+        $onclick1 = new stdClass();
+        $onclick1->action = 'submit-form-content';
+        $onclick1->id = 'save-variables';
 
-        $data[] = $this->getText($mycountrycode,array('style' => 'phone_register_field_country','onclick' => $onclick));
+        $onclick2 = new stdClass();
+        $onclick2->action = 'open-tab';
+        $onclick2->action_config = '2';
+
+        $data[] = $this->getText($mycountrycode,array('style' => 'phone_register_field_country','onclick' => array($onclick1,$onclick2)));
         $data[] = $this->getFieldtext($var,  $textfieldparams );
 
         $output = $this->getRow( $data, $params );
