@@ -87,6 +87,10 @@ class ArticleController {
 
     public $appinfo;
 
+    public $imagespath;
+    public $imagesearchpath;
+
+
     /* @var Localizationapi */
     public $localizationComponent;
 
@@ -190,6 +194,29 @@ class ArticleController {
         }
     }
 
+    /*
+    this will simply copy an asset from actions assets to images
+    directory without doing any modification. This way the image
+    can be used without any preprosessing and be referenced with its
+    original name. NOTE: as the state of images directory is no permanet,
+    this call should be included with any method requiring the asset every time
+    */
+
+
+    public function copyAssetWithoutProcessing($filename){
+        $target = Controller::getImagesPath($this->gid) .$filename;
+
+        if(file_exists($target)){
+            return true;
+        }
+
+        foreach ($this->imagesobj->imagesearchpath as $place){
+            $sourcepath = $place.$filename;
+            if(file_exists($sourcepath)){
+                copy($sourcepath,$targetpath);
+            }
+        }
+    }
 
 
     /* this will return image filename that the client understands
