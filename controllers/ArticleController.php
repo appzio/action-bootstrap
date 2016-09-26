@@ -213,7 +213,7 @@ class ArticleController {
         foreach ($this->imagesobj->imagesearchpath as $place){
             $sourcepath = $place.$filename;
             if(file_exists($sourcepath)){
-                copy($sourcepath,$targetpath);
+                copy($sourcepath,$target);
             }
         }
     }
