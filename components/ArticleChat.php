@@ -50,7 +50,7 @@ class ArticleChat extends ArticleComponent {
     public function template() {
 
         $this->factoryobj->rewriteActionField( 'keep_scroll_in_bottom', 1 );
-        $this->factoryobj->rewriteActionField('poll_update_view', 'all');
+        $this->factoryobj->rewriteActionField( 'poll_update_view', 'scroll' );
 
         // Init the Chat based on the currently requested context
         $this->custom_play_id = isset($this->options['custom_play_id']) ? $this->options['custom_play_id'] : $this->playid;
@@ -119,6 +119,7 @@ class ArticleChat extends ArticleComponent {
         // App specific settings
         $this->save_match = $this->addParam('save_match',$this->options,false);
         $this->firstname_only = $this->addParam('firstname_only',$this->options,false);
+        $this->hide_time = $this->addParam('hide_time',$this->options,false);
         $this->notify = $this->addParam('notify',$this->options,false);
 
         $this->pic_permission = $this->addParam('pic_permission',$this->options,false);
@@ -249,7 +250,7 @@ class ArticleChat extends ArticleComponent {
         }
 
         $msgs = (object) $this->chat_content['msgs'];
-        $count = count( $msgs );
+        $count = count( $this->chat_content['msgs'] );
 
         foreach ($msgs as $i => $msg) {
 
@@ -258,7 +259,7 @@ class ArticleChat extends ArticleComponent {
             }
 
             $seen_text = '';
-            if ( $count == $i AND $this->userIsOwner( $msg ) ) {
+            if ( $count == ($i+1) AND $this->userIsOwner( $msg ) ) {
                 $seen_text = $this->checkIfSeen( $msg );
             }
 
@@ -269,6 +270,9 @@ class ArticleChat extends ArticleComponent {
             }
 
             $date = $this->factoryobj->getLocalizedDate( 'D, j. \of M @ H:i', $msg['date'] );
+            if ( $this->hide_time ) {
+                $date = $this->factoryobj->getLocalizedDate( 'D, j', $msg['date'] );
+            }
 
             $img_params = array('imgwidth' => 640, 'imgheight' => 400, 'width' => '96%', 'radius' => 4, 'margin' => '4 4 4 4');
             $colitems[] = $this->factoryobj->getText($userInfo['name'] . ', ' . $date, array('style' => 'chat-msg-info'));
