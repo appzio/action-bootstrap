@@ -736,7 +736,7 @@ class ArticleController {
         user has an option to close it and it will not be shown again
     */
 
-    public function getAlertBox($content,$id,$markread=false){
+    public function getAlertBox($content,$id,$show_only_once=false){
 
         if($this->menuid == $id){
             $this->playkeyvaluestorage->set('alertbox'.$id,true);
@@ -753,10 +753,10 @@ class ArticleController {
         $onclick->action = 'submit-form-content';
 
         $alert[] = $this->getText($content,array('style' => 'alertbox_text'));
-        $close[] = $this->getText('x',array('style' => 'alertbox_close'));
+        $close[] = $this->getImage('close-alert-box.png',array('style' => 'alertbox_close'));
         $alert[] = $this->getColumn($close,array('style' => 'alertbox_close_row','onclick' => $onclick));
 
-        if($markread){
+        if($show_only_once){
             $this->playkeyvaluestorage->set('alertbox'.$id,true);
         }
 

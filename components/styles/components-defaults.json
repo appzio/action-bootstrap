@@ -205,19 +205,19 @@
 
   "alertbox_text":{
     "font-size": "13",
-    "color" :"#ffffff"
+    "color" :"#ffffff",
+    "padding" : "0 0 0 9"
   },
 
   "alertbox_close":{
     "font-weight": "bold",
     "color":"#ffffff",
     "font-size": "20",
-    "text-align": "center"
+    "text-align": "center",
+    "height": "25"
   },
 
   "alertbox_close_row":{
-    "border-color":"#ffffff",
-    "border-radius": "15",
     "vertical-align": "middle",
     "text-align":"center",
     "width" :"30",
