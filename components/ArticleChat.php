@@ -271,7 +271,7 @@ class ArticleChat extends ArticleComponent {
 
             $date = $this->factoryobj->getLocalizedDate( 'D, j. \of M @ H:i', $msg['date'] );
             if ( $this->hide_time ) {
-                $date = $this->factoryobj->getLocalizedDate( 'D, j', $msg['date'] );
+                $date = $this->factoryobj->getLocalizedDate( 'D, j. \of M', $msg['date'] );
             }
 
             $img_params = array('imgwidth' => 640, 'imgheight' => 400, 'width' => '96%', 'radius' => 4, 'margin' => '4 4 4 4');
