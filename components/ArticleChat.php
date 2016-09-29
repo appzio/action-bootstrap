@@ -217,6 +217,7 @@ class ArticleChat extends ArticleComponent {
         $imageparams['crop'] = 'round';
         $imageparams['width'] = '40';
         $imageparams['margin'] = '0 10 0 0';
+        $imageparams['priority'] = 9;
         $imageparams['onclick'] = new StdClass();
         $imageparams['onclick']->action = 'open-action';
         $imageparams['onclick']->id = $id;
@@ -274,7 +275,7 @@ class ArticleChat extends ArticleComponent {
                 $date = $this->factoryobj->getLocalizedDate( 'D, j. \of M', $msg['date'] );
             }
 
-            $img_params = array('imgwidth' => 640, 'imgheight' => 400, 'width' => '96%', 'radius' => 4, 'margin' => '4 4 4 4');
+            $img_params = array('imgwidth' => 640, 'imgheight' => 400, 'width' => '96%', 'radius' => 4, 'margin' => '4 4 4 4', 'priority' => '9');
             $colitems[] = $this->factoryobj->getText($userInfo['name'] . ', ' . $date, array('style' => 'chat-msg-info'));
 
             $colitems[] = $this->factoryobj->getText($msg['msg'],array('style' => 'chat-msg-text'));
