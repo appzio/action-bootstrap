@@ -510,8 +510,24 @@ class ArticleChat extends ArticleComponent {
             $hint = isset($this->options['hint']) ? $this->options['hint'] : '{#write_a_message#}';
             //$hint = 'chatid:'.$this->factoryobj->mobilechatobj->getChatId() .'other:' .$this->other_user_play_id . 'mine: ' .$this->playid;
 
+            $args = array(
+                'submit_menu_id' => 'submit-msg',
+                'hint' => $hint,
+                'variable' => '66666660',
+                'value' => '',
+                'activation' => 'keep-open',
+                'background-color' => '#ffffff',
+                'font-size' => '12',
+                'font-style' => 'italic',
+                'color' => '#474747',
+                'padding' => '4 4 4 4',
+                'height' => '35',
+                'border-radius' => '4',
+                'vertical-align' => 'middle',
+            );
+
             $columns[] = $this->factoryobj->getColumn(array(
-                    $this->factoryobj->getFieldTextarea( '', array( 'submit_menu_id' => 'submit-msg', 'hint' => $hint, 'style' => 'chat-comment-field', 'variable' => '66666660' ,'value' => '', 'activation' => 'keep-open'))
+                    $this->factoryobj->getFieldTextarea( '', $args )
                 ), array( 'style' => 'chat-comment-field-wrap' ));
 
             /* if permission is required from both users for sending pictures */
