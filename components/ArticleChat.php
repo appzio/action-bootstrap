@@ -90,7 +90,6 @@ class ArticleChat extends ArticleComponent {
         $this->saveChatMsg();
         $content = $this->factoryobj->mobilechatobj->getChatContent();
 
-
         if($this->limit_monologue){
             $reverse = array_reverse($content);
             $count = 1;
@@ -112,9 +111,6 @@ class ArticleChat extends ArticleComponent {
                 $this->disable_chat = true;
             }
         }
-
-
-
 
         // App specific settings
         $this->save_match = $this->addParam('save_match',$this->options,false);
@@ -168,6 +164,7 @@ class ArticleChat extends ArticleComponent {
             'padding' => '20 20 20 20',
             'font-size' => '18',
             'text-align' => 'center',
+            'color' => '#ffffff',
         ));
 
         return $output;
