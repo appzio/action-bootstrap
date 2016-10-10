@@ -1,49 +1,36 @@
 {
-
   "form-field-section-title":{
     "background-color": "#eaeaea",
     "font-size": "13",
     "padding" : "8 8 8 8",
     "font-weight": "bold"
   },
-
   "form-field-separator":{
     "background-color": "#eaeaea",
     "height": "1",
     "margin": "0 14 10 14"
   },
-
   "form-field-titletext":{
     "font-size": "12",
     "padding" : "3 14 0 14"
-
-
   },
   "form-field-textfield":{
     "font-size": "13",
     "padding" : "0 14 0 14",
     "vertical-align": "top"
   },
-
-
   "form-field-textfield-onoff":{
     "font-size": "13",
     "padding" : "0 14 9 14"
   },
-
   "form-field-non-editable-textfield":{
     "font-size": "13",
     "padding" : "15 14 13 14"
-
   },
-
-
   "form-field-row":{
     "font-size": "13",
     "width": "100%"
   },
-
-
   "article-button": {
     "width": "100%",
     "height": "100",
@@ -62,7 +49,6 @@
       "padding": "4 60 4 60"
     }
   },
-
   "loader-text": {
     "font-size": "16",
     "font-style": "normal",
@@ -71,7 +57,6 @@
     "padding": "4 4 0 4",
     "margin": "10 42 0 42"
   },
-
   "topbar-row": {
     "width": "75%",
     "alignment": "center",
@@ -85,7 +70,6 @@
     "color": "#000000",
     "background-color": "#ffffff"
   },
-
   "field-with-icon": {
     "height": "45",
     "margin": "10 10 0 10",
@@ -93,7 +77,6 @@
     "background-color": "#ffffff",
     "border-radius": "4"
   },
-
   "field-with-icon-error": {
     "height": "45",
     "margin": "10 10 0 10",
@@ -103,7 +86,6 @@
     "border-color": "#e51414",
     "border-width": "1"
   },
-
   "field-with-icon-phone": {
     "height": "45",
     "margin": "10 40 0 40",
@@ -111,7 +93,6 @@
     "background-color": "#ffffff",
     "border-radius": "4"
   },
-
   "field-with-icon-error-phone": {
     "height": "45",
     "margin": "10 40 0 40",
@@ -121,9 +102,6 @@
     "border-color": "#e51414",
     "border-width": "1"
   },
-
-
-
   "field-icon-column-left": {
     "width": "15%",
     "height": "35",
@@ -142,14 +120,12 @@
     "width": "25%",
     "vertical-align": "middle"
   },
-
   "fbbutton_text_style": {
     "font-size": "12",
     "font-style": "normal",
     "text-align": "center",
     "color": "#ffffff"
   },
-
   "oauth_button_style": {
     "background-color": "#22a085",
     "text-align": "center",
@@ -158,7 +134,6 @@
     "vertical-align": "middle",
     "margin": "5 40 0 40"
   },
-
   "facebook_button_style": {
     "background-color": "#3b5998",
     "text-align": "center",
@@ -167,7 +142,6 @@
     "vertical-align": "middle",
     "margin": "5 40 0 40"
   },
-
   "instagram_button_style": {
     "background-color": "#ffffff",
     "text-align": "center",
@@ -176,7 +150,6 @@
     "vertical-align": "middle",
     "margin": "5 40 0 40"
   },
-
   "twitter_button_style": {
     "background-color": "#00acee",
     "color" :"#ffffff",
@@ -186,29 +159,22 @@
     "vertical-align": "middle",
     "margin": "5 40 0 40"
   },
-
-
   "instagram_text_style": {
     "font-size": "12",
     "font-style": "normal",
     "text-align": "center",
     "color": "#000000"
   },
-
-
-
   "alertbox":{
     "padding": "8 8 8 8",
     "background-color": "#911111",
     "vertical-align": "middle"
   },
-
   "alertbox_text":{
     "font-size": "13",
     "color" :"#ffffff",
     "padding" : "0 0 0 9"
   },
-
   "alertbox_close":{
     "font-weight": "bold",
     "color":"#ffffff",
@@ -216,7 +182,6 @@
     "text-align": "center",
     "height": "25"
   },
-
   "alertbox_close_row":{
     "vertical-align": "middle",
     "text-align":"center",
@@ -234,6 +199,17 @@
     "padding": "9 15 9 15",
     "margin": "25 10 5 10"
   },
+  "general_button_style": {
+    "font-size": "14",
+    "border-width": "1",
+    "border-color": "#000000",
+    "text-align": "center",
+    "color": "#000000",
+    "border-radius": "4",
+    "vertical-align": "middle",
+    "padding": "9 15 9 15",
+    "margin": "10 10 5 10"
+  },
   "register-text-step-error": {
     "font-size": "13",
     "font-style": "normal",
@@ -242,13 +218,10 @@
     "padding": "4 4 0 4",
     "margin": "0 42 3 42"
   },
-
   "phone_register_field_country": {
     "font-size": "13",
     "background-color": "#CCEDE9",
     "padding": "3 6 3 6",
     "border-radius": "4"
-
   }
-
 }
