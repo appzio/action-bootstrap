@@ -681,6 +681,13 @@ class ArticleController {
     public function getImage($filename,$params=array()){
         $file = $this->getImageFileName($filename,$params);
 
+        // Check if $filename is an external URL
+        if ( empty($file) ) {
+            if (filter_var($filename, FILTER_VALIDATE_URL) !== false) {
+                $file = $filename;
+            }
+        }
+
         if($file){
             return $this->returnComponent('image','field',$file,$params);
         } else {
