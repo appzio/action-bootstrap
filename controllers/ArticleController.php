@@ -109,6 +109,9 @@ class ArticleController {
     /* @var AegameKeyvaluestorage */
     public $appkeyvaluestorage;
 
+    /** @var MobileloginModel */
+    public $loginmodel;
+
 
     public function __construct($obj){
 
@@ -193,6 +196,21 @@ class ArticleController {
             $this->setBranchlist($list);
         }
     }
+
+
+    public function initLoginModel(){
+        Yii::import('application.modules.aelogic.packages.actionMobilelogin.models.*');
+
+        $this->loginmodel = new MobileloginModel();
+        $this->loginmodel->userid = $this->userid;
+        $this->loginmodel->playid = $this->playid;
+        $this->loginmodel->gid = $this->gid;
+        $this->loginmodel->password = $this->getSavedVariable('password');
+        $this->loginmodel->fbid = $this->getSavedVariable('fbid');
+        $this->loginmodel->fbtoken = $this->getSavedVariable('fb_token');
+        $this->loginmodel->password = $this->getSavedVariable('password');
+    }
+
 
     /*
     this will simply copy an asset from actions assets to images
