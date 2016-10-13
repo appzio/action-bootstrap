@@ -586,9 +586,10 @@ class ArticleChat extends ArticleComponent {
                 continue;
             }
 
-            if ( !isset($message['msg_is_read']) ) {
+            // Do not update the message
+            if ( !isset($message['msg_is_read']) OR $message['msg_is_read'] == 1 ) {
                 continue;
-            }            
+            }
 
             $this->factoryobj->mobilechatobj->updateMessageStatus( $message['id'] );
         }
