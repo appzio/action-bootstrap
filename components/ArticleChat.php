@@ -35,6 +35,7 @@ class ArticleChat extends ArticleComponent {
 
     public $context;
     public $context_key;
+    public $disable_header = false;
 
     public $other_user_play_id;
 
@@ -59,6 +60,7 @@ class ArticleChat extends ArticleComponent {
         $this->context = $this->addParam('context',$this->options,false);
         $this->context_key = $this->addParam('context_key',$this->options,false);
         $this->limit_monologue = $this->addParam('limit_monologue',$this->options,false);
+        $this->disable_header = $this->addParam('disable_header',$this->options,false);
 
         $this->factoryobj->initMobileChat( $this->context, $this->context_key );
         
@@ -127,11 +129,12 @@ class ArticleChat extends ArticleComponent {
 
         $object = new StdClass();
 
-        if($this->pic_permission){
-            $object->header[] = $this->handlePicPermission();
+        if ( !$this->disable_header ) {
+            if ( $this->pic_permission ) {
+                $object->header[] = $this->handlePicPermission();
+            }
+            $object->header[] = $this->getMyMatchItem( $this->other_user_play_id );
         }
-
-        $object->header[] = $this->getMyMatchItem( $this->other_user_play_id );
 
         $storage = new AeplayKeyvaluestorage();
         
@@ -170,7 +173,7 @@ class ArticleChat extends ArticleComponent {
         return $output;
     }
 
-    private function getChat() {
+    public function getChat() {
 
         $this->markMsgsAsRead();
 

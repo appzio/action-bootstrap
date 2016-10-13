@@ -14,7 +14,7 @@ class Article_View_Image extends ArticleComponent {
         $obj->content = $this->content;
 
         $params = array(
-            'onclick', 'variable','crop','image_fallback','selected_state'
+            'onclick', 'variable', 'crop', 'image_fallback', 'selected_state', 'lazy',
         );
 
         foreach ($params as $param) {
