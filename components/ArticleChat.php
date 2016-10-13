@@ -441,7 +441,7 @@ class ArticleChat extends ArticleComponent {
             if ( $notify ) {
                 $notification_text = $this->getFirstName($msg['name']) . ': ' . $message_text;
                 $title = 'Message from ' . $this->getFirstName($msg['name']);
-                Aenotification::addUserNotification( $this->other_user_play_id, $title, $notification_text );
+                Aenotification::addUserNotification( $this->other_user_play_id, $title, $notification_text,0,$this->gid );
             }
 
             $this->factoryobj->mobilematchingobj->addNotificationToBanner('msg');
