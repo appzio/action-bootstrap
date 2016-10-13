@@ -1348,49 +1348,25 @@ class ArticleController {
     }
 
     public function getLocalizedDate( $format, $stamp ) {
+        $day = '{#' .date('l',$stamp) .'#}';
+        $month = '{#' .date('F',$stamp) .'#}';
+        $daynumber = date('j',$stamp);
 
-        if ( !is_int($stamp) ) {
-            $stamp = strtotime( $stamp );
+        if($daynumber == 1){
+            $extension = 'st';
+        }elseif($daynumber == 3) {
+            $extension = 'nd';
+        }elseif($daynumber == 3) {
+            $extension = 'rd';
+        }else {
+            $extension = 'th';
         }
 
-        $months = array(
-            '{#january#}', '{#february#}', '{#march#}', '{#april#}', '{#may#}', '{#june#}', '{#july#}', '{#august#}', '{#september#}', '{#october#}', '{#november#}', '{#december#}'
-        );
+        $time = date('H:i',$stamp);
+        $output = $day. ', '.$daynumber .$extension .' {#of#} '.$month .' @ '.$time;
+        
+        return $output;
 
-        $days = array(
-            '{#monday#}', '{#tuesday#}', '{#wednesday#}', '{#thursday#}', '{#friday#}', '{#saturday#}', '{#sunday#}',
-        );
-
-        // -- equals "day"
-        // - equals "month"
-        $replaces = array(
-            'D' => '{--N}',
-            'M' => '{-n}',
-        );
-
-        $result = str_replace(
-            array_keys($replaces), 
-            array_values($replaces), 
-            $format
-        );
-
-        $date_int = date( $result, $stamp );
-
-        $days_rp = preg_replace_callback('~({--\d})~', function( $matches ) use($days) {
-            $entry = $matches[0];
-            $num = filter_var($entry, FILTER_SANITIZE_NUMBER_INT);
-            $num = str_replace('--', '', $num);
-            return $days[$num - 1];
-        }, $date_int);
-
-        $final = preg_replace_callback('~({-\d})~', function( $matches ) use($months) {
-            $entry = $matches[0];
-            $num = filter_var($entry, FILTER_SANITIZE_NUMBER_INT);
-            $num = str_replace('-', '', $num);
-            return $months[$num - 1];
-        }, $days_rp);
-
-        return $final;
     }
 
 
