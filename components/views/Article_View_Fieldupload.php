@@ -18,6 +18,7 @@ class Article_View_Fieldupload extends ArticleComponent {
         }
 
         $obj->content = $this->content;
+
         return $obj;
     }
 

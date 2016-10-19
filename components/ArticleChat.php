@@ -498,14 +498,12 @@ class ArticleChat extends ArticleComponent {
             $output = array();
             $output[] = $this->factoryobj->getText('{#sorry_message_limit_reached#}',array('style' => 'chat-msg-text-centered'));
             return $output;
-
         }
 
         $this->debug = false;
         $output = array();
 
         if ( isset($this->varcontent['name']) AND $this->varcontent['name']
-            OR isset($this->varcontent['code']) AND $this->varcontent['code']
             OR isset($this->varcontent['real_name']) AND $this->varcontent['real_name']
         ) {
 
