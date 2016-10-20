@@ -10,6 +10,12 @@
     "height": "1",
     "margin": "0 14 10 14"
   },
+  "form-field-separator-error":{
+    "background-color": "#F41416",
+    "height": "1",
+    "margin": "0 14 10 14"
+  },
+
   "form-field-titletext":{
     "font-size": "12",
     "padding" : "3 14 0 14"
@@ -19,6 +25,14 @@
     "padding" : "0 14 0 14",
     "vertical-align": "top"
   },
+  "form-field-textfield-error":{
+    "font-size": "13",
+    "padding" : "0 14 0 14",
+    "vertical-align": "top",
+    "border-width" : "1",
+    "border-color": "#F41416"
+  },
+
   "form-field-textfield-onoff":{
     "font-size": "13",
     "padding" : "0 14 9 14"

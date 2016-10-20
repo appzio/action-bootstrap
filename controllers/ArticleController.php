@@ -513,6 +513,36 @@ class ArticleController {
         }
     }
 
+    public function validateEmail($email){
+        $validator = new CEmailValidator;
+        $validator->checkMX = true;
+
+        if($email) {
+            if ($validator->validateValue($email)) {
+                return 1;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    public function validateWebsite($url){
+        if(strlen($url) < 4){
+            return false;
+        }
+
+        if(!stristr($this->getSavedVariable('website'),'http')){
+            $url = 'http://'.$url;
+        }
+
+        $url = parse_url($url);
+        if (!isset($url["host"])) return false;
+        return !(gethostbyname($url["host"]) == $url["host"]);
+    }
+
+
     public function getSubmitVariable($varid){
         if(isset($this->submitvariables[$varid])){
             return $this->submitvariables[$varid];
