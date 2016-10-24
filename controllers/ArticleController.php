@@ -1366,7 +1366,7 @@ class ArticleController {
         return $vars;
     }
 
-    public function getLocalizedDate( $format, $stamp ) {
+    public function getLocalizedDate( $stamp, $show_time = true ) {
         $day = '{#' .date('l',$stamp) .'#}';
         $month = '{#' .date('F',$stamp) .'#}';
         $daynumber = date('j',$stamp);
@@ -1381,11 +1381,13 @@ class ArticleController {
             $extension = 'th';
         }
 
-        $time = date('H:i',$stamp);
-        $output = $day. ', '.$daynumber .$extension .' {#of#} '.$month .' @ '.$time;
+        $time = date( 'H:i', $stamp );
+        $output = $day . ', '. $daynumber . $extension . ' {#of#} ' . $month;
+        if ( $show_time ) {
+            $output .= ' @ ' . $time;
+        }
         
         return $output;
-
     }
 
 
