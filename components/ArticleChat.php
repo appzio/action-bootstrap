@@ -1,6 +1,7 @@
 <?php
 
 Yii::import('application.modules.aelogic.article.components.*');
+Yii::import('application.modules.aechat.models.*');
 
 class ArticleChat extends ArticleComponent {
 
@@ -44,6 +45,12 @@ class ArticleChat extends ArticleComponent {
     public $limit_monologue;
     public $disable_chat = false;
 
+    public $can_invite_others;
+    public $hide_time;
+
+    /* for group chats */
+    public $userlist;
+
     protected function requiredOptions() {
         return array();
     }
@@ -61,6 +68,8 @@ class ArticleChat extends ArticleComponent {
         $this->context_key = $this->addParam('context_key',$this->options,false);
         $this->limit_monologue = $this->addParam('limit_monologue',$this->options,false);
         $this->disable_header = $this->addParam('disable_header',$this->options,false);
+        $this->can_invite_others = $this->addParam('can_invite_others',$this->options,false);
+        $this->userlist = $this->addParam('userlist',$this->options,false);
 
         $this->factoryobj->initMobileChat( $this->context, $this->context_key );
         
@@ -91,7 +100,58 @@ class ArticleChat extends ArticleComponent {
 
         $this->saveChatMsg();
         $content = $this->factoryobj->mobilechatobj->getChatContent();
+        $this->disableChat($content);
 
+        // App specific settings
+        $this->save_match = $this->addParam('save_match',$this->options,false);
+        $this->firstname_only = $this->addParam('firstname_only',$this->options,false);
+        $this->hide_time = $this->addParam('hide_time',$this->options,false);
+        $this->notify = $this->addParam('notify',$this->options,false);
+
+        $this->pic_permission = $this->addParam('pic_permission',$this->options,false);
+        $this->strip_urls = $this->addParam('strip_urls',$this->options,false);
+
+        if ( !empty($content) ) {
+            $this->chat_content['msgs'] = $content;
+        }
+
+        $object = new StdClass();
+        $this->chatid = $this->factoryobj->mobilechatobj->getChatId();
+
+        /* header */
+        if ( !$this->disable_header ) {
+            if ( $this->pic_permission ) {
+                $object->header[] = $this->handlePicPermission();
+            }
+
+            $object->header[] = $this->getMyMatchItem( $this->other_user_play_id );
+        }
+
+
+        $storage = new AeplayKeyvaluestorage();
+        
+        // Look whether the chat is disabled for a certain player
+        $chat_flag = $storage->findByAttributes(array(
+            'play_id' => $this->playid,
+            'key' => 'chat-flag',
+        ));
+
+        if ( !empty($chat_flag) AND $chat_flag->value == '1' ) {
+            // $complete = new StdClass();
+            // $complete->action = 'list-branches';
+            // $this->data->onload[] = $complete;
+            $object->scroll = $this->getChatError();
+        } else {
+            $object->scroll = $this->getChat();
+            $object->footer = $this->getFooter();
+        }
+
+
+        $this->factoryobj->initMobileMatching( $this->other_user_play_id,true );
+        return $object;
+    }
+
+    public function disableChat($content){
         if($this->limit_monologue){
             $reverse = array_reverse($content);
             $count = 1;
@@ -113,51 +173,6 @@ class ArticleChat extends ArticleComponent {
                 $this->disable_chat = true;
             }
         }
-
-        // App specific settings
-        $this->save_match = $this->addParam('save_match',$this->options,false);
-        $this->firstname_only = $this->addParam('firstname_only',$this->options,false);
-        $this->hide_time = $this->addParam('hide_time',$this->options,false);
-        $this->notify = $this->addParam('notify',$this->options,false);
-
-        $this->pic_permission = $this->addParam('pic_permission',$this->options,false);
-        $this->strip_urls = $this->addParam('strip_urls',$this->options,false);
-
-        if ( !empty($content) ) {
-            $this->chat_content['msgs'] = $content;
-        }
-
-        $object = new StdClass();
-
-        if ( !$this->disable_header ) {
-            if ( $this->pic_permission ) {
-                $object->header[] = $this->handlePicPermission();
-            }
-            $object->header[] = $this->getMyMatchItem( $this->other_user_play_id );
-        }
-
-        $storage = new AeplayKeyvaluestorage();
-        
-        // Look whether the chat is disabled for a certain player
-        $chat_flag = $storage->findByAttributes(array(
-            'play_id' => $this->playid,
-            'key' => 'chat-flag',
-        ));
-
-        if ( !empty($chat_flag) AND $chat_flag->value == '1' ) {
-            // $complete = new StdClass();
-            // $complete->action = 'list-branches';
-            // $this->data->onload[] = $complete;
-            $object->scroll = $this->getChatError();
-        } else {
-            $object->scroll = $this->getChat();
-            $object->footer = $this->getFooter();
-        }
-
-        $this->chatid = $this->factoryobj->mobilechatobj->getChatId();
-
-        $this->factoryobj->initMobileMatching( $this->other_user_play_id,true );
-        return $object;
     }
 
     public function getChatError() {
@@ -200,6 +215,10 @@ class ArticleChat extends ArticleComponent {
 
     public function getMyMatchItem( $id ){
 
+        if($this->userlist){
+            return $this->getGroupChatHeader($this->userlist);
+        }
+
         $vars = AeplayVariable::getArrayOfPlayvariables( $id );
 
         if(isset($vars['screen_name'])) {
@@ -211,6 +230,11 @@ class ArticleChat extends ArticleComponent {
         } else {
             $name = '{#anonymous#}';
         }
+
+
+        $string = $this->factoryobj->localizationComponent->smartLocalize('{#chat_with#}');
+
+        $this->factoryobj->rewriteActionField('subject',$string.' ' .$name);
 
         $name = isset($vars['city']) ? $name.', '.$vars['city'] : $name;
 
@@ -240,7 +264,81 @@ class ArticleChat extends ArticleComponent {
         $columns[] = $this->factoryobj->getImage($profilepic, $imageparams);
         $columns[] = $this->factoryobj->getText($name, $textparams);
 
+        if($this->can_invite_others == true){
+            $columns[] = $this->factoryobj->getImage('add-user-group.png',array('margin' => '8 14 8 8','onclick' => $this->factoryobj->getOnclick('tab2', true)));
+        }
+
         return $this->factoryobj->getRow($columns,$rowparams);
+    }
+
+
+    private function getGroupChatHeader($users){
+        $names = '';
+        $profilepics = array();
+        $count = 0;
+
+        foreach ($users as $user){
+            $vars = AeplayVariable::getArrayOfPlayvariables($user);
+            $name = $this->getFirstName($vars['real_name']);
+            $names .= $name .', ';
+            $profilepic = isset($vars['profilepic']) ? $vars['profilepic'] : 'anonymous2.png';
+            $profilepics[] = $profilepic;
+            $count++;
+        }
+
+        if($names){
+            $names = substr($names,0,-2);
+
+            if(strlen($names) > 35){
+                $names = substr($names,0,32) .'...';
+            }
+        }
+
+        $imageparams['style'] = 'round_image_imate_stacked';
+        $imageparams['priority'] = 9;
+        $piccount=1;
+
+        foreach ($profilepics AS $pic){
+            if($piccount < 3 OR count($profilepics) == 3){
+                $col[] = $this->factoryobj->getImage($pic,$imageparams);
+            }
+            $piccount++;
+        }
+
+        $left = count($profilepics)-2;
+
+        if($left > 1){
+            $imageparams['style'] = 'round_image_imate_stacked_text';
+            $col[] = $this->factoryobj->getText('+'.$left,$imageparams);
+        }
+
+        $textparams['color'] = '#ffffff';
+        $textparams['font-size'] = '12';
+        $col[] = $this->factoryobj->getVerticalSpacer(20);
+
+        $chatinfo = Aechat::model()->findBYPk($this->chatid);
+
+        $name = isset($chatinfo->title) ? $chatinfo->title : '{#untitled#}';
+
+        $this->factoryobj->rewriteActionField('subject',$this->factoryobj->localizationComponent->smartLocalize($name));
+
+        $row[] = $this->factoryobj->getText('{#group_chat_with#}',$textparams);
+
+        $subtext['color'] = '#ffffff';
+        $subtext['font-size'] = '12';
+        $row[] = $this->factoryobj->getText($names,$subtext);
+        $col[] = $this->factoryobj->getColumn($row,array('vertical-align' => 'middle','margin' => '0 0 0 25'));
+
+        $rowparams['padding'] = '0 0 5 5';
+        $rowparams['height'] = '80';
+        $rowparams['vertical-align'] = 'middle';
+        $rowparams['background-color'] = $this->factoryobj->color_topbar;
+        $rowparams['onclick'] = $this->factoryobj->getOnclick('tab2', true);
+
+        $col[] = $this->factoryobj->getImage('beak-icon.png',array('margin' => '22 14 22 8'));
+
+
+        return $this->factoryobj->getRow($col,$rowparams);
     }
 
     private function renderChatMsgs() {

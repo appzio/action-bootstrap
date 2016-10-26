@@ -492,6 +492,22 @@ class ArticleController {
         }
     }
 
+    /* collects location once */
+    public function getCollectLocation(){
+        $cache = Appcaching::getGlobalCache('location-asked'.$this->playid);
+
+        if(!$cache){
+            $menu2 = new StdClass();
+            $menu2->action = 'ask-location';
+            Appcaching::setGlobalCache('location-asked'.$this->playid,true);
+            return $menu2;
+        } else {
+            return false;
+        }
+    }
+
+
+
     public function getFullPageLoader($color='#000000',$text=false){
         $color = $color ? $color : '#000000';
         $text = $text ? $text : '{#loading#}';
@@ -1419,6 +1435,9 @@ class ArticleController {
         
         return $output;
     }
+
+
+
 
 
     /* depreceated */
