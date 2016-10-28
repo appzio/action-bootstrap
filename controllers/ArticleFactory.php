@@ -197,6 +197,13 @@ class ArticleFactory {
         /* save debug to cache, so that it can be shown by the debug or delete if none is set */
         if(!empty($this->childobj->debugMsgs)){
             array_unshift($this->childobj->debugMsgs,$this->actionobj->name);
+
+            $cache = Appcaching::getGlobalCache($this->playid .'-debug');
+
+            if(is_array($cache)){
+                $this->childobj->debugMsgs = $cache+$this->childobj->debugMsgs;
+            }
+
             Appcaching::setGlobalCache($this->playid .'-debug',$this->childobj->debugMsgs);
         }
 
