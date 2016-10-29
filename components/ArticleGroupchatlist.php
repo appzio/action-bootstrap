@@ -8,17 +8,23 @@ class ArticleGroupchatlist extends ArticleComponent {
 
     /* prevents from listing chats that are already shown in the view, simple list of id's */
     public $expended_connection_ids;
+    public $mode;
 
     public function template(){
 
         $this->expended_connection_ids = $this->addParam('expended_connection_ids',$this->options,false);
+        $this->mode = $this->addParam('mode',$this->options,'mychats');
+
+        if(!is_object($this->factoryobj->mobilechatobj)){
+            $this->factoryobj->initMobileChat(false,false);
+        }
 
         if(stristr($this->factoryobj->menuid,'delete_chat_')){
             $id = str_replace('delete_chat_','',$this->factoryobj->menuid);
             Aechat::model()->deleteAllByAttributes(array('id' => $id,'owner_play_id' => $this->playid));
         }
 
-        $matches = $this->factoryobj->mobilematchingobj->getGroupChats();
+        $matches = $this->factoryobj->mobilechatobj->getGroupChats($this->mode);
         return $this->groupChats($matches);
 
     }
@@ -32,10 +38,13 @@ class ArticleGroupchatlist extends ArticleComponent {
 
         foreach ($matches as $key => $res) {
             $out[] = $this->groupChatItem($res);
+            $out[] = $this->factoryobj->getText('',array('margin' => '8 20 4 20','background-color' => '#BABABA','height' => '1','opacity' => '0.4'));
             $this->expended_connection_ids[$res] = true;
             unset($columns);
             unset($s);
         }
+
+        array_pop($out);
 
         if(isset($out)){
             return $this->factoryobj->getColumn($out);
@@ -46,13 +55,14 @@ class ArticleGroupchatlist extends ArticleComponent {
 
     public function groupChatItem($contextkey){
 
-        $textparams['onclick'] = new StdClass();
-        $textparams['onclick']->action = 'open-action';
-        $textparams['onclick']->id = $contextkey;
-        $textparams['onclick']->back_button = true;
-        $textparams['onclick']->sync_open = true;
-        $textparams['onclick']->viewport = 'bottom';
-        $textparams['onclick']->action_config = $this->factoryobj->requireConfigParam('chat');
+        $onclick = new StdClass();
+        $onclick->action = 'open-action';
+        $onclick->id = $contextkey;
+        $onclick->back_button = true;
+        $onclick->sync_open = true;
+        $onclick->viewport = 'bottom';
+        $onclick->action_config = $this->factoryobj->requireConfigParam('chat');
+
         $textparams['style'] = 'imate_title';
 
         $chatinfo = Aechatusers::getChatInfo($contextkey);
@@ -115,7 +125,6 @@ class ArticleGroupchatlist extends ArticleComponent {
 
         $col[] = $this->factoryobj->getColumn($row,array('style' => 'imate_contacts_textrow_group'));
 
-
         if($chatowner AND $chatowner == $this->playid){
             $add = new stdClass();
             $add->id = 'delete_chat_'.$chatid;
@@ -132,7 +141,10 @@ class ArticleGroupchatlist extends ArticleComponent {
 
         }
 
-        return $this->factoryobj->getRow($finalrow);
+        $lastcol[] = $this->factoryobj->getRow($finalrow,array('onclick' => $onclick));
+        $lastcol[] = $this->factoryobj->getText('',array('margin' => '8 20 0 20','height' => '1','opacity' => '0.4'));
+
+        return $this->factoryobj->getColumn($lastcol);
 
 
     }

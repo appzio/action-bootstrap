@@ -1109,7 +1109,7 @@ class ArticleController {
 
     public function getButtonWithIcon($image,$id,$text,$buttonparams=array(),$textparams=array(),$onclick=false){
         $params['priority'] = 1;
-        $params['height'] = '30';
+        $params['height'] = '28';
         $params['vertical-align'] = 'middle';
         $params['image'] = $this->getImageFileName($image,$params);
 

@@ -1,4 +1,20 @@
 {
+
+  "imate_contacts_textrow": {
+    "margin": "15 0 0 30",
+    "vertical-align": "middle"
+  },
+
+  "imate_contacts_textrow_group": {
+    "margin": "24 0 0 0",
+    "vertical-align": "middle"
+  },
+
+  "imate_contacts_textrow_group_offset": {
+    "margin": "24 0 0 0",
+    "vertical-align": "middle"
+  },
+
   "form-field-section-title":{
     "background-color": "#eaeaea",
     "font-size": "13",
