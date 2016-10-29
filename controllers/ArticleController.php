@@ -662,74 +662,52 @@ class ArticleController {
         return $this->returnComponent('swipenavi','field','',$params);
     }
 
+    /* @normally used */
+    public function getSelectorListField($params){
+        $params['mode'] = 'field';
+        return $this->returnComponent('selectorlist','module',false,$params);
+    }
+
+    public function getSelectorListing($params){
+        $params['mode'] = 'list';
+        return $this->returnComponent('selectorlist','module',false,$params);
+    }
+
+    public function formkitCheckbox($variable,$title,$params=false){
+        $params['title'] = $title;
+        $params['variable'] = $variable;
+        return $this->returnComponent('formkitcheckbox','field','',$params);
+    }
+
+    public function formkitField($variable,$title,$hint,$type=false,$error=false){
+        $params['title'] = $title;
+        $params['hint'] = $hint;
+        $params['variable'] = $variable;
+        return $this->returnComponent('formkitfield','field','',$params);
+    }
+
+    public function formkitSlider($title,$variablename,$defaultvalue,$minvalue,$maxvalue,$step){
+        $params['title'] = $title;
+        $params['variable'] = $variablename;
+        $params['default'] = $defaultvalue;
+        $params['minvalue'] = $minvalue;
+        $params['maxvalue'] = $maxvalue;
+        $params['step'] = $step;
+        return $this->returnComponent('formkitslider','field','',$params);
+    }
+
+
+
+
 
     public function getTabs($content,$params=array(),$divider=false,$indicatorontop=false){
         /* you can configure the needed params here */
-
-        if(count($content) == 1){
-            $width = $this->screen_width;
-            $fontsize = '14';
-        } elseif(count($content) == 2){
-            $width = round($this->screen_width/2,0);
-            $fontsize = '14';
-        } elseif(count($content) == 3){
-            $width = round($this->screen_width/3,0);
-            $fontsize = '14';
-        } elseif(count($content) == 4){
-            $width = round($this->screen_width/4,0);
-            $fontsize = '12';
-        } elseif(count($content) == 5){
-            $width = round($this->screen_width/5,0);
-            $fontsize = '10';
-        } else {
-            $width = round($this->screen_width/6,0);
-            $fontsize = '10';
-        }
-
-        $count = 1;
-
-        foreach($content as $item){
-            $onclick = new StdClass();
-            $onclick->action = 'open-tab';
-            $onclick->action_config = $count;
-            $onclick->id = $count .'11';
-
-            $btn1 = $this->getText($item,array('padding' => '10 10 10 10',
-                'color' => $this->colors['top_bar_text_color'],'text-align' => 'center',
-                'onclick' => $onclick,'font-size' => $fontsize
-                ));
-
-            if($this->current_tab == $count){
-                $btn2 = $this->getText('',array('height' => '3','background-color' => $this->color_topbar_hilite,'width' => $width));
-            } else {
-                $btn2 = $this->getText('',array('height' => '3','background-color' => $this->color_topbar,'width' => $width));
-            }
-
-            if($indicatorontop){
-                $btn = array($btn2,$btn1);
-            } else {
-                $btn = array($btn1,$btn2);
-
-            }
-
-            $col[] = $this->getColumn($btn,array('width' => $width));
-            unset($btn);
-
-            if($divider){
-                $col[] = $this->getVerticalSpacer(1,array('background-color' => $this->colors['top_bar_text_color']));
-            }
-
-            $count++;
-
-        }
-
-        if(isset($col)){
-            $row = $this->getRow($col,array('background-color' => $this->color_topbar));
-            return $row;
-        }
-
+        $params['divider'] = $divider;
+        $params['content'] = $content;
+        $params['indicatorontop'] = $indicatorontop;
+        $params['params'] = $params;
+        return $this->returnComponent('formkittabs','field','',$params);
     }
-
 
     public function rewriteActionConfigField($field,$newcontent){
         $this->rewriteconfigs[$field] = $newcontent;
@@ -810,30 +788,11 @@ class ArticleController {
 
     public function getAlertBox($content,$id,$show_only_once=false){
 
-        if($this->menuid == $id){
-            $this->playkeyvaluestorage->set('alertbox'.$id,true);
-        }
+        $params['id'] = $id;
+        $params['content'] = $content;
+        $params['show_only_once'] = $show_only_once;
 
-        $ison = $this->playkeyvaluestorage->get('alertbox'.$id);
-
-        if($ison){
-            return false;
-        }
-
-        $onclick = new StdClass();
-        $onclick->id = $id;
-        $onclick->action = 'submit-form-content';
-
-        $alert[] = $this->getText($content,array('style' => 'alertbox_text'));
-        $close[] = $this->getImage('close-alert-box.png',array('style' => 'alertbox_close'));
-        $alert[] = $this->getColumn($close,array('style' => 'alertbox_close_row','onclick' => $onclick));
-
-        if($show_only_once){
-            $this->playkeyvaluestorage->set('alertbox'.$id,true);
-        }
-
-        return $this->getRow($alert,array('style' => 'alertbox'));
-
+        return $this->returnComponent('alertbox','field',$content,$params);
     }
 
     public function getListOfCities(){
@@ -858,8 +817,6 @@ class ArticleController {
 
         return $output;
     }
-
-
 
 
     public function getCheckbox($varname, $title, $error = false, $params = false){
@@ -1230,6 +1187,10 @@ class ArticleController {
 
     public function moduleChat($params){
         return $this->returnComponent('chat','module',false,$params);
+    }
+    
+    public function moduleGroupChatList($params){
+        return $this->returnComponent('groupchatlist','module',false,$params);
     }
 
     public function getError($msg){

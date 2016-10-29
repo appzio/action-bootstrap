@@ -158,12 +158,14 @@ class ArticleComponent {
         if( isset($this->required_params) AND !empty($this->required_params) ){
             foreach($this->required_params AS $param){
                 if(!isset($this->options[$param])){
-                    $obj = new StdClass;
-                    $obj->type = 'msg-plain';
-                    $obj->content = 'Required parameter {' .$param .'} missing';
-                    return $obj;
+                    $out[] = $this->factoryobj->getText('Required parameter {' .$param .'} missing',array('color' => '#C91E19','font-size' => 13,'text-align' => 'center'));
                 }
             }
+
+            if(isset($out)){
+                return $this->factoryobj->getColumn($out);
+            }
+
         }
 
         if(isset($this->options['strlen'])){

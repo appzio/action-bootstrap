@@ -374,6 +374,10 @@ class ArticleFactory {
         $this->imagespath = Yii::getPathOfAlias('application.modules.aelogic.packages.action' .$cc .'.images');
         $this->imagesobj->imagesearchpath[] = $this->imagespath .'/';
 
+        /* component default images */
+        $searchpath = Yii::getPathOfAlias('application.modules.aelogic.components.images');
+        $this->imagesobj->imagesearchpath[] = $searchpath .'/';
+
         Yii::import('application.modules.aelogic.packages.ActivationEngineAction');
 
         $dir_root = 'application.modules.aelogic.packages.action' . ucfirst($actiontype);
