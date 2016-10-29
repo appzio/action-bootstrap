@@ -12,7 +12,6 @@ class ArticleGroupchatlist extends ArticleComponent {
 
     public function template(){
 
-        $this->expended_connection_ids = $this->addParam('expended_connection_ids',$this->options,false);
         $this->mode = $this->addParam('mode',$this->options,'mychats');
 
         if(!is_object($this->factoryobj->mobilechatobj)){

@@ -10,12 +10,20 @@ class Article_View_Formkitcheckbox extends ArticleComponent {
 
         $title = $this->addParam('title',$this->options,false);
         $varname = $this->addParam('variable',$this->options,false);
+        $value = $this->addParam('value',$this->options,false);
+
+        if(!$value){
+            $value = $this->factoryobj->getSavedVariable($varname);
+        }
+
+        $variable = $this->factoryobj->getVariableId($varname) ? $this->factoryobj->getVariableId($varname) : $varname;
 
         $row[] = $this->factoryobj->getText(strtoupper($title), array('style' => 'form-field-textfield-onoff'));
-        $row[] = $this->factoryobj->getFieldonoff($this->factoryobj->getSavedVariable($varname),array(
-                    'value' => $this->factoryobj->getSavedVariable($varname),
-                    'variable' => $this->factoryobj->getVariableId($varname),
+        $row[] = $this->factoryobj->getFieldonoff($value,array(
+                    'value' => $value,
+                    'variable' => $variable,
                     'margin' => '0 15 9 0',
+
                     'floating' => '1',
                     'float' => 'right'
                 )
