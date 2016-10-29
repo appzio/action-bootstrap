@@ -588,6 +588,7 @@ class ArticleController {
         $this->mobilechatobj = new Aechat();
         $this->mobilechatobj->play_id = $this->playid;
         $this->mobilechatobj->gid = $this->gid;
+        $this->mobilechatobj->game_id = $this->gid;
         $this->mobilechatobj->context = $context;
         $this->mobilechatobj->context_key = $context_key;
         

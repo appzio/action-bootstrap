@@ -89,7 +89,8 @@ class ArticleFactory {
 
     public $localizationComponent;
 
-    public $query;                  // this is the original query as api has received it
+    public $query;
+    public $checkSumCheckParams;                  // this is the original query as api has received it
 
     /* gets called when object is created & fed with initial values */
     public function playInit() {
@@ -388,6 +389,8 @@ class ArticleFactory {
         $model = $dir_root . '.models.*';
         Yii::import($model);
 
+        $this->setupChecksumChecker($actiontype);
+
         $controller_included = false;
 
         // Check for subcontrollers
@@ -430,6 +433,19 @@ class ArticleFactory {
 
         $this->childobj = new $class($this);
         $this->moduleAssets();
+    }
+
+    public function setupChecksumChecker($actiontype){
+        $model = ucfirst($actiontype) . 'Model';
+        $rootPath = Yii::getPathOfAlias('application.modules.aelogic.packages.action' .ucfirst($actiontype) .'.models.'.$model);
+
+        if(file_exists($rootPath.'.php')){
+            if(class_exists($model)){
+                if(method_exists($model,'SetChecksumChecker')){
+                    $this->checkSumCheckParams = $model::SetChecksumChecker($this->playid,$this->userid);
+                }
+            }
+        }
     }
 
 
