@@ -92,6 +92,8 @@ class ArticleGroupchatlist extends ArticleComponent {
         }
 
         $imageparams['style'] = 'round_image_imate_stacked';
+        $imageparams['imgwidth'] = '250';
+        $imageparams['imgheight'] = '250';
         $imageparams['priority'] = 9;
         $piccount=1;
 
@@ -105,16 +107,18 @@ class ArticleGroupchatlist extends ArticleComponent {
         $left = count($profilepics)-2;
 
         if($left > 1){
-            $imageparams['style'] = 'round_image_imate_stacked_text';
+            $imageparams['style'] = 'round_image_stacked_text';
             $finalrow[] = $this->factoryobj->getText('+'.$left,$imageparams);
         }
-
+        
         if($piccount == 3){
-            $finalrow[] = $this->factoryobj->getVerticalSpacer(75);
+            $finalrow[] = $this->factoryobj->getVerticalSpacer(81);
         }elseif($piccount == 2){
-            $finalrow[] = $this->factoryobj->getVerticalSpacer(104);
+            $finalrow[] = $this->factoryobj->getVerticalSpacer(116);
+        } elseif($piccount == 4) {
+            $finalrow[] = $this->factoryobj->getVerticalSpacer(0);
         } else {
-            $finalrow[] = $this->factoryobj->getVerticalSpacer(50);
+            $finalrow[] = $this->factoryobj->getVerticalSpacer(53);
         }
 
 

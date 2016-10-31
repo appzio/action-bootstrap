@@ -72,6 +72,19 @@ class ArticleChat extends ArticleComponent {
         $this->userlist = $this->addParam('userlist',$this->options,false);
 
         $this->factoryobj->initMobileChat( $this->context, $this->context_key );
+
+        if($this->factoryobj->mobilechatobj->error_state == true){
+            /* only one-on-one chats should be created automatically if they are missing */
+            if(strstr($this->context_key,'-chat-')){
+                $this->factoryobj->mobilechatobj->addChat($this->context,$this->context_key,$this->otheruser);
+                if($this->factoryobj->mobilechatobj->error_state == true){
+                    return false;
+                }
+            } else {
+                return false;
+            }
+
+        }
         
         /* we look for the user's playid using from the chat id */
         $otheruser = explode('-chat-',$this->context_key);
@@ -273,6 +286,13 @@ class ArticleChat extends ArticleComponent {
 
 
     private function getGroupChatHeader($users){
+
+        $cache = Appcaching::getGlobalCache('chatheader-'.$this->chatid);
+        if($cache){
+            return $cache;
+        }
+
+
         $names = '';
         $profilepics = array();
         $count = 0;
@@ -295,6 +315,8 @@ class ArticleChat extends ArticleComponent {
         }
 
         $imageparams['style'] = 'round_image_imate_stacked';
+        $imageparams['imgwidth'] = '250';
+        $imageparams['imgheight'] = '250';
         $imageparams['priority'] = 9;
         $piccount=1;
 
@@ -336,9 +358,10 @@ class ArticleChat extends ArticleComponent {
         $rowparams['onclick'] = $this->factoryobj->getOnclick('tab2', true);
 
         $col[] = $this->factoryobj->getImage('beak-icon.png',array('margin' => '22 14 22 8'));
+        $ret = $this->factoryobj->getRow($col,$rowparams);
+        Appcaching::setGlobalCache('chatheader-'.$this->chatid,$ret,600);
+        return $ret;
 
-
-        return $this->factoryobj->getRow($col,$rowparams);
     }
 
     private function renderChatMsgs() {
@@ -531,18 +554,20 @@ class ArticleChat extends ArticleComponent {
         }
 
         if ( $this->other_user_play_id ) {
-            $this->factoryobj->initMobileMatching( $this->other_user_play_id, true );
-            $this->factoryobj->mobilematchingobj->saveMatch();
+            if($this->factoryobj->getConfigParam('save_match_when_chatting')){
+                $this->factoryobj->initMobileMatching( $this->other_user_play_id, true );
+                $this->factoryobj->mobilematchingobj->saveMatch();
+            }
 
-            $notify = AeplayVariable::fetchWithName($this->playid,'notify',$this->gid);
+/*            $notify = AeplayVariable::fetchWithName($this->playid,'notify',$this->gid);
 
             if ( $notify ) {
                 $notification_text = $this->getFirstName($msg['name']) . ': ' . $message_text;
-                $title = 'Message from ' . $this->getFirstName($msg['name']);
+                $title = $this->factoryobj->localizationComponent->smartLocalize('{#message_from#} ') . $this->getFirstName($msg['name']);
                 Aenotification::addUserNotification( $this->other_user_play_id, $title, $notification_text,0,$this->gid );
             }
 
-            $this->factoryobj->mobilematchingobj->addNotificationToBanner('msg');
+            $this->factoryobj->mobilematchingobj->addNotificationToBanner('msg');*/
         }
 
     }
@@ -663,6 +688,10 @@ class ArticleChat extends ArticleComponent {
     }
 
     public function checkIfSeen( $message ) {
+
+        if(!isset($message['id'])){
+            return false;
+        }
 
         $is_seen = $this->factoryobj->mobilechatobj->checkMessageStatus( $message['id'] );
 

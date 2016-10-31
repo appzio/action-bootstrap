@@ -674,6 +674,20 @@ class ArticleController {
         return $this->returnComponent('selectorlist','module',false,$params);
     }
 
+
+    public function formkitTags($title,$items,$params=false){
+        $params['title'] = $title;
+        $params['items'] = $items;
+        return $this->returnComponent('formkittags','field','',$params);
+    }
+
+    public function formkitRadiobuttons($title,$items,$params=false){
+        $params['title'] = $title;
+        $params['items'] = $items;
+        return $this->returnComponent('formkitradiobuttons','field','',$params);
+    }
+
+
     public function formkitCheckbox($variable,$title,$params=false){
         $params['title'] = $title;
         $params['variable'] = $variable;
@@ -817,6 +831,23 @@ class ArticleController {
         }
 
         return $output;
+    }
+
+    /* note: you need to determine elsewhere whether this list needs to be updated */
+    public function getNearbyCities($force_update=false){
+
+        if(!$this->getSavedVariable('lat') OR !$this->getSavedVariable('lon')){
+            return false;
+        }
+
+        $cities = json_decode($this->getSavedVariable('nearby_cities'),true);
+
+        if(!$cities OR !is_array($cities) OR $force_update){
+            $cities = ThirdpartyServices::getNearbyCities($this->getSavedVariable('lat'),$this->getSavedVariable('lon'),$this->gid);
+            $this->saveVariable('nearby_cities',json_encode($cities));
+        }
+
+        return $cities;
     }
 
 

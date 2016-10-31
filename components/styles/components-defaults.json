@@ -1,5 +1,69 @@
 {
 
+
+  "formkit-radiobutton-unselected": {
+    "font-size": "13",
+    "padding" : "7 7 7 7",
+    "font-weight": "bold",
+    "border-radius": "8",
+    "border-color": "#eaeaea",
+    "border-width": "1",
+    "margin": "0 0 9 13",
+    "width": "auto",
+    "white-space": "nowrap"
+  },
+
+  "round_image_stacked_text": {
+    "crop": "round",
+    "margin": "5 -38 5 5",
+    "width": "60",
+    "height": "60",
+    "border-color": "#ffffff",
+    "border-width": "3",
+    "border-radius": "30",
+    "background-color": "#DADADA",
+    "color": "#6B6B6B",
+    "text-align": "center",
+    "font-size": "22",
+    "font-weight": "bold"
+  },
+  "formkit-radiobutton-selected": {
+    "font-size": "13",
+    "padding" : "7 7 7 7",
+    "font-weight": "bold",
+    "border-radius": "8",
+    "background-color": "#4cd864",
+    "color" :"#ffffff",
+    "margin": "0 0 9 13",
+    "width": "auto",
+    "white-space": "nowrap"
+  },
+
+
+  "selectorlist_selector_checkbox_unselected": {
+    "width": "34",
+    "height": "34",
+    "background-image": "checkbox-icon-unchecked.png",
+    "background-size": "contain",
+    "text-align": "center",
+    "vertical-align": "middle",
+    "margin": "6 0 0 0",
+    "float": "1",
+    "align": "right"
+  },
+
+  "selectorlist_selector_checkbox_selected": {
+    "width": "34",
+    "height": "34",
+    "background-image": "checkbox-icon-checked.png",
+    "background-size": "contain",
+    "text-align": "center",
+    "vertical-align": "middle",
+    "margin": "6 0 0 0",
+    "float": "1",
+    "align": "right"
+  },
+
   "imate_contacts_textrow": {
     "margin": "15 0 0 30",
     "vertical-align": "middle"

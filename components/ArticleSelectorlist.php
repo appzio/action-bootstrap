@@ -14,6 +14,10 @@ class ArticleSelectorlist extends ArticleComponent {
 
     public $required_params = array( 'mode', 'variable' );
     public $list_data;
+    public $tab;
+    public $tab_back;
+    public $saved_data;
+    public $dont_save_variable;
 
 
     public function template(){
@@ -24,7 +28,10 @@ class ArticleSelectorlist extends ArticleComponent {
         $this->variable = $this->addParam('variable',$this->options);
         $this->hint = $this->addParam('hint',$this->options,false);
         $this->title = $this->addParam('title',$this->options,false);
-        
+        $this->tab = $this->addParam('tab',$this->options,2);
+        $this->tab_back = $this->addParam('tab_back',$this->options,1);
+        $this->dont_save_variable = $this->addParam('dont_save_variable',$this->options,1);
+
         if($this->mode == 'field'){
             return $this->getField();
         } else {
@@ -37,7 +44,7 @@ class ArticleSelectorlist extends ArticleComponent {
 
         $onclick3 = new stdClass();
         $onclick3->action = 'open-tab';
-        $onclick3->action_config = 2;
+        $onclick3->action_config = $this->tab;
         $onclick3->back_button = 1;
 
         $list = json_decode($this->factoryobj->getSavedVariable($this->variable),true);
@@ -54,7 +61,7 @@ class ArticleSelectorlist extends ArticleComponent {
 
         $countries = !empty($countries) ? $countries : '{#all#}';
 
-        $row[] = $this->factoryobj->getText($countries,array('variable' => '','hint' => $this->hint,'style' => 'fashion-form-field-non-editable-textfield'));
+        $row[] = $this->factoryobj->getText($countries,array('variable' => '','hint' => $this->hint,'style' => 'form-field-non-editable-textfield'));
         $row[] = $this->factoryobj->getImage('beak-icon.png',array('height' => '22','margin' => '0 20 0 0','opacity' => '0.6',
             'floating' => '1',
             'float' => 'right'
@@ -68,6 +75,16 @@ class ArticleSelectorlist extends ArticleComponent {
     }
 
 
+    public function saveData($data){
+
+        if($this->dont_save_variable){
+            $this->saved_data = $data;
+        } else {
+            $this->factoryobj->saveVariable($this->variable,$data);
+        }
+
+
+    }
     public function getListing(){
 
         if($this->factoryobj->menuid == 'list-saver'){
@@ -84,10 +101,10 @@ class ArticleSelectorlist extends ArticleComponent {
             }
 
             if(!empty($names)){
-                $this->factoryobj->saveVariable($this->variable,json_encode($names));
+                $this->saveData(json_encode($names));
             }
         } elseif($this->factoryobj->menuid == 'choose_all'){
-            $this->factoryobj->saveVariable($this->variable,'all');
+            $this->saveData('all');
             return true;
         }
 
@@ -97,7 +114,9 @@ class ArticleSelectorlist extends ArticleComponent {
         $output[] = $this->factoryobj->getText(strtoupper('{#search_filtering#}'),array('style' => 'form-field-section-title'));
 
         $output = new stdClass();
-        $output->scroll[] = $this->factoryobj->getText('{#please_choose_countries#}', array( 'style' => 'register-text-step-2'));
+        if($this->hint){
+            $output->scroll[] = $this->factoryobj->getText($this->hint, array( 'style' => 'register-text-step-2'));
+        }
         $output->scroll[] = $this->factoryobj->getSpacer(9);
         $output->scroll[] = $this->factoryobj->getText('',array('style' => 'form-field-separator'));
 
@@ -128,10 +147,10 @@ class ArticleSelectorlist extends ArticleComponent {
 
         $onclick3 = new stdClass();
         $onclick3->action = 'open-tab';
-        $onclick3->action_config = 1;
+        $onclick3->action_config = $this->tab_back;
 
         unset($row);
-        $row[] = $this->factoryobj->getTextbutton('{#cancel#}',array('id' => 'cancel','action' => 'open-tab', 'config' => 1,'width' => '33%'));
+        $row[] = $this->factoryobj->getTextbutton('{#cancel#}',array('id' => 'cancel','action' => 'open-tab', 'config' => $this->tab_back,'width' => '33%'));
         $row[] = $this->factoryobj->getVerticalSpacer('1%');
         $row[] = $this->factoryobj->getTextbutton('{#all#}',array('id' => 'cancel','onclick' => array($onclick1,$onclick3), 'width' => '32%'));
         $row[] = $this->factoryobj->getVerticalSpacer('1%');
@@ -151,13 +170,13 @@ class ArticleSelectorlist extends ArticleComponent {
         }
 
         if (isset($data[$key])){
-            $selectstate = array('style' => 'fashion_selector_checkbox_selected','variable_value' => 1,'active' => 1, 'allow_unselect' => 1,'animation' => 'fade');
+            $selectstate = array('style' => 'selectorlist_selector_checkbox_selected','variable_value' => 1,'active' => 1, 'allow_unselect' => 1,'animation' => 'fade');
         } else {
-            $selectstate = array('style' => 'fashion_selector_checkbox_selected','variable_value' => 1,'allow_unselect' => 1,'animation' => 'fade');
+            $selectstate = array('style' => 'selectorlist_selector_checkbox_selected','variable_value' => 1,'allow_unselect' => 1,'animation' => 'fade');
         }
 
         $col[] = $this->factoryobj->getText($value);
-        $col[] = $this->factoryobj->getText('',array('style'=>'fashion_selector_checkbox_unselected','variable' => 'listitem_'.$key,'selected_state' => $selectstate));
+        $col[] = $this->factoryobj->getText('',array('style'=>'selectorlist_selector_checkbox_unselected','variable' => 'listitem_'.$key,'selected_state' => $selectstate));
 
         return $this->factoryobj->getRow($col,array('margin' => '0 15 2 15','padding' => '5 5 5 5','background-color' => '#ffffff',
             'vertical-align' => 'middle'));
