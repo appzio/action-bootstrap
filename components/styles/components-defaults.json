@@ -90,10 +90,18 @@
     "height": "1",
     "margin": "0 14 10 14"
   },
+
+  "formkit-error": {
+    "margin": "0 14 10 14",
+    "color": "#F41416",
+    "font-size": "13"
+  },
+
+
   "form-field-separator-error":{
     "background-color": "#F41416",
     "height": "1",
-    "margin": "0 14 10 14"
+    "margin": "0 14 3 14"
   },
 
   "form-field-titletext":{
@@ -117,6 +125,13 @@
     "font-size": "13",
     "padding" : "0 14 9 14"
   },
+
+  "form-field-textfield-onoff-link":{
+    "font-size": "13",
+    "padding" : "0 14 9 14",
+    "color" : "#388AC2"
+  },
+
   "form-field-non-editable-textfield":{
     "font-size": "13",
     "padding" : "15 14 13 14"

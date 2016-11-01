@@ -14,7 +14,8 @@ class Article_View_Formkitslider extends ArticleComponent {
         $minvalue = $this->addParam('minvalue',$this->options,false);
         $maxvalue = $this->addParam('maxvalue',$this->options,false);
         $step = $this->addParam('step',$this->options,false);
-
+        $error = $this->addParam('error',$this->options,false);
+        
         $val = $this->factoryobj->getSavedVariable($variable) ? $this->factoryobj->getSavedVariable($variable) : $default;
         $variableid = $this->factoryobj->getVariableId($variable);
 
@@ -32,6 +33,15 @@ class Article_View_Formkitslider extends ArticleComponent {
 
         $col[] = $this->factoryobj->getRow($row,array('margin' => '15 0 15 0','height' => '30','vertical-align' => 'middle'));
         $col[] = $this->factoryobj->getText('',array('style' => 'form-field-separator'));
+
+        if($error){
+            $output[] = $this->factoryobj->getText('',array('style' => 'form-field-separator-error'));
+            $output[] = $this->factoryobj->getText($error,array('style' => 'formkit-error'));
+        } else {
+            $output[] = $this->factoryobj->getText('',array('style' => 'form-field-separator'));
+        }
+
+
         return $this->factoryobj->getColumn($col,array('style' => 'form-field-row'));
 	}
 

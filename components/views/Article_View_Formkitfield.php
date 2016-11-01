@@ -5,6 +5,7 @@ Yii::import('application.modules.aelogic.article.components.*');
 class Article_View_Formkitfield extends ArticleComponent {
 
     public $vars;
+    public $value;
 
     public function template() {
 
@@ -13,14 +14,16 @@ class Article_View_Formkitfield extends ArticleComponent {
         $error = $this->addParam('error',$this->options,false);
         $hint = $this->addParam('hint',$this->options,false);
         $type = $this->addParam('type',$this->options,false);
-
         $param = $this->factoryobj->getVariableId($variable);
 
-        if($error){
-            $content = $this->factoryobj->getSubmittedVariableByName($variable);
-        } else {
-            $content = $this->factoryobj->getSavedVariable($variable);
+        if(!$this->value){
+            $this->value = $this->factoryobj->getSubmittedVariableByName($variable);
+
+            if(!$this->value){
+                $this->value = $this->factoryobj->getSavedVariable($variable);
+            }
         }
+
         $col[] = $this->factoryobj->getText(strtoupper($title),array('style' => 'form-field-titletext'));
 
         if($error){
@@ -32,13 +35,20 @@ class Article_View_Formkitfield extends ArticleComponent {
         }
 
         if($type){
-            $col[] = $this->factoryobj->getFieldtext($content,array('variable' => $param,'hint' => $hint,'style' => $style,'input_type' => $type));
+            $col[] = $this->factoryobj->getFieldtext($this->value,array('variable' => $param,'hint' => $hint,'style' => $style,'input_type' => $type));
         } else {
-            $col[] = $this->factoryobj->getFieldtext($content,array('variable' => $param,'hint' => $hint,'style' => $style));
+            $col[] = $this->factoryobj->getFieldtext($this->value,array('variable' => $param,'hint' => $hint,'style' => $style));
         }
 
+
         $col[] = $this->factoryobj->getText('',array('style' => $style_separator));
+
+        if($error){
+            $col[] = $this->factoryobj->getText($error,array('style' => 'formkit-error'));
+        }
+
         return $this->factoryobj->getColumn($col,array('style' => 'form-field-row'));
+
 
 	}
 

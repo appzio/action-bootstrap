@@ -14,9 +14,13 @@ class Article_View_Formkitradiobuttons extends ArticleComponent {
         $varname = $this->addParam('variable',$this->options,false);
         $this->value = $this->addParam('value',$this->options,false);
         $items = $this->addParam('items',$this->options,false);
+        $error = $this->addParam('error',$this->options,false);
 
         if(!$this->value){
-            $this->value = $this->factoryobj->getSavedVariable($varname);
+            $this->value = $this->factoryobj->getSubmittedVariableByName($varname);
+            if(!$this->value){
+                $this->value = $this->factoryobj->getSavedVariable($varname);
+            }
         }
 
         $this->variable = $this->factoryobj->getVariableId($varname) ? $this->factoryobj->getVariableId($varname) : $varname;
@@ -50,7 +54,13 @@ class Article_View_Formkitradiobuttons extends ArticleComponent {
         }
 
 
-        $output[] = $this->factoryobj->getText('',array('style' => 'form-field-separator'));
+        if($error){
+            $output[] = $this->factoryobj->getText('',array('style' => 'form-field-separator-error'));
+            $output[] = $this->factoryobj->getText($error,array('style' => 'formkit-error'));
+        } else {
+            $output[] = $this->factoryobj->getText('',array('style' => 'form-field-separator'));
+        }
+
 
         return $this->factoryobj->getColumn($output, array('style' => 'form-field-row'));
 	}

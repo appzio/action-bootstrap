@@ -289,7 +289,7 @@ class ArticleChat extends ArticleComponent {
 
         $cache = Appcaching::getGlobalCache('chatheader-'.$this->chatid);
         if($cache){
-            return $cache;
+            //return $cache;
         }
 
 
@@ -330,7 +330,7 @@ class ArticleChat extends ArticleComponent {
         $left = count($profilepics)-2;
 
         if($left > 1){
-            $imageparams['style'] = 'round_image_imate_stacked_text';
+            $imageparams['style'] = 'round_image_stacked_text';
             $col[] = $this->factoryobj->getText('+'.$left,$imageparams);
         }
 

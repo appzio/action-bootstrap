@@ -675,22 +675,25 @@ class ArticleController {
     }
 
 
-    public function formkitTags($title,$items,$params=false){
+    public function formkitTags($title,$items,$params=false,$error=false){
         $params['title'] = $title;
         $params['items'] = $items;
+        $params['error'] = $error;
         return $this->returnComponent('formkittags','field','',$params);
     }
 
-    public function formkitRadiobuttons($title,$items,$params=false){
+    public function formkitRadiobuttons($title,$items,$params=false,$error=false){
         $params['title'] = $title;
         $params['items'] = $items;
+        $params['error'] = $error;
         return $this->returnComponent('formkitradiobuttons','field','',$params);
     }
 
 
-    public function formkitCheckbox($variable,$title,$params=false){
+    public function formkitCheckbox($variable,$title,$params=false,$error=false){
         $params['title'] = $title;
         $params['variable'] = $variable;
+        $params['error'] = $error;
         return $this->returnComponent('formkitcheckbox','field','',$params);
     }
 
@@ -698,6 +701,8 @@ class ArticleController {
         $params['title'] = $title;
         $params['hint'] = $hint;
         $params['variable'] = $variable;
+        $params['type'] = $type;
+        $params['error'] = $error;
         return $this->returnComponent('formkitfield','field','',$params);
     }
 

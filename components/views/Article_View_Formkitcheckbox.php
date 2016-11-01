@@ -5,22 +5,35 @@ Yii::import('application.modules.aelogic.article.components.*');
 class Article_View_Formkitcheckbox extends ArticleComponent {
 
     public $vars;
+    public $value;
 
     public function template() {
 
         $title = $this->addParam('title',$this->options,false);
-        $varname = $this->addParam('variable',$this->options,false);
-        $value = $this->addParam('value',$this->options,false);
+        $variable = $this->addParam('variable',$this->options,false);
+        $error = $this->addParam('error',$this->options,false);
+        $onclick = $this->addParam('onclick',$this->options,false);
 
-        if(!$value){
-            $value = $this->factoryobj->getSavedVariable($varname);
+        $this->value = $this->factoryobj->getVariableId($variable);
+
+        if(!$this->value){
+            $this->value = $this->factoryobj->getSubmittedVariableByName($variable);
+            if(!$this->value){
+                $this->value = $this->factoryobj->getSavedVariable($variable);
+            }
+        }
+        
+        $variable = $this->factoryobj->getVariableId($variable) ? $this->factoryobj->getVariableId($variable) : $variable;
+
+        if($onclick){
+            $row[] = $this->factoryobj->getText(strtoupper($title), array('style' => 'form-field-textfield-onoff-link', 'onclick' => $onclick));
+        } else {
+            $row[] = $this->factoryobj->getText(strtoupper($title), array('style' => 'form-field-textfield-onoff'));
         }
 
-        $variable = $this->factoryobj->getVariableId($varname) ? $this->factoryobj->getVariableId($varname) : $varname;
 
-        $row[] = $this->factoryobj->getText(strtoupper($title), array('style' => 'form-field-textfield-onoff'));
-        $row[] = $this->factoryobj->getFieldonoff($value,array(
-                    'value' => $value,
+        $row[] = $this->factoryobj->getFieldonoff($this->value,array(
+                    'value' => $this->value,
                     'variable' => $variable,
                     'margin' => '0 15 9 0',
 
@@ -30,7 +43,15 @@ class Article_View_Formkitcheckbox extends ArticleComponent {
             );
 
         $columns[] = $this->factoryobj->getRow($row);
-        $columns[] = $this->factoryobj->getText('',array('style' => 'form-field-separator'));
+
+        if($error){
+            $columns[] = $this->factoryobj->getText('',array('style' => 'form-field-separator-error'));
+            $columns[] = $this->factoryobj->getText($error,array('style' => 'formkit-error'));
+        } else {
+            $columns[] = $this->factoryobj->getText('',array('style' => 'form-field-separator'));
+        }
+
+
         return $this->factoryobj->getColumn($columns, array('style' => 'form-field-row'));
 	}
 
