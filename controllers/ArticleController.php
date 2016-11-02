@@ -852,6 +852,10 @@ class ArticleController {
             $this->saveVariable('nearby_cities',json_encode($cities));
         }
 
+        if(!is_array($cities)){
+            return array();
+        }
+
         return $cities;
     }
 
