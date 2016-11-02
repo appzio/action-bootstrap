@@ -14,8 +14,6 @@ class Article_View_Formkitcheckbox extends ArticleComponent {
         $error = $this->addParam('error',$this->options,false);
         $onclick = $this->addParam('onclick',$this->options,false);
 
-        $this->value = $this->factoryobj->getVariableId($variable);
-
         if(!$this->value){
             $this->value = $this->factoryobj->getSubmittedVariableByName($variable);
             if(!$this->value){
