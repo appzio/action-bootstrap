@@ -842,7 +842,7 @@ class ArticleController {
     public function getNearbyCities($force_update=false){
 
         if(!$this->getSavedVariable('lat') OR !$this->getSavedVariable('lon')){
-            return false;
+            return array();
         }
 
         $cities = json_decode($this->getSavedVariable('nearby_cities'),true);
