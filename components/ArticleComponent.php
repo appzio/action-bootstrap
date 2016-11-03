@@ -138,6 +138,10 @@ class ArticleComponent {
             'background-size',
             'color',
 
+            'shadow-color',
+            'shadow-offset',
+            'shadow-radius',
+            
             'vertical-align',
             'border-radius',
 
