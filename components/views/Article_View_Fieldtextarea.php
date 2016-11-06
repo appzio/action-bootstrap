@@ -12,7 +12,7 @@ class Article_View_Fieldtextarea extends ArticleComponent {
         $obj->content = $this->content;
 
         $params = array(
-            'hint', 'height','variable','submit_menu_id','maxlength','activation'
+            'hint', 'height','variable','submit_menu_id','maxlength','activation','content'
         );
 
         foreach ($params as $param) {

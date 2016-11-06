@@ -113,6 +113,18 @@
     "padding" : "0 14 0 14",
     "vertical-align": "top"
   },
+
+  "profile-field-label": {
+    "font-style" : "normal",
+    "font-size" : "14"
+  },
+
+  "form-field-textarea":{
+    "font-size": "13",
+    "margin" : "0 14 0 10",
+    "vertical-align": "top"
+  },
+
   "form-field-textfield-error":{
     "font-size": "13",
     "padding" : "0 14 0 14",

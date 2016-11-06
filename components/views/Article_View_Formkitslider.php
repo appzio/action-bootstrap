@@ -19,8 +19,18 @@ class Article_View_Formkitslider extends ArticleComponent {
         $val = $this->factoryobj->getSavedVariable($variable) ? $this->factoryobj->getSavedVariable($variable) : $default;
         $variableid = $this->factoryobj->getVariableId($variable);
 
+        if(!$variableid){
+            $variableid = $variable;
+        }
+
+        if(strlen($maxvalue) > 4){
+            $width = '70%';
+        } else {
+            $width = '80%';
+        }
+
         $params  = array('variable'=>$variableid,'min_value' => $minvalue,'max_value' => $maxvalue,'value' => $val,'step' => $step,
-            'left_track_color' => '#a4c97f', 'right_track_color' => '#000000','width' => '70%', 'margin' => '0 10 0 15',
+            'left_track_color' => '#a4c97f', 'right_track_color' => '#000000','width' => $width, 'margin' => '0 10 0 15',
             'track_height' => '1','vertical-align' => 'middle'
         );
 

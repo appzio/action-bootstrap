@@ -2,7 +2,7 @@
 
 Yii::import('application.modules.aelogic.article.components.*');
 
-class Article_View_Formkitfield extends ArticleComponent {
+class Article_View_Formkittextarea extends ArticleComponent {
 
     public $vars;
     public $value;
@@ -28,20 +28,25 @@ class Article_View_Formkitfield extends ArticleComponent {
             }
         }
 
+        if(!$this->value){
+            $this->value = '';
+        }
+
         $col[] = $this->factoryobj->getText(strtoupper($title),array('style' => 'form-field-titletext'));
+        $col[] = $this->factoryobj->getSpacer(10);
 
         if($error){
-            $style = 'form-field-textfield';
+            $style = 'form-field-textarea';
             $style_separator = 'form-field-separator-error';
         } else {
-            $style = 'form-field-textfield';
+            $style = 'form-field-textarea';
             $style_separator = 'form-field-separator';
         }
 
         if($type){
-            $col[] = $this->factoryobj->getFieldtext($this->value,array('variable' => $param,'hint' => $hint,'style' => $style,'input_type' => $type));
+            $col[] = $this->factoryobj->getFieldtextarea($this->value,array('variable' => $param,'hint' => $hint,'style' => $style,'input_type' => $type));
         } else {
-            $col[] = $this->factoryobj->getFieldtext($this->value,array('variable' => $param,'hint' => $hint,'style' => $style));
+            $col[] = $this->factoryobj->getFieldtextarea($this->value,array('variable' => $param,'hint' => $hint,'style' => $style));
         }
 
 

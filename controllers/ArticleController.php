@@ -451,7 +451,7 @@ class ArticleController {
     }
 
 
-    public function getOnclick($case='tab1',$back=false){
+    public function getOnclick($case='tab1',$back=false,$param=false){
         $onclick = new StdClass();
 
         switch($case){
@@ -474,6 +474,17 @@ class ArticleController {
                 $onclick->action = 'open-tab';
                 $onclick->action_config = '4';
                 break;
+
+            case 'action':
+                $onclick->action = 'open-action';
+                $onclick->action_config = $param;
+                break;
+
+            case 'id':
+                $onclick->action = 'submit-form-content';
+                $onclick->id = $param;
+                break;
+
         }
 
         if($back){
@@ -563,6 +574,13 @@ class ArticleController {
         if(isset($this->submitvariables[$varid])){
             return $this->submitvariables[$varid];
         } else {
+
+            $id = $this->getVariableId($varid);
+
+            if(isset($this->submitvariables[$id])){
+                return $this->submitvariables[$id];
+            }
+
             return false;
         }
     }
@@ -706,6 +724,16 @@ class ArticleController {
         return $this->returnComponent('formkitfield','field','',$params);
     }
 
+    public function formkitTextarea($variable,$title,$hint,$type=false,$error=false){
+        $params['title'] = $title;
+        $params['hint'] = $hint;
+        $params['variable'] = $variable;
+        $params['type'] = $type;
+        $params['error'] = $error;
+        return $this->returnComponent('formkittextarea','field','',$params);
+    }
+
+
     public function formkitSlider($title,$variablename,$defaultvalue,$minvalue,$maxvalue,$step){
         $params['title'] = $title;
         $params['variable'] = $variablename;
@@ -742,7 +770,11 @@ class ArticleController {
     }
 
     public function getImage($filename,$params=array()){
-        $file = $this->getImageFileName($filename,$params);
+        if(isset($params['use_filename']) AND $params['use_filename'] == 1){
+            $file = $filename;
+        } else {
+            $file = $this->getImageFileName($filename,$params);
+        }
 
         // Check if $filename is an external URL
         if ( empty($file) ) {
@@ -1063,7 +1095,7 @@ class ArticleController {
     }
 
 
-    public function getSpacer($height){
+    public function getSpacer($height,$params=array()){
         $params['height'] = $height;
         return $this->returnComponent('text','field','',$params);
     }
