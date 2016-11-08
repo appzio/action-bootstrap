@@ -124,6 +124,11 @@ class ArticleFactory {
         $vars = $this->getParam('variables',$this->submit);
 
         $this->actionobj = AeplayAction::model()->with('aetask')->findByPk($this->actionid);
+        
+        if(!isset($this->actionobj->action_id)){
+            return false;
+        }
+        
         $this->action_id = $this->actionobj->action_id;
         $this->branchobj = Aebranch::model()->findByPk($this->actionobj->aetask->branch_id);
 
