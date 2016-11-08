@@ -126,7 +126,7 @@ class ArticleGroupchatlist extends ArticleComponent {
         $textparams['style'] = 'imate_title_subtext';
         $row[] = $this->factoryobj->getText($names,$textparams);
 
-        $col[] = $this->factoryobj->getColumn($row,array('width' => '180','onclick' => $onclick));
+        $col[] = $this->factoryobj->getColumn($row,array('width' => '180','onclick' => $onclick,'vertical-align' => 'middle'));
 
         if($chatowner AND $chatowner == $this->playid){
             $add = new stdClass();
