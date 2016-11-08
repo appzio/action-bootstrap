@@ -126,7 +126,7 @@ class ArticleGroupchatlist extends ArticleComponent {
         $textparams['style'] = 'imate_title_subtext';
         $row[] = $this->factoryobj->getText($names,$textparams);
 
-        $col[] = $this->factoryobj->getColumn($row,array('style' => 'imate_contacts_textrow_group'));
+        $col[] = $this->factoryobj->getColumn($row,array('width' => '180','onclick' => $onclick,'vertical-align' => 'middle'));
 
         if($chatowner AND $chatowner == $this->playid){
             $add = new stdClass();
@@ -135,6 +135,7 @@ class ArticleGroupchatlist extends ArticleComponent {
 
             $col[] = $this->factoryobj->getImage('threedotmenu-icon.png',array('margin' => '15 10 10 10','height' => '32','opacity' =>'0.5'));
             $swipe[] = $this->factoryobj->getRow($col);
+            array_pop($col);
             $col[] = $this->factoryobj->getImage('apple-delete-icon.png',array('margin' => '15 10 10 10','onclick' => $add,'height' => '32'));
             $swipe[] = $this->factoryobj->getRow($col);
 

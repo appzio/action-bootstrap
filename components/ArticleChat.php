@@ -349,7 +349,7 @@ class ArticleChat extends ArticleComponent {
         $subtext['color'] = '#ffffff';
         $subtext['font-size'] = '12';
         $row[] = $this->factoryobj->getText($names,$subtext);
-        $col[] = $this->factoryobj->getColumn($row,array('vertical-align' => 'middle','margin' => '0 0 0 25'));
+        $col[] = $this->factoryobj->getColumn($row,array('vertical-align' => 'middle','margin' => '0 0 0 25','width' => '180'));
 
         $rowparams['padding'] = '0 0 5 5';
         $rowparams['height'] = '80';
