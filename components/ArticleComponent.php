@@ -147,6 +147,8 @@ class ArticleComponent {
 
             'text-align',
 
+            'lazy',
+
             'floating',
             'float',
 
