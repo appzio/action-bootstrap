@@ -1212,8 +1212,15 @@ class ArticleController {
 
 
     public function getImagebutton($image,$id,$fallbackimage=false,$params=array()){
+
+        if(isset($params['use_filename']) AND $params['use_filename'] == 1){
+            $file = $image;
+        } else {
+            $file = $this->getImageFileName($image, $params);
+        }
+
         $params['priority'] = 1;
-        $params['image'] = $this->getImageFileName($image,$params);
+        $params['image'] = $file;
         $params['id'] = $id;
         $params['fallbackimage'] = $this->getImageFileName($fallbackimage,$params);
         $params['action'] = $this->addParam('action',$params,'submit-form-content');
