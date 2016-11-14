@@ -175,7 +175,7 @@ class ArticleSelectorlist extends ArticleComponent {
             $selectstate = array('style' => 'selectorlist_selector_checkbox_selected','variable_value' => 1,'allow_unselect' => 1,'animation' => 'fade');
         }
 
-        $col[] = $this->factoryobj->getText($value);
+        $col[] = $this->factoryobj->getText($value,array('width' => '190'));
         $col[] = $this->factoryobj->getText('',array('style'=>'selectorlist_selector_checkbox_unselected','variable' => 'listitem_'.$key,'selected_state' => $selectstate));
 
         return $this->factoryobj->getRow($col,array('margin' => '0 15 2 15','padding' => '5 5 5 5','background-color' => '#ffffff',

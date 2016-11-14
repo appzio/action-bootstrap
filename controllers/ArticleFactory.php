@@ -124,8 +124,15 @@ class ArticleFactory {
         $vars = $this->getParam('variables',$this->submit);
 
         $this->actionobj = AeplayAction::model()->with('aetask')->findByPk($this->actionid);
-        $this->action_id = $this->actionobj->action_id;
-        $this->branchobj = Aebranch::model()->findByPk($this->actionobj->aetask->branch_id);
+        
+/*        if(!isset($this->actionobj->action_id)){
+            return false;
+        }*/
+
+        if(isset($this->actionobj->action_id)){
+            $this->action_id = $this->actionobj->action_id;
+            $this->branchobj = Aebranch::model()->findByPk($this->actionobj->aetask->branch_id);
+        }
 
         if(isset($this->branchobj->config)){
             $this->branchconfig = @json_decode($this->branchobj->config);
