@@ -392,12 +392,16 @@ class ArticleController {
 
 
     /* generates a unique chat id between two users */
-    public function getTwoWayChatId($id){
+    public function getTwoWayChatId($id,$playid=false){
 
-        if($id < $this->playid){
-            $chatid = $id.'-chat-'.$this->playid;
+        if(!$playid){
+            $playid = $this->playid;
+        }
+
+        if($id < $playid){
+            $chatid = $id.'-chat-'.$playid;
         } else {
-            $chatid = $this->playid.'-chat-'.$id;
+            $chatid = $playid.'-chat-'.$id;
         }
 
         return $chatid;
@@ -484,6 +488,12 @@ class ArticleController {
                 $onclick->action = 'submit-form-content';
                 $onclick->id = $param;
                 break;
+
+            case 'url':
+                $onclick->action = 'open-url';
+                $onclick->action_config = $param;
+                break;
+
 
         }
 
@@ -1161,7 +1171,7 @@ class ArticleController {
     }
 
 
-    public function getOauthSignInButton(){
+    public function getOauthSignIn(){
 
         // myapp://open?action_id=12329&menuid=menuid
 
@@ -1174,7 +1184,7 @@ class ArticleController {
         $onclick2->sync_open = 1;
         $onclick2->action_config = $url;
 
-        return $this->getButtonWithIcon('gf-icon-logo.png', 'insta', '{#sign_in_with_golfriend#}', array('style' => 'oauth_button_style'),array('style' => 'fbbutton_text_style'),$onclick2);
+        return $onclick2;
     }
 
 
