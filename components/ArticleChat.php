@@ -570,6 +570,21 @@ class ArticleChat extends ArticleComponent {
             $this->factoryobj->mobilematchingobj->addNotificationToBanner('msg');*/
         }
 
+        // Ditto related only
+        // Probably not the best place to handle it - should be using hooks instead
+        if ( isset($this->varcontent['active_date_id']) AND !empty($this->varcontent['active_date_id']) ) {
+            Yii::import('application.modules.aelogic.packages.actionMobiledates.models.*');
+            $requestsobj = new MobiledatesModel();
+            $request_id = $this->varcontent['active_date_id'];
+
+            $request = $requestsobj->findByPk( $request_id );
+            
+            if ( $request ) {
+                $request->row_last_updated = time();
+                $request->update();
+            }
+        }
+
     }
 
 
