@@ -98,7 +98,7 @@ class ArticleGroupchatlist extends ArticleComponent {
         $piccount=0;
 
         foreach ($profilepics AS $pic){
-            if($piccount < 3 OR count($profilepics) == 3){
+            if($piccount < 2 OR count($profilepics) == 3){
                 $finalrow[] = $this->factoryobj->getImage($pic,$imageparams);
             }
             $piccount++;
@@ -114,13 +114,12 @@ class ArticleGroupchatlist extends ArticleComponent {
         if($piccount == 1){
             $finalrow[] = $this->factoryobj->getVerticalSpacer(116);
         }elseif($piccount == 2){
-            $finalrow[] = $this->factoryobj->getVerticalSpacer(83);
+            $finalrow[] = $this->factoryobj->getVerticalSpacer(86);
         } elseif($piccount == 3) {
-            $finalrow[] = $this->factoryobj->getVerticalSpacer(53);
+            $finalrow[] = $this->factoryobj->getVerticalSpacer(60);
         } else {
-            $finalrow[] = $this->factoryobj->getVerticalSpacer(0);
+            $finalrow[] = $this->factoryobj->getVerticalSpacer(60);
         }
-
 
         $row[] = $this->factoryobj->getText($chatname,$textparams);
         $textparams['style'] = 'imate_title_subtext';
