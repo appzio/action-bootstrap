@@ -26,13 +26,14 @@ class Article_View_Formkittags extends ArticleComponent {
             }
         }
 
-        if(empty($savearray)){
+        if(is_array($this->value) AND !empty($this->value)){
+
+        }elseif(empty($savearray)){
             $this->value = json_decode($this->factoryobj->getSavedVariable($varname),true);
         } else {
             $this->value = $savearray;
         }
-
-
+        
         $this->variable = $this->factoryobj->getVariableId($varname) ? $this->factoryobj->getVariableId($varname) : $varname;
         $output[] = $this->factoryobj->getText(strtoupper($title), array('style' => 'form-field-textfield-onoff'));
 
