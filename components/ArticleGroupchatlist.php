@@ -95,7 +95,7 @@ class ArticleGroupchatlist extends ArticleComponent {
         $imageparams['imgwidth'] = '250';
         $imageparams['imgheight'] = '250';
         $imageparams['priority'] = 9;
-        $piccount=1;
+        $piccount=0;
 
         foreach ($profilepics AS $pic){
             if($piccount < 3 OR count($profilepics) == 3){
@@ -111,14 +111,14 @@ class ArticleGroupchatlist extends ArticleComponent {
             $finalrow[] = $this->factoryobj->getText('+'.$left,$imageparams);
         }
         
-        if($piccount == 3){
-            $finalrow[] = $this->factoryobj->getVerticalSpacer(81);
-        }elseif($piccount == 2){
+        if($piccount == 1){
             $finalrow[] = $this->factoryobj->getVerticalSpacer(116);
-        } elseif($piccount == 4) {
-            $finalrow[] = $this->factoryobj->getVerticalSpacer(0);
-        } else {
+        }elseif($piccount == 2){
+            $finalrow[] = $this->factoryobj->getVerticalSpacer(83);
+        } elseif($piccount == 3) {
             $finalrow[] = $this->factoryobj->getVerticalSpacer(53);
+        } else {
+            $finalrow[] = $this->factoryobj->getVerticalSpacer(0);
         }
 
 
