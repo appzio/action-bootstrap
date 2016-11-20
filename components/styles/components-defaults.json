@@ -1,5 +1,25 @@
 {
 
+  "round_image_imate_stacked": {
+    "crop": "round",
+    "margin": "5 -30 5 5",
+    "width": "60",
+    "height": "60",
+    "border-color": "#ffffff",
+    "border-width": "3",
+    "border-radius": "30"
+  },
+
+
+  "round_image_imate": {
+    "crop": "round",
+    "margin": "5 5 5 5",
+    "width": "60",
+    "height": "60",
+    "border-color": "#ffffff",
+    "border-width": "3",
+    "border-radius": "30"
+  },
 
   "formkit-radiobutton-unselected": {
     "font-size": "13",

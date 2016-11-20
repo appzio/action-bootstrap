@@ -625,9 +625,21 @@ class ArticleChat extends ArticleComponent {
             'variable' => $this->factoryobj->getVariableId('chat_upload_temp')
         );
 
-        return $this->factoryobj->getColumn(array(
-            $this->factoryobj->getImagebutton( 'camera.png','969698', false, $options ),
-        ), array( 'width' => '13%','margin'=>'0 5 0 7' ));
+        if($this->factoryobj->getConfigParam('actionimage5')){
+            $camera = $this->factoryobj->getConfigParam('actionimage5');
+            return $this->factoryobj->getColumn(array(
+                $this->factoryobj->getImagebutton( $camera,'969698', false, $options ),
+            ), array( 'width' => '8%','margin'=>'7 25 10 40' ));
+
+        } else {
+
+            $camera = 'camera.png';
+            return $this->factoryobj->getColumn(array(
+                $this->factoryobj->getImagebutton( $camera,'969698', false, $options ),
+            ), array( 'width' => '13%','margin'=>'0 5 0 7' ));
+
+        }
+
     }
 
     private function getFooter(){
@@ -685,9 +697,21 @@ class ArticleChat extends ArticleComponent {
                 $columns[] = $this->getImageButton();
             }
 
-            $columns[] = $this->factoryobj->getColumn(array(
-                    $this->factoryobj->getImagebutton( 'sendbutton.png', 'submit-msg', false, array( 'sync_upload' => 1, 'viewport' => 'bottom' ) )
+            if($this->factoryobj->getConfigParam('actionimage4')){
+                $btn = $this->factoryobj->getConfigParam('actionimage4');
+                $columns[] = $this->factoryobj->getColumn(array(
+                    $this->factoryobj->getImagebutton( $btn, 'submit-msg', false, array( 'sync_upload' => 1, 'viewport' => 'bottom' ) )
+                ), array( 'width' => '8%','margin'=>'10 10 10 2' ));
+
+            } else {    
+                $btn = 'sendbutton.png';
+                $columns[] = $this->factoryobj->getColumn(array(
+                    $this->factoryobj->getImagebutton( $btn, 'submit-msg', false, array( 'sync_upload' => 1, 'viewport' => 'bottom' ) )
                 ), array( 'width' => '13%','margin'=>'0 10 0 2' ));
+
+            }
+
+
 
             $output[] = $this->factoryobj->getRow($columns,array('margin' => '10 0 10 0'));
 
