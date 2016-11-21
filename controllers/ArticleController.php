@@ -1128,10 +1128,12 @@ class ArticleController {
     }
 
     public function getFacebookSignInButton($id,$submitmenu=false){
+        $styles = array( 'style' => 'fbbutton_text_style' );
+
         if($submitmenu){
-            return $this->getButtonWithIcon('f-icon.png', $id, '{#sign_in_with_facebook#}', array('style' => 'facebook_button_style'),array('style' => 'fbbutton_text_style'));
+            return $this->getButtonWithIcon('f-icon.png', $id, '{#sign_in_with_facebook#}', array('style' => 'facebook_button_style'), $styles);
         } else {
-            return $this->getButtonWithIcon('f-icon.png', $id, '{#sign_in_with_facebook#}', array('style' => 'facebook_button_style','action' => 'fb-login','sync_open' => true),array('style' => 'fbbutton_text_style'));
+            return $this->getButtonWithIcon('f-icon.png', $id, '{#sign_in_with_facebook#}', array('style' => 'facebook_button_style','action' => 'fb-login','sync_open' => true), $styles);
         }
     }
 
