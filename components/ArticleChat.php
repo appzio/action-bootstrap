@@ -726,7 +726,7 @@ class ArticleChat extends ArticleComponent {
 
 
             $output[] = $this->factoryobj->getSpacer(1,array('background-color' => $this->factoryobj->color_topbar
-                    //,'margin' => '0 20 0 20'
+                    ,'margin' => '0 20 0 20','opacity' => '0.3'
             ));
             $output[] = $this->factoryobj->getImage('invisible-divider.png',array('margin' => '0 0 0 0','variable' => $this->factoryobj->getVariableId('chat_upload_temp')));
             $hint = isset($this->options['hint']) ? $this->options['hint'] : '{#write_a_message#}';
