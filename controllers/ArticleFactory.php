@@ -358,8 +358,8 @@ class ArticleFactory {
             $colorarray['active'] = $active_color;
             $colorarray['colors'] = $colors;
 
-            $this->color_topbar = $background_color;
-            $this->color_topbar_hilite = $active_color;
+            $this->color_topbar = '#'.$background_color;
+            $this->color_topbar_hilite = '#'.$active_color;
 
             foreach($colors as $key => $col){
                 $newcolors[$key] = Helper::normalizeColor($col);

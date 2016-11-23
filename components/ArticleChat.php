@@ -26,9 +26,7 @@ class ArticleChat extends ArticleComponent {
     public $otheruser;
     public $save_match;
     public $notify;
-
-    public $firstname_only;
-
+    
     public $pic_permission;
     public $strip_urls;
 
@@ -47,6 +45,8 @@ class ArticleChat extends ArticleComponent {
 
     public $can_invite_others;
     public $hide_time;
+
+    public $name_mode;
 
     /* for group chats */
     public $userlist;
@@ -70,6 +70,23 @@ class ArticleChat extends ArticleComponent {
         $this->disable_header = $this->addParam('disable_header',$this->options,false);
         $this->can_invite_others = $this->addParam('can_invite_others',$this->options,false);
         $this->userlist = $this->addParam('userlist',$this->options,false);
+
+        // App specific settings
+        $this->save_match = $this->addParam('save_match',$this->options,false);
+        $firstname_only = $this->addParam('firstname_only',$this->options,false);
+        $this->hide_time = $this->addParam('hide_time',$this->options,false);
+        $this->notify = $this->addParam('notify',$this->options,false);
+
+        $this->pic_permission = $this->addParam('pic_permission',$this->options,false);
+        $this->strip_urls = $this->addParam('strip_urls',$this->options,false);
+
+        if($this->factoryobj->getConfigParam('name_mode')){
+            $this->name_mode = $this->factoryobj->getConfigParam('name_mode');
+        } elseif($firstname_only){
+            $this->name_mode = 'firstname';
+        } else {
+            $this->name_mode = 'default';
+        }
 
         $this->factoryobj->initMobileChat( $this->context, $this->context_key );
 
@@ -115,14 +132,6 @@ class ArticleChat extends ArticleComponent {
         $content = $this->factoryobj->mobilechatobj->getChatContent();
         $this->disableChat($content);
 
-        // App specific settings
-        $this->save_match = $this->addParam('save_match',$this->options,false);
-        $this->firstname_only = $this->addParam('firstname_only',$this->options,false);
-        $this->hide_time = $this->addParam('hide_time',$this->options,false);
-        $this->notify = $this->addParam('notify',$this->options,false);
-
-        $this->pic_permission = $this->addParam('pic_permission',$this->options,false);
-        $this->strip_urls = $this->addParam('strip_urls',$this->options,false);
 
         if ( !empty($content) ) {
             $this->chat_content['msgs'] = $content;
@@ -232,18 +241,10 @@ class ArticleChat extends ArticleComponent {
             return $this->getGroupChatHeader($this->userlist);
         }
 
-        $vars = AeplayVariable::getArrayOfPlayvariables( $id );
-
-        if(isset($vars['screen_name'])) {
-            $name = $vars['screen_name'];
-        }elseif(isset($vars['real_name'])){
-            $name = $this->getFirstName($vars['real_name']);
-        }elseif(isset($vars['name'])) {
-            $name = $this->getFirstName($vars['name']);
-        } else {
-            $name = '{#anonymous#}';
-        }
-
+        $userinfo = $this->getUserInfo($id);
+        $name = $userinfo['name'];
+        $profilepic = $userinfo['profilepic'];
+        $vars = $userinfo['vars'];
 
         $string = $this->factoryobj->localizationComponent->smartLocalize('{#chat_with#}');
 
@@ -273,7 +274,6 @@ class ArticleChat extends ArticleComponent {
         $textparams['font-size'] = 15;
         $textparams['text-align'] = 'left';
 
-        $profilepic = isset($vars['profilepic']) ? $vars['profilepic'] : 'anonymous2.png';
         $columns[] = $this->factoryobj->getImage($profilepic, $imageparams);
         $columns[] = $this->factoryobj->getText($name, $textparams);
 
@@ -292,17 +292,14 @@ class ArticleChat extends ArticleComponent {
             //return $cache;
         }
 
-
         $names = '';
         $profilepics = array();
         $count = 0;
 
         foreach ($users as $user){
-            $vars = AeplayVariable::getArrayOfPlayvariables($user);
-            $name = $this->getFirstName($vars['real_name']);
-            $names .= $name .', ';
-            $profilepic = isset($vars['profilepic']) ? $vars['profilepic'] : 'anonymous2.png';
-            $profilepics[] = $profilepic;
+            $userinfo = $this->getUserInfo($user);
+            $names .= $userinfo['name'] .', ';
+            $profilepics[] = $userinfo['profilepic'];
             $count++;
         }
 
@@ -378,7 +375,7 @@ class ArticleChat extends ArticleComponent {
 
         foreach ($msgs as $i => $msg) {
 
-            if ( !isset($msg['name']) OR !is_string($msg['name']) ) {
+            if ( !isset($msg['user']) OR !$msg['user']){
                 continue;
             }
 
@@ -387,7 +384,7 @@ class ArticleChat extends ArticleComponent {
                 $seen_text = $this->checkIfSeen( $msg );
             }
 
-            $userInfo = $this->getUserInfo( $msg );
+            $userInfo = $this->getUserInfo( $msg['user'] );
 
             if ( $this->msgadded === true) {
                 $this->msgadded = false;
@@ -453,31 +450,42 @@ class ArticleChat extends ArticleComponent {
     }
 
 
-    private function getUserInfo( $user_msg ) {
+    private function getUserInfo( $id ) {
         
         $profilepic = 'anonymous2.png';
-        $name = 'Anonymous';
 
-        if ( isset($user_msg) AND $user_msg ) {
-            // $userinfo = $this->factoryobj->getUserVariables($user_msg);
-
-            if ( isset($user_msg['profilepic']) ) {
-                $profilepic = $user_msg['profilepic'];
-            }
-
-            if ( isset($user_msg['name']) ) {
-
-                $name = $user_msg['name'];
-
-                if ( $this->firstname_only ) {
-                    $name = $this->getFirstName($name);
-                }
-            }
+        $cachename = 'uservars-'.$id;
+        $vars = Appcaching::getGlobalCache($cachename);
+        
+        if(!$vars){
+            $vars = AeplayVariable::getArrayOfPlayvariables($id);
+            Appcaching::setGlobalCache($cachename,$vars);
         }
+        
+        switch($this->name_mode){
+            case 'invisible';
+                $name = '';
+                break;
+
+            case 'nickname';
+                $name = isset($vars['screen_name']) ? $vars['screen_name'] : '{#anonymous#}';
+                break;
+
+            case 'firstname';
+                $name = isset($vars['real_name']) ? $this->getFirstName($vars['real_name']) : '{#anonymous#}';
+                break;
+
+            default:
+                $name = isset($vars['real_name']) ? $vars['real_name'] : '{#anonymous#}';
+                break;
+        }
+
+        $profilepic = isset($vars['profilepic']) ? $vars['profilepic'] : $profilepic;
 
         return array(
             'profilepic' => $profilepic,
             'name'       => $name,
+            'vars'       => $vars
         );
     }
 
@@ -506,12 +514,8 @@ class ArticleChat extends ArticleComponent {
             return false;
         }
 
-        $username = isset($this->varcontent['name']) ? $this->varcontent['name']:$this->varcontent['real_name'];
+        $username = isset($this->varcontent['real_name']) ? $this->varcontent['real_name'] : $this->varcontent['name'];
         $pic = 'anonymous.png';
-
-        if ( $this->firstname_only ) {
-            $username = $this->getFirstName($username);
-        }
 
         if ( $this->strip_urls AND $msg ){
             $msg = $this->stripUrls($msg);
@@ -534,7 +538,6 @@ class ArticleChat extends ArticleComponent {
 
         $this->chat_content['msgs'][] = $new;
         $this->saveData();
-
         return $this->chat_content;
     }
 
@@ -611,32 +614,94 @@ class ArticleChat extends ArticleComponent {
         $other = $this->factoryobj->appkeyvaluestorage->get($pointer_me);
 
         if(!$other){
-            return $this->factoryobj->getTextButton('{#this_user_can_send_me_pictures#}',array('id' => 'pic_permission','small_text' => true,'icon' => 'icon-cam-ok.png'));
+            return $this->factoryobj->getTextbutton('{#this_user_can_send_me_pictures#}',array('id' => 'pic_permission','small_text' => true,'icon' => 'icon-cam-ok.png'));
         }
     }
 
-    private function getImageButton(){
-        $options = array(
-            'action' => 'upload-image',
-            'sync_upload' => true,
-            'viewport' => 'bottom',
-            'max_dimensions'=> '600',
-            'allow_delete' => true,
-            'variable' => $this->factoryobj->getVariableId('chat_upload_temp')
-        );
+    private function getSubmitButton(){
+        $onclick = new stdClass();
+        $onclick->action = 'submit-form-content';
+        $onclick->id = 'submit-msg';
+        $onclick->sync_upload = 1;
+        $onclick->viewport = 'bottom';
 
-        if($this->factoryobj->getConfigParam('actionimage5')){
-            $camera = $this->factoryobj->getConfigParam('actionimage5');
-            return $this->factoryobj->getColumn(array(
-                $this->factoryobj->getImagebutton( $camera,'969698', false, $options ),
-            ), array( 'width' => '8%','margin'=>'7 25 10 40' ));
+        if($this->factoryobj->getConfigParam('actionimage4')){
+            $btn = $this->factoryobj->getConfigParam('actionimage4');
+            return $this->getBtn($btn,$onclick,false);
 
         } else {
+            $btn = 'chat-icon-send.png';
+            return $this->getBtn($btn,$onclick,true,true);
 
-            $camera = 'camera.png';
-            return $this->factoryobj->getColumn(array(
-                $this->factoryobj->getImagebutton( $camera,'969698', false, $options ),
-            ), array( 'width' => '13%','margin'=>'0 5 0 7' ));
+        }
+
+    }
+
+    private function getBtn($icon,$onclick,$filled=true,$small=false){
+        if($filled){
+            if($small){
+                $options = array(
+                    'width' => '20',
+                    'height' => '20',
+                    'float' => 'center',
+                    'floating' => '1',
+                    'onclick' => $onclick
+                );
+
+            } else {
+                $options = array(
+                    'width' => '30',
+                    'height' => '30',
+                    'float' => 'center',
+                    'floating' => '1',
+                    'onclick' => $onclick
+                );
+
+            }
+
+            $image[] = $this->factoryobj->getImage($icon,$options);
+
+            return $this->factoryobj->getColumn($image,array(
+                'width' => '50','height' => '50','background-color' => $this->factoryobj->color_topbar,
+                'vertical-align' => 'middle',' text-align' => 'center','align' => 'center','border-radius' => '25'
+            ));
+
+        } else {
+            $image[] = $this->factoryobj->getImage($icon,array('onclick' => $onclick,'width' => '50','height' => '50'));
+
+            return $this->factoryobj->getColumn($image,array(
+                'width' => '50','height' => '50',
+                'vertical-align' => 'middle',' text-align' => 'center'
+            ));
+
+        }
+        
+    }
+
+    private function getPhotoUploadButton(){
+
+        /* if permission is required from both users for sending pictures */
+        if($this->pic_permission){
+            $pointer = $this->factoryobj->mobilechatobj->context_key .'-' .$this->other_user_play_id;
+            $other = $this->factoryobj->appkeyvaluestorage->get($pointer);
+            if(!$other){
+                return $this->factoryobj->getVerticalSpacer(50);
+            }
+        }
+
+        $onclick = new stdClass();
+        $onclick->action = 'upload-image';
+        $onclick->sync_upload = 1;
+        $onclick->viewport = 'bottom';
+        $onclick->max_dimensions = '600';
+        $onclick->allow_delete = true;
+        $onclick->variable = $this->factoryobj->getVariableId('chat_upload_temp');
+
+        if($this->factoryobj->getConfigParam('actionimage5')){
+            return $this->getBtn( $this->factoryobj->getConfigParam('actionimage5'),$onclick,false);
+        } else {
+            $camera = 'chat-icon-photo.png';
+            return $this->getBtn( $camera,$onclick,true);
 
         }
 
@@ -657,7 +722,9 @@ class ArticleChat extends ArticleComponent {
             OR isset($this->varcontent['real_name']) AND $this->varcontent['real_name']
         ) {
 
-            $output[] = $this->factoryobj->getImage('hairline2.png',array('margin' => '0 0 4 0','variable' => $this->factoryobj->getVariableId('chat_upload_temp')));
+
+            $output[] = $this->factoryobj->getSpacer(1,array('background-color' => $this->factoryobj->color_topbar,'margin' => '0 20 0 20'));
+            $output[] = $this->factoryobj->getImage('invisible-divider.png',array('margin' => '0 0 0 0','variable' => $this->factoryobj->getVariableId('chat_upload_temp')));
             $hint = isset($this->options['hint']) ? $this->options['hint'] : '{#write_a_message#}';
             //$hint = 'chatid:'.$this->factoryobj->mobilechatobj->getChatId() .'other:' .$this->other_user_play_id . 'mine: ' .$this->playid;
 
@@ -671,49 +738,24 @@ class ArticleChat extends ArticleComponent {
                 'font-size' => '12',
                 'font-style' => 'italic',
                 'color' => '#474747',
-                'padding' => '4 4 4 4',
-                'height' => '35',
+                'padding' => '15 4 4 4',
+                'height' => '50',
                 'border-radius' => '4',
                 'vertical-align' => 'middle',
             );
+            
+            $width = $this->factoryobj->screen_width - 160;
 
             $columns[] = $this->factoryobj->getColumn(array(
-                    $this->factoryobj->getFieldTextarea( '', $args )
-                ), array( 'style' => 'chat-comment-field-wrap' ));
+                    $this->factoryobj->getFieldtextarea( '', $args )
+                ), array( 'width' => $width,'vertical-align' => 'middle' ));
 
-            /* if permission is required from both users for sending pictures */
-            if($this->pic_permission){
+            $columns[] = $this->factoryobj->getVerticalSpacer('10');
+            $columns[] = $this->getPhotoUploadButton();
+            $columns[] = $this->factoryobj->getVerticalSpacer('10');
+            $columns[] = $this->getSubmitButton();
 
-                $pointer = $this->factoryobj->mobilechatobj->context_key .'-' .$this->other_user_play_id;
-                $other = $this->factoryobj->appkeyvaluestorage->get($pointer);
-
-                if($other){
-                    $columns[] = $this->getImageButton();
-                } else {
-                    $columns[] = $this->factoryobj->getText('', array( 'width' => '13%','margin'=>'0 5 0 7' ));
-                }
-
-            } else {
-                $columns[] = $this->getImageButton();
-            }
-
-            if($this->factoryobj->getConfigParam('actionimage4')){
-                $btn = $this->factoryobj->getConfigParam('actionimage4');
-                $columns[] = $this->factoryobj->getColumn(array(
-                    $this->factoryobj->getImagebutton( $btn, 'submit-msg', false, array( 'sync_upload' => 1, 'viewport' => 'bottom' ) )
-                ), array( 'width' => '8%','margin'=>'10 10 10 2' ));
-
-            } else {    
-                $btn = 'sendbutton.png';
-                $columns[] = $this->factoryobj->getColumn(array(
-                    $this->factoryobj->getImagebutton( $btn, 'submit-msg', false, array( 'sync_upload' => 1, 'viewport' => 'bottom' ) )
-                ), array( 'width' => '13%','margin'=>'0 10 0 2' ));
-
-            }
-
-
-
-            $output[] = $this->factoryobj->getRow($columns,array('margin' => '10 0 10 0'));
+            $output[] = $this->factoryobj->getRow($columns,array('margin' => '9 20 10 20','vertical-align' => 'middle','height' => '70'));
 
         } else {
             if ( isset($this->configobj->profile_action_id) ) {
