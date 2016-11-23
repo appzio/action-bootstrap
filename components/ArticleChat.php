@@ -645,6 +645,7 @@ class ArticleChat extends ArticleComponent {
                     'height' => '20',
                     'float' => 'center',
                     'floating' => '1',
+                    'margin' => '0 0 0 10',
                     'onclick' => $onclick
                 );
 
@@ -654,6 +655,7 @@ class ArticleChat extends ArticleComponent {
                     'height' => '30',
                     'float' => 'center',
                     'floating' => '1',
+                    'margin' => '0 0 0 15',
                     'onclick' => $onclick
                 );
 
