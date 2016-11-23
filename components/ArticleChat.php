@@ -289,7 +289,7 @@ class ArticleChat extends ArticleComponent {
 
         $cache = Appcaching::getGlobalCache('chatheader-'.$this->chatid);
         if($cache){
-            //return $cache;
+            return $cache;
         }
 
         $names = '';
@@ -459,7 +459,7 @@ class ArticleChat extends ArticleComponent {
         
         if(!$vars){
             $vars = AeplayVariable::getArrayOfPlayvariables($id);
-            Appcaching::setGlobalCache($cachename,$vars);
+            Appcaching::setGlobalCache($cachename,$vars,1400);
         }
         
         switch($this->name_mode){
