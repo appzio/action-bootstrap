@@ -249,9 +249,12 @@ class ArticleChat extends ArticleComponent {
         $profilepic = $userinfo['profilepic'];
         $vars = $userinfo['vars'];
 
-        $string = $this->factoryobj->localizationComponent->smartLocalize('{#chat_with#}');
-
-        $this->factoryobj->rewriteActionField('subject',$string.' ' .$name);
+        if($this->disable_header){
+            $this->factoryobj->rewriteActionField($name);
+        } else {
+            $string = $this->factoryobj->localizationComponent->smartLocalize('{#chat_with#}');
+            $this->factoryobj->rewriteActionField('subject',$string.' ' .$name);
+        }
 
         $name = isset($vars['city']) ? $name.', '.$vars['city'] : $name;
 
