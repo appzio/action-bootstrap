@@ -152,6 +152,8 @@ class ArticleComponent {
             'floating',
             'float',
 
+            'max-height'
+
         );
     }
 
