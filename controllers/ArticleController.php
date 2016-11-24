@@ -484,6 +484,11 @@ class ArticleController {
                 $onclick->action_config = $param;
                 break;
 
+            case 'location':
+                $onclick->action = 'ask-location';
+                $onclick->action_config = $param;
+                break;
+
             case 'id':
                 $onclick->action = 'submit-form-content';
                 $onclick->id = $param;
