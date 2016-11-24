@@ -224,7 +224,10 @@ class ArticleChat extends ArticleComponent {
         // }
         // $output[] = $this->factoryobj->getInfinitescroll( $items, array( 'next_page_id' => $next_page_id ) );
 
+
         $output = array();
+
+        $output[] = $this->factoryobj->getSpacer( 15 );
 
         foreach ($items as $item) {
             $output[] = $item;
@@ -416,7 +419,7 @@ class ArticleChat extends ArticleComponent {
                     $colitems,
                 array( 'style' => 'chat-column-3' ));
             $column4 = $this->factoryobj->getColumn(array(
-                    $this->factoryobj->getImage('flipped-beak.png')
+                    $this->factoryobj->getImage('flipped-beak-2.png')
                 ), array( 'style' => 'chat-column-2' ));
             $column5 = $this->factoryobj->getColumn(
                     $colitems,
