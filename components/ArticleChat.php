@@ -333,7 +333,9 @@ class ArticleChat extends ArticleComponent {
 
         $textparams['color'] = '#ffffff';
         $textparams['font-size'] = '12';
-        $col[] = $this->factoryobj->getVerticalSpacer(20);
+
+
+        $col[] = $this->factoryobj->getVerticalSpacer(30);
 
         $chatinfo = Aechat::model()->findBYPk($this->chatid);
 
@@ -348,13 +350,13 @@ class ArticleChat extends ArticleComponent {
         $row[] = $this->factoryobj->getText($names,$subtext);
         $col[] = $this->factoryobj->getColumn($row,array('vertical-align' => 'middle','margin' => '0 0 0 25','width' => '180'));
 
-        $rowparams['padding'] = '0 0 5 5';
+        $rowparams['padding'] = '0 0 5 13';
         $rowparams['height'] = '80';
         $rowparams['vertical-align'] = 'middle';
         $rowparams['background-color'] = $this->factoryobj->color_topbar;
         $rowparams['onclick'] = $this->factoryobj->getOnclick('tab2', true);
 
-        $col[] = $this->factoryobj->getImage('beak-icon.png',array('margin' => '22 14 22 8'));
+        $col[] = $this->factoryobj->getImage('beak-icon.png',array('margin' => '22 20 22 10','floating' => '1','float' => 'right'));
         $ret = $this->factoryobj->getRow($col,$rowparams);
         Appcaching::setGlobalCache('chatheader-'.$this->chatid,$ret,600);
         return $ret;
@@ -645,7 +647,7 @@ class ArticleChat extends ArticleComponent {
                     'height' => '20',
                     'float' => 'center',
                     'floating' => '1',
-                    'margin' => '0 0 0 10',
+                    'margin' => '0 0 0 15',
                     'onclick' => $onclick
                 );
 
@@ -655,7 +657,7 @@ class ArticleChat extends ArticleComponent {
                     'height' => '30',
                     'float' => 'center',
                     'floating' => '1',
-                    'margin' => '0 0 0 15',
+                    'margin' => '0 0 0 10',
                     'onclick' => $onclick
                 );
 
