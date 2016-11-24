@@ -671,7 +671,10 @@ class ArticleChat extends ArticleComponent {
             ));
 
         } else {
-            $image[] = $this->factoryobj->getImage($icon,array('onclick' => $onclick,'width' => '50','height' => '50'));
+            $image[] = $this->factoryobj->getImage($icon,array('onclick' => $onclick,'width' => '25','height' => '25',
+                'float' => 'center',
+                'floating' => '1',
+            ));
 
             return $this->factoryobj->getColumn($image,array(
                 'width' => '50','height' => '50',
