@@ -85,16 +85,15 @@ class ArticleUserinfo extends ArticleComponent {
             $columns[] = $this->factoryobj->getText( '',array('width'=>'60%','margin'=>'35 0 0 10','alignment' => 'left')+$style);
         }
 
-        $menustyle = array('width' => '50','float' => 'right','floating' => 1, 'text-align' => 'right','margin' => '25 0 0 0');
+        $menustyle = array('width' => '50','float' => 'right','floating' => 1, 'text-align' => 'right','margin' => '15 0 0 0');
         if($status == 1){
             $columns[] = $this->factoryobj->getImagebutton('heart-icon-red.png',200,'heart-icon-grey.png',$menustyle);
         } else {
             $columns[] = $this->factoryobj->getImagebutton('heart-icon-grey.png',201,'heart-icon-red.png',$menustyle);
         }
 
-        $row = $this->factoryobj->getRow($columns,array('margin' => '-15 30 0 10','width' => '95%','float' => 'right', 'alignment' => 'left','floating' => 1));
+        $row = $this->factoryobj->getRow($columns,array('margin' => '-40 30 15 10','width' => '95%','alignment' => 'left','floating' => 1));
 
-        // print_r($row);die();
         return $row;
     }
 
