@@ -91,18 +91,22 @@ class ArticleChat extends ArticleComponent {
         $this->factoryobj->initMobileChat( $this->context, $this->context_key );
 
         if($this->factoryobj->mobilechatobj->error_state == true){
+            $this->factoryobj->mobilechatobj->addChat($this->context,$this->context_key,$this->otheruser);
+
             /* only one-on-one chats should be created automatically if they are missing */
-            if(strstr($this->context_key,'-chat-')){
-                $this->factoryobj->mobilechatobj->addChat($this->context,$this->context_key,$this->otheruser);
-                if($this->factoryobj->mobilechatobj->error_state == true){
-                    return false;
-                }
-            } else {
-                return false;
-            }
+
+            /*            if(strstr($this->context_key,'-chat-')){
+                            $this->factoryobj->mobilechatobj->addChat($this->context,$this->context_key,$this->otheruser);
+                            if($this->factoryobj->mobilechatobj->error_state == true){
+                                return false;
+                            }
+                        } else {
+                            return false;
+                        }*/
 
         }
-        
+
+
         /* we look for the user's playid using from the chat id */
         $otheruser = explode('-chat-',$this->context_key);
 
