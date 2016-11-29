@@ -85,7 +85,7 @@ class ArticleUserinfo extends ArticleComponent {
             $columns[] = $this->factoryobj->getText( '',array('width'=>'60%','margin'=>'35 0 0 10','alignment' => 'left')+$style);
         }
 
-        $menustyle = array('width' => '50','float' => 'right','text-align' => 'right','margin' => '15 0 0 0');
+        $menustyle = array('width' => '50','float' => 'right','floating' => 1, 'text-align' => 'right','margin' => '15 0 0 0');
         if($status == 1){
             $columns[] = $this->factoryobj->getImagebutton('heart-icon-red.png',200,'heart-icon-grey.png',$menustyle);
         } else {
