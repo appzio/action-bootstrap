@@ -250,7 +250,7 @@ class ArticleChat extends ArticleComponent {
         $vars = $userinfo['vars'];
 
         if($this->disable_header){
-            $this->factoryobj->rewriteActionField($name);
+            $this->factoryobj->rewriteActionConfigField('subject',$name);
         } else {
             $string = $this->factoryobj->localizationComponent->smartLocalize('{#chat_with#}');
             $this->factoryobj->rewriteActionField('subject',$string.' ' .$name);
@@ -403,7 +403,8 @@ class ArticleChat extends ArticleComponent {
                 $date = $this->factoryobj->getLocalizedDate( $msg['date'], $show_time = false );
             }
 
-            $img_params = array('imgwidth' => 250, 'imgheight' => 250, 'width' => '96%', 'radius' => 4, 'margin' => '4 4 4 4', 'priority' => '9');
+            $img_params = array('imgwidth' => 400, 'imgheight' => 400, 'width' => '96%', 'radius' => 4, 'margin' => '4 4 4 4', 'priority' => '9',
+                'tap_to_open' => 1);
             $colitems[] = $this->factoryobj->getText($userInfo['name'] . ', ' . $date, array('style' => 'chat-msg-info'));
 
             $colitems[] = $this->factoryobj->getText($msg['msg'],array('style' => 'chat-msg-text'));
