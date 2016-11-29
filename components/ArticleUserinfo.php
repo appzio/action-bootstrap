@@ -92,7 +92,7 @@ class ArticleUserinfo extends ArticleComponent {
             $columns[] = $this->factoryobj->getImagebutton('heart-icon-grey.png',201,'heart-icon-red.png',$menustyle);
         }
 
-        $row = $this->factoryobj->getRow($columns,array('margin' => '-40 10 15 10','width' => '95%','alignment' => 'left'));
+        $row = $this->factoryobj->getRow($columns,array('margin' => '-40 10 15 10','width' => '95%','alignment' => 'left','floating' => 1));
 
         // print_r($row);die();
         return $row;
