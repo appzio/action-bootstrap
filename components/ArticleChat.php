@@ -407,13 +407,21 @@ class ArticleChat extends ArticleComponent {
                 $date = $this->factoryobj->getLocalizedDate( $msg['date'], $show_time = false );
             }
 
-            $img_params = array('imgwidth' => 400, 'imgheight' => 400, 'width' => '96%', 'radius' => 4, 'margin' => '4 4 4 4', 'priority' => '9',
-                'tap_to_open' => 1);
             $colitems[] = $this->factoryobj->getText($userInfo['name'] . ', ' . $date, array('style' => 'chat-msg-info'));
-
             $colitems[] = $this->factoryobj->getText($msg['msg'],array('style' => 'chat-msg-text'));
 
+
             if ( isset($msg['attachment']) ) {
+
+                $img_params = array('imgwidth' => 300, 'imgheight' => 300, 'width' => '96%', 'radius' => 4, 'margin' => '4 4 4 4', 'priority' => '9',
+                    'tap_to_open' => 1,'tap_image' => '');
+
+                $image = $this->factoryobj->getImage($msg['attachment'],array('imgwidth' => '900','imgheight' => '900'));
+                if(isset($image->content)){
+                    $bigimage = $image->content;
+                    $img_params['tap_image'] = $bigimage;
+                }
+                
                 $colitems[] = $this->factoryobj->getImage($msg['attachment'], $img_params);
             }
 
