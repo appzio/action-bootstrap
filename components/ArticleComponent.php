@@ -198,6 +198,10 @@ class ArticleComponent {
             $obj->visibility = $this->options['visibility'];
         }
 
+        if ( isset($this->options['swipe_id']) ) {
+            $obj->swipe_id = $this->options['swipe_id'];
+        }
+
         if ( isset($this->options['visibility_delay']) ) {
             $obj->visibility_delay = $this->options['visibility_delay'];
         }
