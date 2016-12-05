@@ -51,8 +51,24 @@ class ArticleChat extends ArticleComponent {
     /* for group chats */
     public $userlist;
 
+    public $current_page = 1;
+    public $total_messages;
+
     protected function requiredOptions() {
         return array();
+    }
+
+    public function array_flatten($arrays) { 
+
+        $result = array(); 
+
+        foreach ($arrays as $array) {
+            foreach ($array as $arr) {
+                $result[] = $arr;
+            }
+        }
+
+        return $result; 
     }
 
     public function template() {
@@ -120,20 +136,40 @@ class ArticleChat extends ArticleComponent {
             }
         }
 
-        /*
-        $page = 1;
+        $this->saveChatMsg();
 
-        if ( isset($this->submit['next_page_id']) ) {
-            $page = $this->submit['next_page_id'];
+        $page = $this->factoryobj->getVariable( 'tmp_chat_page' );
+        $this->current_page = $page;
+
+        if ( $this->factoryobj->menuid == 'get-next-page' ) {
+            $page = $page + 1;
+            $this->current_page = $page;
+            $this->factoryobj->saveVariable( 'tmp_chat_page', $page );
         }
 
-        $num_rec_per_page = 10;
-        $start_from = ($page-1) * $num_rec_per_page;
+        /*
+        if ( isset($this->submit['next_page_id']) ) {
+            $this->current_page = $this->submit['next_page_id'];
+        }
+
+        $num_rec_per_page = 5;
+        $start_from = ($this->current_page-1) * $num_rec_per_page;
+
         $content = $this->factoryobj->mobilechatobj->getChatContent( $start_from, $num_rec_per_page );
         */
 
-        $this->saveChatMsg();
         $content = $this->factoryobj->mobilechatobj->getChatContent();
+        $this->total_messages = count( $content );
+
+        $content = array_chunk($content, 10);
+
+        $offset = '-' . $this->current_page;
+        $length = $this->current_page;
+        $content = array_slice($content, $offset, $length);
+
+        // revamp the content
+        $content = $this->array_flatten( $content );
+
         $this->disableChat($content);
 
 
@@ -382,8 +418,19 @@ class ArticleChat extends ArticleComponent {
             return $output;
         }
 
+        $onclick = new StdClass();
+        $onclick->id = 'get-next-page';
+        $onclick->action = 'submit-form-content';
+        $onclick->viewport = 'bottom';
+
+
+        // $msgs = (object) array_reverse( $this->chat_content['msgs'] );
         $msgs = (object) $this->chat_content['msgs'];
         $count = count( $this->chat_content['msgs'] );
+
+        if ( $count < $this->total_messages ) {
+            $output[] = $this->factoryobj->getText( '{#load_more#}', array( 'style' => 'load-more-btn', 'onclick' => $onclick ) );
+        }
 
         foreach ($msgs as $i => $msg) {
 
