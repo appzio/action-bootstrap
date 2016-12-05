@@ -138,7 +138,7 @@ class ArticleChat extends ArticleComponent {
 
         $this->saveChatMsg();
 
-        $page = $this->factoryobj->getVariable( 'tmp_chat_page' );
+        $page = ( $this->factoryobj->getVariable( 'tmp_chat_page' ) ? $this->factoryobj->getVariable( 'tmp_chat_page' ) : 1 );
         $this->current_page = $page;
 
         if ( $this->factoryobj->menuid == 'get-next-page' ) {
