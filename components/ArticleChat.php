@@ -157,7 +157,7 @@ class ArticleChat extends ArticleComponent {
         $content = $this->factoryobj->mobilechatobj->getChatContent();
          $this->total_messages = count( $content );
 
-         $content = array_chunk($content, 3);
+         $content = array_chunk($content, 15);
 
          $offset = '-' . $page;
          $length = $page;
