@@ -221,12 +221,12 @@ class ArticleChat extends ArticleComponent {
         $items = $this->renderChatMsgs();
 
         // Still some work to be done here ..
-        // $next_page_id = 2;
+         $next_page_id = 2;
 
-        // if ( isset($this->submit['next_page_id']) ) {
-        //     $next_page_id = $this->submit['next_page_id'] + 1;
-        // }
-        // $output[] = $this->factoryobj->getInfinitescroll( $items, array( 'next_page_id' => $next_page_id ) );
+         if ( isset($this->submit['next_page_id']) ) {
+             $next_page_id = $this->submit['next_page_id'] + 1;
+         }
+         $output[] = $this->factoryobj->getInfinitescroll( $items, array( 'next_page_id' => $next_page_id ) );
 
 
         $output = array();
@@ -667,7 +667,6 @@ class ArticleChat extends ArticleComponent {
                     'float' => 'center',
                     'floating' => '1',
                     'margin' => '0 0 0 15',
-                    'onclick' => $onclick
                 );
 
             } else {
@@ -677,7 +676,6 @@ class ArticleChat extends ArticleComponent {
                     'float' => 'center',
                     'floating' => '1',
                     'margin' => '0 0 0 10',
-                    'onclick' => $onclick
                 );
 
             }
@@ -686,17 +684,18 @@ class ArticleChat extends ArticleComponent {
 
             return $this->factoryobj->getColumn($image,array(
                 'width' => '50','height' => '50','background-color' => $this->factoryobj->color_topbar,
-                'vertical-align' => 'middle',' text-align' => 'center','align' => 'center','border-radius' => '25'
+                'vertical-align' => 'middle',' text-align' => 'center','align' => 'center','border-radius' => '25',
+                'onclick' => $onclick
             ));
 
         } else {
-            $image[] = $this->factoryobj->getImage($icon,array('onclick' => $onclick,'width' => '25','height' => '25',
+            $image[] = $this->factoryobj->getImage($icon,array('width' => '25','height' => '25',
                 'float' => 'center',
                 'floating' => '1',
             ));
 
             return $this->factoryobj->getColumn($image,array(
-                'width' => '50','height' => '50',
+                'width' => '50','height' => '50','onclick' => $onclick,
                 'vertical-align' => 'middle',' text-align' => 'center'
             ));
 
