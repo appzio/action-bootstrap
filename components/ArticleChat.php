@@ -51,7 +51,6 @@ class ArticleChat extends ArticleComponent {
     /* for group chats */
     public $userlist;
 
-    public $current_page = 1;
     public $total_messages;
 
     protected function requiredOptions() {
@@ -110,18 +109,17 @@ class ArticleChat extends ArticleComponent {
             $this->factoryobj->mobilechatobj->addChat($this->context,$this->context_key,$this->otheruser);
 
             /* only one-on-one chats should be created automatically if they are missing */
-
-            /*            if(strstr($this->context_key,'-chat-')){
-                            $this->factoryobj->mobilechatobj->addChat($this->context,$this->context_key,$this->otheruser);
-                            if($this->factoryobj->mobilechatobj->error_state == true){
-                                return false;
-                            }
-                        } else {
-                            return false;
-                        }*/
-
+            /*
+                if(strstr($this->context_key,'-chat-')){
+                    $this->factoryobj->mobilechatobj->addChat($this->context,$this->context_key,$this->otheruser);
+                    if($this->factoryobj->mobilechatobj->error_state == true){
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            */
         }
-
 
         /* we look for the user's playid using from the chat id */
         $otheruser = explode('-chat-',$this->context_key);
@@ -139,21 +137,19 @@ class ArticleChat extends ArticleComponent {
         $this->saveChatMsg();
 
         $page = ( $this->factoryobj->getVariable( 'tmp_chat_page' ) ? $this->factoryobj->getVariable( 'tmp_chat_page' ) : 1 );
-        $this->current_page = $page;
 
         if ( $this->factoryobj->menuid == 'get-next-page' ) {
             $page = $page + 1;
-            $this->current_page = $page;
             $this->factoryobj->saveVariable( 'tmp_chat_page', $page );
         }
 
         /*
         if ( isset($this->submit['next_page_id']) ) {
-            $this->current_page = $this->submit['next_page_id'];
+            $page = $this->submit['next_page_id'];
         }
 
         $num_rec_per_page = 5;
-        $start_from = ($this->current_page-1) * $num_rec_per_page;
+        $start_from = ($page-1) * $num_rec_per_page;
 
         $content = $this->factoryobj->mobilechatobj->getChatContent( $start_from, $num_rec_per_page );
         */
@@ -161,10 +157,10 @@ class ArticleChat extends ArticleComponent {
         $content = $this->factoryobj->mobilechatobj->getChatContent();
         $this->total_messages = count( $content );
 
-        $content = array_chunk($content, 10);
+        $content = array_chunk($content, 3);
 
-        $offset = '-' . $this->current_page;
-        $length = $this->current_page;
+        $offset = '-' . $page;
+        $length = $page;
         $content = array_slice($content, $offset, $length);
 
         // revamp the content
@@ -189,8 +185,9 @@ class ArticleChat extends ArticleComponent {
             $object->header[] = $this->getMyMatchItem( $this->other_user_play_id );
         }
 
-
         $storage = new AeplayKeyvaluestorage();
+        $storage->play_id = $this->playid;
+        $matches = $storage->valueExists('two-way-matches',$this->other_user_play_id);
         
         // Look whether the chat is disabled for a certain player
         $chat_flag = $storage->findByAttributes(array(
@@ -198,7 +195,7 @@ class ArticleChat extends ArticleComponent {
             'key' => 'chat-flag',
         ));
 
-        if ( !empty($chat_flag) AND $chat_flag->value == '1' ) {
+        if ( !empty($chat_flag) AND $chat_flag->value == '1' AND !$matches ) {
             // $complete = new StdClass();
             // $complete->action = 'list-branches';
             // $this->data->onload[] = $complete;
@@ -207,7 +204,6 @@ class ArticleChat extends ArticleComponent {
             $object->scroll = $this->getChat();
             $object->footer = $this->getFooter();
         }
-
 
         $this->factoryobj->initMobileMatching( $this->other_user_play_id,true );
         return $object;
@@ -476,13 +472,13 @@ class ArticleChat extends ArticleComponent {
                     $this->factoryobj->getImage($userInfo['profilepic'], array('defaultimage' => 'anonymous2.png', 'crop' => 'round') )
                 ), array( 'style' => 'chat-column-1' ));
             $column2 = $this->factoryobj->getColumn(array(
-                    $this->factoryobj->getImage('arrow-beak2.png')
+                    $this->factoryobj->getImage('arrow-left.png')
                 ), array( 'style' => 'chat-column-2' ));
             $column3 = $this->factoryobj->getColumn(
                     $colitems,
                 array( 'style' => 'chat-column-3' ));
             $column4 = $this->factoryobj->getColumn(array(
-                    $this->factoryobj->getImage('flipped-beak-2.png')
+                    $this->factoryobj->getImage('arrow-right.png')
                 ), array( 'style' => 'chat-column-2' ));
             $column5 = $this->factoryobj->getColumn(
                     $colitems,
@@ -630,7 +626,7 @@ class ArticleChat extends ArticleComponent {
                 $this->factoryobj->mobilematchingobj->saveMatch();
             }
 
-/*            $notify = AeplayVariable::fetchWithName($this->playid,'notify',$this->gid);
+            $notify = AeplayVariable::fetchWithName($this->playid,'notify',$this->gid);
 
             if ( $notify ) {
                 $notification_text = $this->getFirstName($msg['name']) . ': ' . $message_text;
@@ -638,7 +634,7 @@ class ArticleChat extends ArticleComponent {
                 Aenotification::addUserNotification( $this->other_user_play_id, $title, $notification_text,0,$this->gid );
             }
 
-            $this->factoryobj->mobilematchingobj->addNotificationToBanner('msg');*/
+            $this->factoryobj->mobilematchingobj->addNotificationToBanner('msg');
         }
 
         // Ditto related only
