@@ -155,16 +155,16 @@ class ArticleChat extends ArticleComponent {
         */
 
         $content = $this->factoryobj->mobilechatobj->getChatContent();
-        // $this->total_messages = count( $content );
+         $this->total_messages = count( $content );
 
-        // $content = array_chunk($content, 3);
+         $content = array_chunk($content, 3);
 
-        // $offset = '-' . $page;
-        // $length = $page;
-        // $content = array_slice($content, $offset, $length);
+         $offset = '-' . $page;
+         $length = $page;
+         $content = array_slice($content, $offset, $length);
 
-        // // revamp the content
-        // $content = $this->array_flatten( $content );
+         // revamp the content
+         $content = $this->array_flatten( $content );
 
         $this->disableChat($content);
 
