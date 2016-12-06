@@ -16,8 +16,8 @@
   },
   "chat-column-2": {
     "width": "13",
-    "height": "32",
-    "margin": "22 0 0 0",
+    "height": "35",
+    "margin": "20 0 0 0",
     "text-align": "right"
   },
   "chat-column-3": {

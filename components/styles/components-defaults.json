@@ -368,5 +368,14 @@
     "background-color": "#CCEDE9",
     "padding": "3 6 3 6",
     "border-radius": "4"
+  },
+  "load-more-btn": {
+    "font-size": "13",
+    "color": "#333333",
+    "background-color": "#FFFFFF",
+    "padding": "4 6 4 6",
+    "border-radius": "4",
+    "text-align": "center",
+    "margin": "10 100 0 100"
   }
 }
