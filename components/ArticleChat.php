@@ -177,12 +177,14 @@ class ArticleChat extends ArticleComponent {
         $this->chatid = $this->factoryobj->mobilechatobj->getChatId();
 
         /* header */
-        if ( !$this->disable_header ) {
-            if ( $this->pic_permission ) {
-                $object->header[] = $this->handlePicPermission();
-            }
+        if ( $this->pic_permission ) {
+            $object->header[] = $this->handlePicPermission();
+        }
 
-            $object->header[] = $this->getMyMatchItem( $this->other_user_play_id );
+        /* NOTE: header might also return false */
+        $headerdata = $this->getMyMatchItem( $this->other_user_play_id );
+        if($headerdata){
+            $object->header[] = $headerdata;
         }
 
         $storage = new AeplayKeyvaluestorage();
@@ -287,6 +289,7 @@ class ArticleChat extends ArticleComponent {
 
         if($this->disable_header){
             $this->factoryobj->rewriteActionConfigField('subject',$name);
+            return false;
         } else {
             $string = $this->factoryobj->localizationComponent->smartLocalize('{#chat_with#}');
             $this->factoryobj->rewriteActionField('subject',$string.' ' .$name);
@@ -328,6 +331,14 @@ class ArticleChat extends ArticleComponent {
 
 
     private function getGroupChatHeader($users){
+
+        $chatinfo = Aechat::model()->findBYPk($this->chatid);
+        $name = isset($chatinfo->title) ? $chatinfo->title : '{#untitled#}';
+        $this->factoryobj->rewriteActionField('subject',$this->factoryobj->localizationComponent->smartLocalize($name));
+
+        if($this->disable_header){
+            return false;
+        }
 
         $cache = Appcaching::getGlobalCache('chatheader-'.$this->chatid);
         if($cache){
@@ -378,13 +389,6 @@ class ArticleChat extends ArticleComponent {
 
 
         $col[] = $this->factoryobj->getVerticalSpacer(30);
-
-        $chatinfo = Aechat::model()->findBYPk($this->chatid);
-
-        $name = isset($chatinfo->title) ? $chatinfo->title : '{#untitled#}';
-
-        $this->factoryobj->rewriteActionField('subject',$this->factoryobj->localizationComponent->smartLocalize($name));
-
         $row[] = $this->factoryobj->getText('{#group_chat_with#}',$textparams);
 
         $subtext['color'] = '#ffffff';
