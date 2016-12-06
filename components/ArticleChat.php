@@ -424,9 +424,9 @@ class ArticleChat extends ArticleComponent {
         $msgs = (object) $this->chat_content['msgs'];
         $count = count( $this->chat_content['msgs'] );
 
-        // if ( $count < $this->total_messages ) {
-        //     $output[] = $this->factoryobj->getText( '{#load_more#}', array( 'style' => 'load-more-btn', 'onclick' => $onclick ) );
-        // }
+         if ( $count < $this->total_messages ) {
+             $output[] = $this->factoryobj->getText( '{#load_more#}', array( 'style' => 'load-more-btn', 'onclick' => $onclick ) );
+         }
 
         foreach ($msgs as $i => $msg) {
 
