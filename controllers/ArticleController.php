@@ -615,7 +615,7 @@ class ArticleController {
         $this->mobilematchingobj->initMatching($otheruserid,true);
     }
 
-    public function initMobileChat( $context, $context_key, $otheruserid = false ){
+    public function initMobileChat( $context, $context_key, $otheruserid = false, $chat_id = 0 ){
         Yii::import('application.modules.aechat.models.*');
 
         $this->mobilechatobj = new Aechat();
@@ -624,11 +624,18 @@ class ArticleController {
         $this->mobilechatobj->game_id = $this->gid;
         $this->mobilechatobj->context = $context;
         $this->mobilechatobj->context_key = $context_key;
-        
-        // $this->mobilechatobj->actionid = $this->actionid;
-        // $this->mobilechatobj->playid_otheruser = $otheruserid;
 
-        $this->mobilechatobj->initChat();
+
+        // If Chat ID is provided, users would be able to only preview the chat
+        if ( $chat_id ) {
+            $this->mobilechatobj->current_chat_id = $chat_id;
+        } else {
+            // $this->mobilechatobj->actionid = $this->actionid;
+            // $this->mobilechatobj->playid_otheruser = $otheruserid;
+
+            $this->mobilechatobj->initChat();
+        }
+        
     }
 
     public function getSubmittedVariableByName($varname,$default=false)
