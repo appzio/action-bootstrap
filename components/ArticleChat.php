@@ -109,6 +109,7 @@ class ArticleChat extends ArticleComponent {
         if ( $this->factoryobj->menuid == 'join_chat' ) {
             $this->factoryobj->initMobileChat( $this->context, $this->context_key );
             $this->userlist = Aechatusers::getChatUserslist( $this->context_key );
+            Appcaching::removeGlobalCache( 'chatheader-' . $this->chat_id );
         } else {
             $this->factoryobj->initMobileChat( $this->context, $this->context_key, false, $this->chat_id );
         }
@@ -117,6 +118,7 @@ class ArticleChat extends ArticleComponent {
         if ( $this->factoryobj->menuid == 'leave-chat' ) {
             Aechatusers::removeUser( $this->chat_id, $this->playid );
             $this->userlist = Aechatusers::getChatUserslist( $this->context_key );
+            Appcaching::removeGlobalCache( 'chatheader-' . $this->chat_id );
         }
 
         if($this->factoryobj->mobilechatobj->error_state == true){
@@ -356,9 +358,9 @@ class ArticleChat extends ArticleComponent {
         }
 
         $cache = Appcaching::getGlobalCache('chatheader-'.$this->chat_id);
-        // if($cache){
-        //     return $cache;
-        // }
+        if($cache){
+            return $cache;
+        }
 
         $names = '';
         $profilepics = array();
