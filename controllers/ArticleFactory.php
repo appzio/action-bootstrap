@@ -508,6 +508,7 @@ class ArticleFactory {
         $output = array();
 
         $tabs = $this->tabsimages;
+
         $onload = array();
         $key = 1;
 
@@ -531,7 +532,6 @@ class ArticleFactory {
 
 
         if(!empty($onload)) {
-
             $actions = array();
             foreach ($onload as $item) {
 
@@ -545,11 +545,9 @@ class ArticleFactory {
             }
         }
 
-
         if($this->debug){
            // print_r($output);die();
         }
-
 
         return $output;
     }

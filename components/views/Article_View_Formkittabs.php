@@ -32,20 +32,21 @@ class Article_View_Formkittabs extends ArticleComponent {
             $fontsize = '10';
         }
 
-        $count = 1;
+        foreach($content as $tab_key => $tab_title){
 
-        foreach($content as $item){
+            $tab_num = str_replace('tab', '', $tab_key);
+
             $onclick = new StdClass();
             $onclick->action = 'open-tab';
-            $onclick->action_config = $count;
-            $onclick->id = $count .'11';
+            $onclick->action_config = $tab_num;
+            $onclick->id = 'key-' . $tab_key;
 
-            $btn1 = $this->factoryobj->getText($item,array('padding' => '10 10 10 10',
+            $btn1 = $this->factoryobj->getText($tab_title,array('padding' => '10 10 10 10',
                 'color' => $this->factoryobj->colors['top_bar_text_color'],'text-align' => 'center',
                 'onclick' => $onclick,'font-size' => $fontsize
             ));
 
-            if($this->factoryobj->current_tab == $count){
+            if($this->factoryobj->current_tab == $tab_num){
                 $btn2 = $this->factoryobj->getText('',array('height' => '3','background-color' => $this->factoryobj->color_topbar_hilite,'width' => $width));
             } else {
                 $btn2 = $this->factoryobj->getText('',array('height' => '3','background-color' => $this->factoryobj->color_topbar,'width' => $width));
@@ -55,7 +56,6 @@ class Article_View_Formkittabs extends ArticleComponent {
                 $btn = array($btn2,$btn1);
             } else {
                 $btn = array($btn1,$btn2);
-
             }
 
             $col[] = $this->factoryobj->getColumn($btn,array('width' => $width));
@@ -64,8 +64,6 @@ class Article_View_Formkittabs extends ArticleComponent {
             if($divider){
                 $col[] = $this->factoryobj->getVerticalSpacer(1,array('background-color' => $this->factoryobj->colors['top_bar_text_color']));
             }
-
-            $count++;
 
         }
 

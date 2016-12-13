@@ -31,7 +31,7 @@ class ArticleGroupchatlist extends ArticleComponent {
     public function groupChats($matches){
 
         if ( empty($matches) ) {
-            $othertxt['style'] = 'imate_title_nomatch';
+            $othertxt['style'] = 'chat-heading-no-chats';
             return $this->factoryobj->getText('{#no_group_chats#}', $othertxt);
         }
 
