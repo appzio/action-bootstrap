@@ -203,37 +203,42 @@ class ArticleController {
         }
     }
 
+    public function logout(){
+        $this->saveVariable('logged_in','0');
+        $this->saveVariable('fb_universal_login','0');
+        $this->deleteVariable('instagram_token');
+        $this->deleteVariable('instagram_temp_token');
+        $this->deleteVariable('twitter_token');
+        $this->deleteVariable('twitter_token_secret');
+        $this->deleteVariable('oauth_raw_info');
+        $this->deleteVariable('access_token');
+        $this->deleteVariable('refresh_token');
+        if($this->getSavedVariable('login_branch_id') AND $this->getSavedVariable('register_branch_id')){
+            AeplayBranch::activateBranch($this->getSavedVariable('login_branch_id'),$this->playid);
+            AeplayBranch::activateBranch($this->getSavedVariable('register_branch_id'),$this->playid);
+        }
+    }
+
     public function fakePlay($force = false){
 
         if($this->getConfigParam('use_false_id') OR $force){
             if($this->getSavedVariable('faux_pid') AND $this->getSavedVariable('faux_gid')){
                 $obtest = Aeplay::model()->findByPk($this->getSavedVariable('faux_pid'));
                 if(!is_object($obtest)){
-                    $this->saveVariable('logged_in','0');
-                    $this->saveVariable('fb_universal_login','0');
-                    $this->deleteVariable('instagram_token');
-                    $this->deleteVariable('instagram_temp_token');
-                    $this->deleteVariable('twitter_token');
-                    $this->deleteVariable('twitter_token_secret');
-                    $this->deleteVariable('oauth_raw_info');
-                    $this->deleteVariable('access_token');
-                    $this->deleteVariable('refresh_token');
-                    if($this->getSavedVariable('login_branch_id') AND $this->getSavedVariable('register_branch_id')){
-                        AeplayBranch::activateBranch($this->getSavedVariable('login_branch_id'),$this->playid);
-                        AeplayBranch::activateBranch($this->getSavedVariable('register_branch_id'),$this->playid);
-                    }
-
+                    $this->logout();
                     $this->fake_play_error = true;
-
                     return false;
+                } else {
+                    $this->current_playid = $this->getSavedVariable('faux_pid');
+                    $this->current_gid = $this->getSavedVariable('faux_gid');
+
+                    if($this->current_gid){
+                        $this->imagesobj->secondary_gid = $this->current_gid;
+                    }
                 }
-            }
-
-            $this->current_playid = $this->getSavedVariable('faux_pid');
-            $this->current_gid = $this->getSavedVariable('faux_gid');
-
-            if($this->current_gid){
-                $this->imagesobj->secondary_gid = $this->current_gid;
+            } else {
+                $this->logout();
+                $this->fake_play_error = true;
             }
         }
 
