@@ -857,7 +857,8 @@ class ArticleChat extends ArticleComponent {
             'font-size' => '12',
             'font-style' => 'italic',
             'color' => '#474747',
-            'padding' => '15 4 15 4',
+            'padding' => '4 4 4 4',
+            'height' => '50',
             'border-radius' => '4',
             'vertical-align' => 'middle',
         );
