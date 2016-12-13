@@ -501,9 +501,18 @@ class ArticleController {
     }
 
     public function collectPushPermission(){
-        $onclick = new StdClass();
-        $onclick->action = 'push-permission';
-        return $onclick;
+        $cachename = $this->playid.$this->userid.'-notify';
+        $updated = Appcaching::getGlobalCache($cachename);
+
+        if(!$updated OR !$this->getSavedVariable('perm_push')){
+            $onclick = new stdClass();
+            $onclick->action = 'push-permission';
+            Appcaching::setGlobalCache($cachename,true,640);
+            return $onclick;
+        } else {
+            return false;
+        }
+
     }
 
     public function updateLocation($interval){
