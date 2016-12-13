@@ -234,7 +234,9 @@ class ArticleController {
                     $this->current_gid = $this->getSavedVariable('faux_gid');
 
                     if($this->current_gid){
-                        $this->imagesobj->secondary_gid = $this->current_gid;
+                        if(is_object($this->imagesobj)){
+                            $this->imagesobj->secondary_gid = $this->current_gid;
+                        }
                     }
 
                     return true;
