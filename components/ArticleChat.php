@@ -830,7 +830,7 @@ class ArticleChat extends ArticleComponent {
 
         $chat_owner_play_id = ( isset($this->chat_info->owner_play_id) ? $this->chat_info->owner_play_id : 0 );
 
-        if ( !ctype_digit($this->chatid) AND ($chat_owner_play_id != $this->playid) ) {
+        if ( !empty($this->userlist) AND !ctype_digit($this->chatid) AND ($chat_owner_play_id != $this->playid) ) {
             $onclick = new stdClass();
             $onclick->action = 'submit-form-content';
             $onclick->id = 'join_chat';
