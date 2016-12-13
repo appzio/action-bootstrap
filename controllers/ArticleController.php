@@ -224,6 +224,7 @@ class ArticleController {
         if($this->getConfigParam('use_false_id') OR $force){
             if($this->getSavedVariable('faux_pid') AND $this->getSavedVariable('faux_gid')){
                 $obtest = Aeplay::model()->findByPk($this->getSavedVariable('faux_pid'));
+
                 if(!is_object($obtest)){
                     $this->logout();
                     $this->fake_play_error = true;
@@ -235,6 +236,8 @@ class ArticleController {
                     if($this->current_gid){
                         $this->imagesobj->secondary_gid = $this->current_gid;
                     }
+
+                    return true;
                 }
             } else {
                 $this->logout();
