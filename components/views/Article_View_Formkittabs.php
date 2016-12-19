@@ -11,6 +11,7 @@ class Article_View_Formkittabs extends ArticleComponent {
         $content = $this->addParam('content',$this->options,false);
         $indicatorontop = $this->addParam('indicatorontop',$this->options,false);
         $divider = $this->addParam('divider',$this->options,false);
+        $active = $this->addParam('active',$this->options,false);
 
         if(count($content) == 1){
             $width = $this->factoryobj->screen_width;
@@ -46,7 +47,9 @@ class Article_View_Formkittabs extends ArticleComponent {
                 'font-size' => $fontsize
             ));
 
-            if($this->factoryobj->current_tab == $tab_num){
+            if($active AND $active == $tab_num){
+                $btn2 = $this->factoryobj->getText('',array('height' => '3','background-color' => $this->factoryobj->color_topbar_hilite,'width' => $width));
+            }elseif($this->factoryobj->current_tab == $tab_num){
                 $btn2 = $this->factoryobj->getText('',array('height' => '3','background-color' => $this->factoryobj->color_topbar_hilite,'width' => $width));
             } else {
                 $btn2 = $this->factoryobj->getText('',array('height' => '3','background-color' => $this->factoryobj->color_topbar,'width' => $width));
