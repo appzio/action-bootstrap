@@ -564,7 +564,10 @@ class ArticleChat extends ArticleComponent {
                 break;
 
             case 'company':
-                $name = isset($vars['company']) ? $vars['company'] : isset($vars['real_name']) ? $vars['real_name'] : '{#anonymous#}';
+                $name = isset($vars['company']) ? $vars['company'] : false;
+                if(!$name){
+                    $name = isset($vars['real_name']) ? $this->getFirstName($vars['real_name']) : '{#anonymous#}';
+                }
                 break;
 
             default:
