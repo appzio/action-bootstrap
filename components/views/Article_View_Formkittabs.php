@@ -49,7 +49,7 @@ class Article_View_Formkittabs extends ArticleComponent {
 
             if($active AND $active == $tab_num){
                 $btn2 = $this->factoryobj->getText('',array('height' => '3','background-color' => $this->factoryobj->color_topbar_hilite,'width' => $width));
-            }elseif($this->factoryobj->current_tab == $tab_num){
+            }elseif(!$active AND $this->factoryobj->current_tab == $tab_num){
                 $btn2 = $this->factoryobj->getText('',array('height' => '3','background-color' => $this->factoryobj->color_topbar_hilite,'width' => $width));
             } else {
                 $btn2 = $this->factoryobj->getText('',array('height' => '3','background-color' => $this->factoryobj->color_topbar,'width' => $width));
