@@ -43,7 +43,7 @@ class Article_View_Formkittabs extends ArticleComponent {
 
             $btn1 = $this->factoryobj->getText($tab_title,array('padding' => '10 10 10 10',
                 'color' => $this->factoryobj->colors['top_bar_text_color'],'text-align' => 'center',
-                'onclick' => $onclick,'font-size' => $fontsize
+                'font-size' => $fontsize
             ));
 
             if($this->factoryobj->current_tab == $tab_num){
@@ -58,7 +58,7 @@ class Article_View_Formkittabs extends ArticleComponent {
                 $btn = array($btn1,$btn2);
             }
 
-            $col[] = $this->factoryobj->getColumn($btn,array('width' => $width));
+            $col[] = $this->factoryobj->getColumn($btn,array('width' => $width,'onclick' => $onclick));
             unset($btn);
 
             if($divider){
