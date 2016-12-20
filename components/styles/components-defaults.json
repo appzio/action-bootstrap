@@ -55,33 +55,33 @@
   },
 
   "selectorlist_selector_checkbox_unselected": {
-    "width": "34",
+    "width": "100%",
     "height": "34",
-    "background-image": "checkbox-icon-unchecked.png",
+    "background-image": "checkbox-icon-unchecked-wide.png",
     "background-size": "contain",
     "background_size": "contain",
     "background-size ": "contain",
     "background_size ": "contain",
-    "text-align": "center",
+    "text-align": "left",
     "vertical-align": "middle",
     "margin": "6 0 0 0",
-    "float": "1",
-    "align": "right"
+    "float": "right",
+    "floating": "1"
   },
 
   "selectorlist_selector_checkbox_selected": {
-    "width": "34",
+    "width": "100%",
     "height": "34",
-    "background-image": "checkbox-icon-checked.png",
+    "background-image": "checkbox-icon-checked-wide.png",
     "background-size": "contain",
     "background_size": "contain",
     "background-size ": "contain",
     "background_size ": "contain",
-    "text-align": "center",
+    "text-align": "left",
     "vertical-align": "middle",
     "margin": "6 0 0 0",
-    "float": "1",
-    "align": "right"
+    "float": "right",
+    "floating": "1"
   },
 
   "imate_contacts_textrow": {
