@@ -1456,6 +1456,20 @@ class ArticleController {
     }
 
 
+    /* session getters and setters */
+    public function sessionSet($pointer,$value){
+        $_SESSION[$pointer] = $value;
+    }
+
+    public function sessionGet($pointer){
+        if(isset($_SESSION[$pointer])){
+            return $_SESSION[$pointer];
+        } else {
+            return false;
+        }
+    }
+
+
     /* these are semi-permanent states for either play or specific action
         if you need permanence, play variables are a way to go
 
