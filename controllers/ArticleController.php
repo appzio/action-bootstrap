@@ -242,7 +242,7 @@ class ArticleController {
                     return true;
                 }
             } else {
-                $this->logout();
+                //$this->logout();
                 $this->fake_play_error = true;
             }
         }
