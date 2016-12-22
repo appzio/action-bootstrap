@@ -25,6 +25,7 @@ class Article_View_Imagebutton extends ArticleComponent {
         $crop = $this->addParam('crop',$this->options,false);
         $max_dimensions = $this->addParam('max_dimensions',$this->options,'1200');
         $context = $this->addParam('context',$this->options,false);
+        $send_ids = $this->addParam('send_ids',$this->options,false);
 
         $imgparams['width'] = $this->addParam('imgwidth',$this->options,false);
         $imgparams['height'] = $this->addParam('imgheight',$this->options,false);
@@ -32,26 +33,34 @@ class Article_View_Imagebutton extends ArticleComponent {
 
         $item = new StdClass;
         $item->id = $id;
-        $item->image = $image;
-        $item->state = 'active';
-        $item->action = $action;
-        $item->action_config = $config;
-        $item->open_popup = $open_popup;
-        $item->sync_open = $sync_open;
-        $item->sync_close = $sync_close;
-        $item->viewport = $viewport;
+
+        if($image) { $item->image = $image; }
+        //if($item->state) { $item->state = 'active'; }
+        if($action) { $item->action = $action; }
+        if($config) { $item->action_config = $config; }
+        if($open_popup) { $item->open_popup = $open_popup; }
+        if($sync_open) { $item->sync_open = $sync_open; }
+        if($sync_close) { $item->sync_close = $sync_close; }
+        if($viewport) { $item->viewport = $viewport; }
 
         if($context){
             $item->context = $context;
         }
 
+        if($send_ids){
+            $item->send_ids = $send_ids;
+        }
+
+
         if($action == 'upload-image'){
             $item->max_dimensions = $max_dimensions;
         }
 
-        $item->sync_upload = $sync_upload;
-        $item->back_button = $back_button;
-        $item->variable = $variable;
+        if($sync_upload){ $item->sync_upload = $sync_upload; }
+        if($back_button){$item->back_button = $back_button; }
+        if($variable){ $item->variable = $variable;}
+
+
         $item->style_content = new StdClass();
         $item->style_content->crop = $crop;
 

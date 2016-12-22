@@ -211,13 +211,16 @@ class ArticleComponent {
         }
 
         if ( isset($this->options['animation']) ) {
-            $obj->animation = $this->options['animation'];
+            $obj->transition = $this->options['animation'];
         }
 
         if ( isset($this->options['time_to_live']) ) {
             $obj->time_to_live = $this->options['time_to_live'];
         }
 
+        if ( isset($this->options['send_ids']) ) {
+            $obj->time_to_live = $this->options['send_ids'];
+        }
 
         return $this->addStyles($obj,$this->options);
 
