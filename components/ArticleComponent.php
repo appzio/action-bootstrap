@@ -211,7 +211,7 @@ class ArticleComponent {
         }
 
         if ( isset($this->options['animation']) ) {
-            $obj->transition = $this->options['animation'];
+            $obj->animation = $this->options['animation'];
         }
 
         if ( isset($this->options['time_to_live']) ) {
