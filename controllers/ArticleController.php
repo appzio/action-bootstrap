@@ -93,7 +93,10 @@ class ArticleController {
     public $current_playid;
     public $current_gid;
 
-
+    /* by settings this to true, you can have api output only msg ok
+    this is used for certain async functions where we don't want the client
+    to do an update of its view */
+    public $no_output = false;
 
     /* @var Localizationapi */
     public $localizationComponent;

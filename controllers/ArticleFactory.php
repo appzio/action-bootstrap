@@ -90,7 +90,12 @@ class ArticleFactory {
     public $localizationComponent;
 
     public $query;
-    public $checkSumCheckParams;                  // this is the original query as api has received it
+    public $checkSumCheckParams;        // this is the original query as api has received it
+
+    /* by settings this to true, you can have api output only msg ok
+    this is used for certain async functions where we don't want the client
+    to do an update of its view */
+    public $no_output = false;
 
     /* gets called when object is created & fed with initial values */
     public function playInit() {
@@ -225,6 +230,10 @@ class ArticleFactory {
 
         if(isset($this->childobj->rewriteactionfield)){
             $this->rewriteactionfield = $this->childobj->rewriteactionfield;
+        }
+
+        if($this->childobj->no_output){
+            $this->no_output = $this->childobj->no_output;
         }
 
         return $op;
