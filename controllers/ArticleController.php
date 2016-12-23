@@ -836,12 +836,15 @@ class ArticleController {
 
 
 
-    public function getTabs($content,$params=array(),$divider=false,$indicatorontop=false){
+    public function getTabs($content,$params=array(),$divider=false){
         /* you can configure the needed params here */
+
+        // Supported indicator modes: top / bottom / fulltab
+
         $params['divider'] = $divider;
         $params['content'] = $content;
-        $params['indicatorontop'] = $indicatorontop;
         $params['params'] = $params;
+
         return $this->returnComponent('formkittabs','field','',$params);
     }
 
