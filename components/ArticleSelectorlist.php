@@ -30,7 +30,7 @@ class ArticleSelectorlist extends ArticleComponent {
         $this->title = $this->addParam('title',$this->options,false);
         $this->tab = $this->addParam('tab',$this->options,2);
         $this->tab_back = $this->addParam('tab_back',$this->options,1);
-        $this->dont_save_variable = $this->addParam('dont_save_variable',$this->options,1);
+        $this->dont_save_variable = $this->addParam('dont_save_variable',$this->options,false);
 
         if($this->mode == 'field'){
             return $this->getField();
@@ -89,7 +89,6 @@ class ArticleSelectorlist extends ArticleComponent {
 
         if($this->factoryobj->menuid == 'list-saver'){
             $names = array();
-
             foreach($this->factoryobj->submitvariables AS $key=>$value){
 
                 if($value == 1){
@@ -108,8 +107,8 @@ class ArticleSelectorlist extends ArticleComponent {
             return true;
         }
 
-        $this->factoryobj->copyAssetWithoutProcessing('checkbox-icon-checked.png');
-        $this->factoryobj->copyAssetWithoutProcessing('checkbox-icon-unchecked.png');
+        $this->factoryobj->copyAssetWithoutProcessing('checkbox-icon-checked-wide.png');
+        $this->factoryobj->copyAssetWithoutProcessing('checkbox-icon-unchecked-wide.png');
 
         $output[] = $this->factoryobj->getText(strtoupper('{#search_filtering#}'),array('style' => 'form-field-section-title'));
 
@@ -175,8 +174,8 @@ class ArticleSelectorlist extends ArticleComponent {
             $selectstate = array('style' => 'selectorlist_selector_checkbox_selected','variable_value' => 1,'allow_unselect' => 1,'animation' => 'fade');
         }
 
-        $col[] = $this->factoryobj->getText($value,array('width' => '190'));
-        $col[] = $this->factoryobj->getText('',array('style'=>'selectorlist_selector_checkbox_unselected','variable' => 'listitem_'.$key,'selected_state' => $selectstate));
+        //$col[] = $this->factoryobj->getText($value,array('width' => '190'));
+        $col[] = $this->factoryobj->getText($value,array('style'=>'selectorlist_selector_checkbox_unselected','variable' => 'listitem_'.$key,'selected_state' => $selectstate));
 
         return $this->factoryobj->getRow($col,array('margin' => '0 15 2 15','padding' => '5 5 5 5','background-color' => '#ffffff',
             'vertical-align' => 'middle'));

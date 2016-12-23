@@ -93,7 +93,10 @@ class ArticleController {
     public $current_playid;
     public $current_gid;
 
-
+    /* by settings this to true, you can have api output only msg ok
+    this is used for certain async functions where we don't want the client
+    to do an update of its view */
+    public $no_output = false;
 
     /* @var Localizationapi */
     public $localizationComponent;
@@ -242,7 +245,7 @@ class ArticleController {
                     return true;
                 }
             } else {
-                $this->logout();
+                //$this->logout();
                 $this->fake_play_error = true;
             }
         }
@@ -501,9 +504,18 @@ class ArticleController {
     }
 
     public function collectPushPermission(){
-        $onclick = new StdClass();
-        $onclick->action = 'push-permission';
-        return $onclick;
+        $cachename = $this->playid.$this->userid.'-notify';
+        $updated = Appcaching::getGlobalCache($cachename);
+
+        if(!$updated OR !$this->getSavedVariable('perm_push')){
+            $onclick = new stdClass();
+            $onclick->action = 'push-permission';
+            Appcaching::setGlobalCache($cachename,true,640);
+            return $onclick;
+        } else {
+            return false;
+        }
+
     }
 
     public function updateLocation($interval){
@@ -1447,6 +1459,20 @@ class ArticleController {
         }
 
         return false;
+    }
+
+
+    /* session getters and setters */
+    public function sessionSet($pointer,$value){
+        $_SESSION[$pointer] = $value;
+    }
+
+    public function sessionGet($pointer){
+        if(isset($_SESSION[$pointer])){
+            return $_SESSION[$pointer];
+        } else {
+            return false;
+        }
     }
 
 
