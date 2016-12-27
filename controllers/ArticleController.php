@@ -93,6 +93,10 @@ class ArticleController {
     public $current_playid;
     public $current_gid;
 
+    /* automatically created bottom menu gets put here. To disable it for
+    some tab or view, you can simply set it empty (it gets created upon init) */
+    public $bottom_menu_json;
+
     /* by settings this to true, you can have api output only msg ok
     this is used for certain async functions where we don't want the client
     to do an update of its view */
@@ -121,6 +125,9 @@ class ArticleController {
 
     /* this is related to mixing data between apps */
     public $fake_play_error = false;
+    
+    /* bottom navigation, which is handled entirely on server side */
+    public $bottom_menu_id;
 
     public function __construct($obj){
 
@@ -136,7 +143,12 @@ class ArticleController {
 
         $this->initKeyValueStorage();
 
+        if($this->bottom_menu_id){
+            $this->bottom_menu_json = $this->getBottomMenu();
+        }
+
     }
+
 
     public function saveVariables(){
         ArticleModel::saveVariables($this->submitvariables,$this->playid);
@@ -762,6 +774,10 @@ class ArticleController {
 
 
     /* components go here */
+    public function getBottomMenu(){
+        return $this->returnComponent('bottommenu','module');
+    }
+
 
     public function getText($content,$params=array()){
         /* you can configure the needed params here */

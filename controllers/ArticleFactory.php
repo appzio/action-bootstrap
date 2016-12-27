@@ -96,6 +96,7 @@ class ArticleFactory {
     this is used for certain async functions where we don't want the client
     to do an update of its view */
     public $no_output = false;
+    public $bottom_menu_id;
 
     /* gets called when object is created & fed with initial values */
     public function playInit() {
@@ -157,6 +158,7 @@ class ArticleFactory {
 
         $this->setColors();
         $this->tabMenu();
+        $this->setBottomMenuId();
 
         if(isset($_REQUEST['referring_action'])){
             $this->referring_action = $_REQUEST['referring_action'];
@@ -492,6 +494,52 @@ class ArticleFactory {
     }
 
 
+    /* extracts a bottom menu */
+    public function setBottomMenuId(){
+        $visualconfig = json_decode($this->appinfo->visual_config_params);
+
+        if(isset($this->configobj->bottom_menu_id)){
+            if($this->configobj->bottom_menu_id === 0){
+                return false;
+            }
+
+            if(is_numeric($this->configobj->bottom_menu_id) AND $this->configobj->bottom_menu_id > 0){
+                $this->bottom_menu_id = $this->configobj->bottom_menu_id;
+                return true;
+            }
+        }
+
+
+        /* traversing to banch */
+        if(isset($this->branchconfig->bottom_menu_id)){
+            if($this->branchconfig->bottom_menu_id === 0){
+                return false;
+            }
+
+            if(is_numeric($this->branchconfig->bottom_menu_id) AND $this->branchconfig->bottom_menu_id > 0){
+                $this->bottom_menu_id = $this->branchconfig->bottom_menu_id;
+                return true;
+            }
+        }
+
+        /* traversing to app config*/
+        if(isset($visualconfig->bottom_menu_id) AND $visualconfig->bottom_menu_id){
+            if(is_numeric($visualconfig->bottom_menu_id) AND $visualconfig->bottom_menu_id > 0){
+                $this->bottom_menu_id = $this->branchconfig->bottom_menu_id;
+                return true;
+            }
+        }
+
+        return false;
+
+    }
+
+    public function getBottomMenu($output,$id){
+        echo($id);die();
+        return $output;
+    }
+
+
     /**
     * This method would try to retrieve the default output/response from a certain component
     */
@@ -517,7 +565,6 @@ class ArticleFactory {
         $output = array();
 
         $tabs = $this->tabsimages;
-
         $onload = array();
         $key = 1;
 
@@ -530,6 +577,16 @@ class ArticleFactory {
 
                 if (isset($tabcontent->onload)) {
                     $onload = array_merge($onload, $tabcontent->onload);
+                }
+
+                /* bottom menu which is created on article controllers init stage */
+                if($this->childobj->bottom_menu_json){
+                    if(!isset($tabcontent->footer)){
+                        $tabcontent->footer = new stdClass();
+                        $tabcontent->footer = $this->childobj->bottom_menu_json;
+                    } else {
+                        $tabcontent->footer = array_merge($tabcontent->footer,$this->childobj->bottom_menu_json);
+                    }
                 }
 
                 $tabcontent = $this->addTabJson($tabcontent,$key);
