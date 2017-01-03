@@ -411,9 +411,13 @@ class ArticleController {
     }
 
     
-    public function getSettingsTitle($title,$columnparams=false){
+    public function getSettingsTitle($title, $columnparams = false, $show_border = true){
         $output[] = $this->getText(strtoupper($title),array('style' => 'form-field-section-title'));
-        $output[] = $this->getText('',array('height' => '1','background-color' => '#b5b5b5','margin' => '0 0 10 0'));
+            
+        if ( $show_border ) {
+            $output[] = $this->getText('',array('height' => '1','background-color' => '#b5b5b5','margin' => '0 0 10 0'));
+        }
+        
         return $this->getColumn($output,$columnparams);
     }
 
