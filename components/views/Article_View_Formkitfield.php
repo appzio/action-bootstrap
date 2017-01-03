@@ -38,12 +38,17 @@ class Article_View_Formkitfield extends ArticleComponent {
             $style_separator = 'form-field-separator';
         }
 
-        if($type){
-            $col[] = $this->factoryobj->getFieldtext($this->value,array('variable' => $param,'hint' => $hint,'style' => $style,'input_type' => $type));
-        } else {
-            $col[] = $this->factoryobj->getFieldtext($this->value,array('variable' => $param,'hint' => $hint,'style' => $style));
-        }
+        $args = array(
+            'variable' => $param,
+            'hint' => $hint,
+            'style' => $style,
+        );
 
+        if ( $type ) {
+            $args['input_type'] = $type;
+        }
+        
+        $col[] = $this->factoryobj->getFieldtext($this->value, $args);
 
         $col[] = $this->factoryobj->getText('',array('style' => $style_separator));
 
@@ -52,8 +57,6 @@ class Article_View_Formkitfield extends ArticleComponent {
         }
 
         return $this->factoryobj->getColumn($col,array('style' => 'form-field-row'));
-
-
 	}
 
 }
