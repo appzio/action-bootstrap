@@ -54,6 +54,7 @@ class ArticleChat extends ArticleComponent {
     public $userlist;
 
     public $total_messages;
+    public $top_button;
 
     protected function requiredOptions() {
         return array();
@@ -86,6 +87,7 @@ class ArticleChat extends ArticleComponent {
         $this->disable_header = $this->addParam('disable_header',$this->options,false);
         $this->can_invite_others = $this->addParam('can_invite_others',$this->options,false);
         $this->userlist = $this->addParam('userlist',$this->options,false);
+        $this->top_button = $this->addParam('top_button',$this->options,false);
 
         // App specific settings
         $this->save_match = $this->addParam('save_match',$this->options,false);
@@ -344,6 +346,11 @@ class ArticleChat extends ArticleComponent {
 
         if($this->can_invite_others == true){
             $columns[] = $this->factoryobj->getImage('add-user-group.png',array('margin' => '8 14 8 8','onclick' => $this->factoryobj->getOnclick('tab2', true)));
+        }
+
+        if($this->top_button){
+            $btn[] = $this->top_button;
+            $columns[] = $this->factoryobj->getColumn($btn,array('float' => 'right','floating' => 1,'vertical-align' => 'middle'));
         }
 
         return $this->factoryobj->getRow($columns,$rowparams);
