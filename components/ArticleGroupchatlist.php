@@ -9,10 +9,17 @@ class ArticleGroupchatlist extends ArticleComponent {
     /* prevents from listing chats that are already shown in the view, simple list of id's */
     public $expended_connection_ids;
     public $mode;
+    public $separator_styles;
 
     public function template(){
 
-        $this->mode = $this->addParam('mode',$this->options,'mychats');
+        $this->mode = $this->addParam('mode', $this->options, 'mychats');
+        $this->separator_styles = $this->addParam('separator_styles', $this->options, array(
+                'margin' => '8 20 4 20',
+                'background-color' => '#BABABA',
+                'height' => '1',
+                'opacity' => '0.4'
+            ));
 
         if(!is_object($this->factoryobj->mobilechatobj)){
             $this->factoryobj->initMobileChat(false,false);
@@ -24,8 +31,8 @@ class ArticleGroupchatlist extends ArticleComponent {
         }
 
         $matches = $this->factoryobj->mobilechatobj->getGroupChats($this->mode);
-        return $this->groupChats($matches);
 
+        return $this->groupChats($matches);
     }
 
     public function groupChats($matches){
@@ -37,7 +44,7 @@ class ArticleGroupchatlist extends ArticleComponent {
 
         foreach ($matches as $key => $res) {
             $out[] = $this->groupChatItem($res);
-            $out[] = $this->factoryobj->getText('',array('margin' => '8 20 4 20','background-color' => '#BABABA','height' => '1','opacity' => '0.4'));
+            $out[] = $this->factoryobj->getText('', $this->separator_styles);
             $this->expended_connection_ids[$res] = true;
             unset($columns);
             unset($s);
@@ -49,8 +56,6 @@ class ArticleGroupchatlist extends ArticleComponent {
             return $this->factoryobj->getColumn($out);
         }
     }
-
-    
 
     public function groupChatItem($contextkey){
 
@@ -70,6 +75,7 @@ class ArticleGroupchatlist extends ArticleComponent {
         $chatowner = isset($chatinfo[0]['owner_play_id']) ? $chatinfo[0]['owner_play_id'] : false;
 
         $users = Aechatusers::getChatUserslist($contextkey);
+
         $names = '';
         $profilepics = array();
         $count = 0;
@@ -141,15 +147,12 @@ class ArticleGroupchatlist extends ArticleComponent {
             $finalrow[] = $this->factoryobj->getSwipearea($swipe,array('animate' => 1));
         } else {
             $finalrow[] = $this->factoryobj->getRow($col);
-
         }
 
         $lastcol[] = $this->factoryobj->getRow($finalrow,array('onclick' => $onclick));
         $lastcol[] = $this->factoryobj->getText('',array('margin' => '8 20 0 20','height' => '1','opacity' => '0.4'));
 
         return $this->factoryobj->getColumn($lastcol);
-
-
     }
 
     public function getFirstName($vars){
