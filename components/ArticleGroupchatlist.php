@@ -67,7 +67,8 @@ class ArticleGroupchatlist extends ArticleComponent {
         $onclick->back_button = true;
         $onclick->sync_open = true;
         $onclick->viewport = 'bottom';
-        $onclick->action_config = $this->factoryobj->requireConfigParam('chat');
+        // $onclick->action_config = $this->factoryobj->requireConfigParam('chat');
+        $onclick->action_config = $this->factoryobj->getConfigParam('chat');
 
         $chatinfo = Aechatusers::getChatInfo($contextkey);
         $chatid = isset($chatinfo[0]['chat_id']) ? $chatinfo[0]['chat_id'] : false;

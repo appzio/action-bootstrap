@@ -12,6 +12,7 @@ class Article_View_Formkittabs extends ArticleComponent {
         $indicator_mode = $this->addParam('indicator_mode',$this->options,false);
         $divider = $this->addParam('divider',$this->options,false);
         $active = $this->addParam('active',$this->options,false);
+        $btn_padding = $this->addParam('btn_padding',$this->options,'10 10 10 10');
         $color_topbar = $this->addParam('color_topbar',$this->options,$this->factoryobj->color_topbar);
         $color_topbar_hilite = $this->addParam('color_topbar_hilite',$this->options,$this->factoryobj->color_topbar_hilite);
 
@@ -22,7 +23,7 @@ class Article_View_Formkittabs extends ArticleComponent {
         $width = $params['width'];
 
         $btn_params = array(
-            'padding' => '10 10 10 10',
+            'padding' => $btn_padding,
             'color' => $this->factoryobj->colors['top_bar_text_color'],
             'text-align' => 'center',
             'font-size' => $fontsize

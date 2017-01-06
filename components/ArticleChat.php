@@ -228,7 +228,7 @@ class ArticleChat extends ArticleComponent {
             $object->footer = $this->getFooter();
         }
 
-        $this->factoryobj->initMobileMatching( $this->other_user_play_id,true );
+        $this->factoryobj->initMobileMatching( $this->other_user_play_id, true );
 
         return $object;
     }
