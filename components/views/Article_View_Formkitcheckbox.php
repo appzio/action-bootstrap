@@ -13,6 +13,7 @@ class Article_View_Formkitcheckbox extends ArticleComponent {
         $variable = $this->addParam('variable',$this->options,false);
         $error = $this->addParam('error',$this->options,false);
         $onclick = $this->addParam('onclick',$this->options,false);
+        $toggle_type = $this->addParam('type',$this->options,'default');
 
         if(!$this->value){
             $this->value = $this->factoryobj->getSubmittedVariableByName($variable);
@@ -29,16 +30,16 @@ class Article_View_Formkitcheckbox extends ArticleComponent {
             $row[] = $this->factoryobj->getText(strtoupper($title), array('style' => 'form-field-textfield-onoff'));
         }
 
+        $args = array(
+            'type' => $toggle_type,
+            'value' => $this->value,
+            'variable' => $variable,
+            'margin' => '0 15 9 0',
+            'floating' => '1',
+            'float' => 'right'
+        );
 
-        $row[] = $this->factoryobj->getFieldonoff($this->value,array(
-                    'value' => $this->value,
-                    'variable' => $variable,
-                    'margin' => '0 15 9 0',
-
-                    'floating' => '1',
-                    'float' => 'right'
-                )
-            );
+        $row[] = $this->factoryobj->getFieldonoff($this->value, $args);
 
         $columns[] = $this->factoryobj->getRow($row);
 
