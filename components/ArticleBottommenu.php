@@ -24,11 +24,14 @@ class ArticleBottommenu extends ArticleComponent {
             $column[] = $this->getItem($menuitem,$count);
         }
 
-        $column[] = $this->factoryobj->getText($this->factoryobj->bottom_menu_id);
-        $row[] = $this->factoryobj->getText('',array('height' => '2', 'background-color' => $this->factoryobj->color_topbar_hilite));
-        $row[] = $this->factoryobj->getRow($column,array('background-color' => $this->factoryobj->color_topbar));
+        if(isset($column)){
+            $row[] = $this->factoryobj->getText('',array('height' => '2', 'background-color' => $this->factoryobj->color_topbar_hilite));
+            $row[] = $this->factoryobj->getRow($column,array('background-color' => $this->factoryobj->color_topbar));
+        } else {
+            $row[] = $this->factoryobj->getText('No menu items found',array('height' => '2', 'background-color' => $this->factoryobj->color_topbar_hilite));
+        }
 
-        $output[] = $this->factoryobj->getColumn($row);
+        $output[] = $this->factoryobj->getColumn($row,array('height' => '60'));
         return $output;
 
     }
