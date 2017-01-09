@@ -850,7 +850,7 @@ class ArticleChat extends ArticleComponent {
             $onclick->id = 'join_chat';
             $onclick->viewport = 'bottom';
 
-            $output[] = $this->factoryobj->getText( '{#join_chat#}', array( 'style' => 'general_button_style_red', 'onclick' => $onclick ) );
+            $output[] = $this->factoryobj->getText( '{#join_chat#}', array( 'style' => 'button-join-chat', 'onclick' => $onclick ) );
             return $output;
         }
 
