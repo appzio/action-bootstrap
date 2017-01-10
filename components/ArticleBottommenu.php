@@ -19,9 +19,11 @@ class ArticleBottommenu extends ArticleComponent {
         }
 
         $count = count($menudata);
+        $counter = 1;
 
         foreach($menudata as $menuitem){
-            $column[] = $this->getItem($menuitem,$count);
+            $column[] = $this->getItem($menuitem,$count,$counter);
+            $counter++;
         }
 
         if(isset($column)){
@@ -36,10 +38,18 @@ class ArticleBottommenu extends ArticleComponent {
 
     }
 
-    public function getItem($item,$count)
+    public function getItem($item,$count,$current)
     {
 
-        $width = $this->factoryobj->screen_width / $count;
+        if($current == $count){
+            /* this is because of rounding */
+            $width = round($this->factoryobj->screen_width / $count,0);
+            $others = $width*($count-1);
+            $width = $this->factoryobj->screen_width - $others;
+        } else {
+            $width = round($this->factoryobj->screen_width / $count,0);
+        }
+
         if ($item['icon']) $row[] = $this->factoryobj->getImage($item['icon'], array('height' => 25, 'margin' => '8 0 5 0'));
 
         $row[] = $this->factoryobj->getText($item['text'], array('color' => $this->factoryobj->colors['top_bar_text_color'], 'font-size' => '10', 'width' => $width, 'text-align' => 'center',

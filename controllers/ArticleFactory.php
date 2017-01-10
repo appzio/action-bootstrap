@@ -500,7 +500,7 @@ class ArticleFactory {
 
         if(isset($this->configobj->bottom_menu_id)){
 
-            if($this->configobj->bottom_menu_id == 0){
+            if($this->configobj->bottom_menu_id == 'none'){
                 return false;
             }
 
@@ -513,7 +513,7 @@ class ArticleFactory {
 
         /* traversing to banch */
         if(isset($this->branchconfig->bottom_menu_id)){
-            if($this->branchconfig->bottom_menu_id == 0){
+            if($this->branchconfig->bottom_menu_id == 'none'){
                 return false;
             }
 

@@ -1323,11 +1323,23 @@ class ArticleController {
         }
 
         $img = $this->getImage($image,$params);
+        if(!isset($buttonparams['style']) AND !isset($buttonparams['background-color'])){
+            $buttonparams['background-color'] = $this->color_topbar;
+            $buttonparams['text-align'] = 'center';
+            $buttonparams['font-size'] = '14';
+            $buttonparams['margin'] = '15 40 40 40';
+            $buttonparams['height'] = '50';
+            $buttonparams['border-radius'] = '8';
+
+            $textparams['color'] = $this->colors['top_bar_text_color'];
+        }
+
 
         //$column[] = $this->getColumn(array($img),array('vertical-align' => 'middle','width' => '30'));
         $column[] = $img;
         $column[] = $this->getVerticalSpacer('10');
         $column[] = $this->getText($text,$textparams);
+
 
         if($params['image']){
             return $this->getRow($column,$buttonparams);
