@@ -3,7 +3,9 @@
 
 Yii::import('application.modules.aegameauthor.models.*');
 Yii::import('application.modules.aegameauthor.components.*');
+Yii::import('application.modules.aegameauthor.components.snippets.*');
 Yii::import('application.modules.aelogic.article.components.*');
+Yii::import('application.modules.aelogic.article.components.snippets.*');
 
 class ArticleController {
 
@@ -812,7 +814,6 @@ class ArticleController {
         return $this->returnComponent('selectorlist','module',false,$params);
     }
 
-
     public function formkitTags($title,$items,$params=false,$error=false){
         $params['title'] = $title;
         $params['items'] = $items;
@@ -827,6 +828,10 @@ class ArticleController {
         return $this->returnComponent('formkitradiobuttons','field','',$params);
     }
 
+    public function formkitTitle($title){
+        $params['title'] = $title;
+        return $this->returnComponent('formkittitle','field','',$params);
+    }
 
     public function formkitCheckbox($variable,$title,$params=false,$error=false){
         $params['title'] = $title;
@@ -1401,6 +1406,11 @@ class ArticleController {
         $params['action'] = $action;
         $params['bookmarkvar'] = $this->addParam('bookmarkvar',$params,'bookmarks');
         return $this->returnComponent('bookmarking','module',false,$params);
+    }
+
+    /* general accessor for snippets */
+    public function getSnippet($snippet,$params=array()){
+        return $this->returnComponent($snippet,'module',false,$params);
     }
 
     public function moduleChat($params){
