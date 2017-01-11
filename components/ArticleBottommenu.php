@@ -19,24 +19,37 @@ class ArticleBottommenu extends ArticleComponent {
         }
 
         $count = count($menudata);
+        $counter = 1;
 
         foreach($menudata as $menuitem){
-            $column[] = $this->getItem($menuitem,$count);
+            $column[] = $this->getItem($menuitem,$count,$counter);
+            $counter++;
         }
 
-        $column[] = $this->factoryobj->getText($this->factoryobj->bottom_menu_id);
-        $row[] = $this->factoryobj->getText('',array('height' => '2', 'background-color' => $this->factoryobj->color_topbar_hilite));
-        $row[] = $this->factoryobj->getRow($column,array('background-color' => $this->factoryobj->color_topbar));
+        if(isset($column)){
+            $row[] = $this->factoryobj->getText('',array('height' => '2', 'background-color' => $this->factoryobj->color_topbar_hilite));
+            $row[] = $this->factoryobj->getRow($column,array('background-color' => $this->factoryobj->color_topbar));
+        } else {
+            $row[] = $this->factoryobj->getText('No menu items found',array('height' => '2', 'background-color' => $this->factoryobj->color_topbar_hilite));
+        }
 
-        $output[] = $this->factoryobj->getColumn($row);
+        $output[] = $this->factoryobj->getColumn($row,array('height' => '60'));
         return $output;
 
     }
 
-    public function getItem($item,$count)
+    public function getItem($item,$count,$current)
     {
 
-        $width = $this->factoryobj->screen_width / $count;
+        if($current == $count){
+            /* this is because of rounding */
+            $width = round($this->factoryobj->screen_width / $count,0);
+            $others = $width*($count-1);
+            $width = $this->factoryobj->screen_width - $others;
+        } else {
+            $width = round($this->factoryobj->screen_width / $count,0);
+        }
+
         if ($item['icon']) $row[] = $this->factoryobj->getImage($item['icon'], array('height' => 25, 'margin' => '8 0 5 0'));
 
         $row[] = $this->factoryobj->getText($item['text'], array('color' => $this->factoryobj->colors['top_bar_text_color'], 'font-size' => '10', 'width' => $width, 'text-align' => 'center',

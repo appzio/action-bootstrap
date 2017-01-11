@@ -499,7 +499,8 @@ class ArticleFactory {
         $visualconfig = json_decode($this->appinfo->visual_config_params);
 
         if(isset($this->configobj->bottom_menu_id)){
-            if($this->configobj->bottom_menu_id === 0){
+
+            if($this->configobj->bottom_menu_id == 'none'){
                 return false;
             }
 
@@ -512,7 +513,7 @@ class ArticleFactory {
 
         /* traversing to banch */
         if(isset($this->branchconfig->bottom_menu_id)){
-            if($this->branchconfig->bottom_menu_id === 0){
+            if($this->branchconfig->bottom_menu_id == 'none'){
                 return false;
             }
 
@@ -525,7 +526,7 @@ class ArticleFactory {
         /* traversing to app config*/
         if(isset($visualconfig->bottom_menu_id) AND $visualconfig->bottom_menu_id){
             if(is_numeric($visualconfig->bottom_menu_id) AND $visualconfig->bottom_menu_id > 0){
-                $this->bottom_menu_id = $this->branchconfig->bottom_menu_id;
+                $this->bottom_menu_id = $visualconfig->bottom_menu_id;
                 return true;
             }
         }
@@ -556,7 +557,27 @@ class ArticleFactory {
                 break;
             }
         }
-        
+
+        $output = $this->bottomMenu($output);
+        return $output;
+    }
+
+    private function bottomMenu($output,$key=1){
+        /* bottom menu which is created on article controllers init stage */
+        if($this->childobj->bottom_menu_json){
+            if(!is_object($output)){
+                $output = new stdClass();
+            }
+
+            if(!isset($output->footer)){
+                $output->footer = new stdClass();
+                $output->footer = $this->childobj->bottom_menu_json;
+            } else {
+                $output->footer = array_merge($output->footer,$this->childobj->bottom_menu_json);
+            }
+        }
+
+        $output = $this->addTabJson($output,$key);
         return $output;
     }
 
@@ -579,17 +600,7 @@ class ArticleFactory {
                     $onload = array_merge($onload, $tabcontent->onload);
                 }
 
-                /* bottom menu which is created on article controllers init stage */
-                if($this->childobj->bottom_menu_json){
-                    if(!isset($tabcontent->footer)){
-                        $tabcontent->footer = new stdClass();
-                        $tabcontent->footer = $this->childobj->bottom_menu_json;
-                    } else {
-                        $tabcontent->footer = array_merge($tabcontent->footer,$this->childobj->bottom_menu_json);
-                    }
-                }
-
-                $tabcontent = $this->addTabJson($tabcontent,$key);
+                $tabcontent = $this->bottomMenu($tabcontent,$key);
                 $output[$tabname] = (object)$tabcontent;
             }
 

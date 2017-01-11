@@ -8,8 +8,6 @@ class Article_View_Tabs extends ArticleComponent {
 		$obj = new StdClass;
         $obj->type = 'menu';
         $obj->content = $this->content;
-
-
         return $obj;
 	}
 

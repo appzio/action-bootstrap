@@ -22,7 +22,7 @@ class Article_View_Progress extends ArticleComponent {
         $obj->content = $this->content;
 
         $params = array(
-            'text_content', 'progress_image', 'track_image','track_color','progress_color'
+            'text_content', 'progress_image', 'track_image','track_color','progress_color','animate'
         );
 
         foreach ($params as $param) {
