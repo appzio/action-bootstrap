@@ -152,8 +152,8 @@ class ArticleController {
     }
 
 
-    public function saveVariables(){
-        ArticleModel::saveVariables($this->submitvariables,$this->playid);
+    public function saveVariables($exclude=false){
+        ArticleModel::saveVariables($this->submitvariables,$this->playid,$exclude);
         $this->loadVariableContent();
         return true;
     }

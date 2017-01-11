@@ -71,11 +71,13 @@ class ArticleModel extends CActiveRecord {
         }
     }
 
-    public static function saveVariables($vars,$playid){
+    public static function saveVariables($vars,$playid,$exclude=false){
 
         if(is_array($vars)){
             foreach ($vars as $var_id => $var_value) {
-                AeplayVariable::updateWithId($playid, $var_id, $var_value);
+                if(!isset($exclude[$var_id])){
+                    AeplayVariable::updateWithId($playid, $var_id, $var_value);
+                }
             }
         }
         
