@@ -864,10 +864,6 @@ class ArticleController {
         return $this->returnComponent('formkitslider','field','',$params);
     }
 
-
-
-
-
     public function getTabs($content,$params=array(),$divider=false){
         /* you can configure the needed params here */
 
@@ -1239,7 +1235,7 @@ class ArticleController {
         return $this->returnComponent('button','field',$content,$params);
     }
 
-    public function getHairline($color){
+    public function getHairline($color, $params=array()){
         $params['height'] = '1';
         $params['width'] = '100%';
         $params['background-color'] = $color;

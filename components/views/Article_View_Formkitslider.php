@@ -29,9 +29,18 @@ class Article_View_Formkitslider extends ArticleComponent {
             $width = '80%';
         }
 
-        $params  = array('variable'=>$variableid,'min_value' => $minvalue,'max_value' => $maxvalue,'value' => $val,'step' => $step,
-            'left_track_color' => '#a4c97f', 'right_track_color' => '#000000','width' => $width, 'margin' => '0 10 0 15',
-            'track_height' => '1','vertical-align' => 'middle'
+        $params  = array(
+            'variable' => $variableid,
+            'min_value' => $minvalue,
+            'max_value' => $maxvalue,
+            'value' => $val,
+            'step' => $step,
+            'left_track_color' => '#a4c97f',
+            'right_track_color' => '#000000',
+            'width' => $width,
+            'margin' => '0 10 0 15',
+            'track_height' => '1',
+            'vertical-align' => 'middle'
         );
 
         $params['value'] = $val;
@@ -50,7 +59,6 @@ class Article_View_Formkitslider extends ArticleComponent {
         } else {
             $output[] = $this->factoryobj->getText('',array('style' => 'form-field-separator'));
         }
-
 
         return $this->factoryobj->getColumn($col,array('style' => 'form-field-row'));
 	}
