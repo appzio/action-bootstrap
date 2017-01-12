@@ -12,6 +12,7 @@ class ArticleGroupchatlist extends ArticleComponent {
     public $show_users_count;
     public $show_chat_tags;
     public $separator_styles;
+    public $return_array;
     public $allow_delete;
 
     public function template(){
@@ -19,14 +20,15 @@ class ArticleGroupchatlist extends ArticleComponent {
         $this->mode = $this->addParam('mode', $this->options, 'mychats');
         $this->show_users_count = $this->addParam('show_users_count', $this->options, false);
         $this->show_chat_tags = $this->addParam('show_chat_tags', $this->options, false);
+        $this->return_array = $this->addParam('return_array', $this->options, false);
         $this->allow_delete = $this->addParam('allow_delete', $this->options, true);
 
         $this->separator_styles = $this->addParam('separator_styles', $this->options, array(
-                'margin' => '8 20 4 20',
-                'background-color' => '#BABABA',
-                'height' => '1',
-                'opacity' => '0.4'
-            ));
+            'margin' => '8 20 4 20',
+            'background-color' => '#BABABA',
+            'height' => '1',
+            'opacity' => '0.4'
+        ));
 
         if(!is_object($this->factoryobj->mobilechatobj)){
             $this->factoryobj->initMobileChat(false,false);
@@ -58,7 +60,11 @@ class ArticleGroupchatlist extends ArticleComponent {
         array_pop($out);
 
         if(isset($out)){
-            return $this->factoryobj->getColumn($out);
+            if($this->return_array){
+                return $out;
+            } else {
+                return $this->factoryobj->getColumn($out);
+            }
         }
     }
 
@@ -112,7 +118,7 @@ class ArticleGroupchatlist extends ArticleComponent {
             $imageparams['style'] = 'round_image_stacked_text';
             $finalrow[] = $this->factoryobj->getText('+'.$left,$imageparams);
         }
-        
+
         if($piccount == 1){
             $finalrow[] = $this->factoryobj->getVerticalSpacer(116);
         }elseif($piccount == 2){
