@@ -4,6 +4,7 @@
 Yii::import('application.modules.aegameauthor.models.*');
 Yii::import('application.modules.aelogic.article.components.*');
 Yii::import('application.modules.aelogic.article.components.views.*');
+Yii::import('application.modules.aelogic.article.components.snippets.*');
 
 class ArticleFactory {
 
