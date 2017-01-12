@@ -73,7 +73,7 @@ class Article_View_Formkittabs extends ArticleComponent {
         }
 
         if(isset($col)){
-            $row = $this->factoryobj->getRow($col,array('background-color' => $color_topbar));
+            $row = $this->factoryobj->getRow($col);
             return $row;
         }
     }
