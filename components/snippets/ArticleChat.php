@@ -366,7 +366,7 @@ class ArticleChat extends ArticleComponent {
         }
 
         $cache = Appcaching::getGlobalCache('chatheader-'.$this->chat_id);
-        $cache = false;
+        //$cache = false;
 
         if($cache){
             return $cache;
