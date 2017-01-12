@@ -35,8 +35,7 @@ class ArticleContactsection extends ArticleComponent
         if(!isset($hide['notify']))
             $output[] = $this->factoryobj->formkitCheckbox('notify', '{#push_messages#}', false);
 
-
-        return $output;
+        return $this->factoryobj->getColumn($output);
     }
 
     public function addTitle($title){
