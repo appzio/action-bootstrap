@@ -411,15 +411,15 @@ class ArticleChat extends ArticleComponent {
 
 
         $col[] = $this->factoryobj->getVerticalSpacer(30);
-        $row[] = $this->factoryobj->getText('{#group_chat_with#}',array(
+/*        $row[] = $this->factoryobj->getText('{#group_chat_with#}',array(
             'color' => '#ffffff',
             'font-size' => '12',
-        ));
+        ));*/
 
         $subtext['color'] = '#ffffff';
         $subtext['font-size'] = '12';
-        $row[] = $this->factoryobj->getText($names,$subtext);
-        $col[] = $this->factoryobj->getColumn($row,array('vertical-align' => 'middle','margin' => '0 0 0 25','width' => '180'));
+/*        $row[] = $this->factoryobj->getText($names,$subtext);
+        $col[] = $this->factoryobj->getColumn($row,array('vertical-align' => 'middle','margin' => '0 0 0 25','width' => '180'));*/
 
         $rowparams['padding'] = '0 0 5 13';
         $rowparams['height'] = '80';
