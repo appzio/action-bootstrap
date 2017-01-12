@@ -433,10 +433,10 @@ class ArticleChat extends ArticleComponent {
         $onclick_leave->action = 'submit-form-content';
 
         if ( $this->chat_info->owner_play_id != $this->playid AND Aechatusers::checkUser( $this->chat_id, $this->playid ) ) {
-            $col[] = $this->factoryobj->getImage('exit-round.png', array( 'height' => '50','margin' => '10 70 0 0','floating'=>'1','float' => 'right', 'onclick' => $onclick_leave ));
-            $col[] = $this->factoryobj->getImage('adduser-round.png', array( 'height' => '50','margin' => '10 10 0 0','floating'=>'1','float' => 'right', 'onclick' => $this->factoryobj->getOnclick('tab2',true) ));
+            $col[] = $this->factoryobj->getImage('exit-round.png', array( 'opacity' => '0.8', 'height' => '50','margin' => '10 70 0 0','floating'=>'1','float' => 'right', 'onclick' => $onclick_leave ));
+            $col[] = $this->factoryobj->getImage('adduser-round.png', array( 'opacity' => '0.8', 'height' => '50','margin' => '10 10 0 0','floating'=>'1','float' => 'right', 'onclick' => $this->factoryobj->getOnclick('tab2',true) ));
         } elseif($this->chat_info->owner_play_id == $this->playid) {
-            $col[] = $this->factoryobj->getImage('adduser-round.png', array( 'height' => '50','margin' => '10 10 0 0','floating'=>'1','float' => 'right', 'onclick' => $this->factoryobj->getOnclick('tab2',true) ));
+            $col[] = $this->factoryobj->getImage('adduser-round.png', array( 'opacity' => '0.8', 'height' => '50','margin' => '10 10 0 0','floating'=>'1','float' => 'right', 'onclick' => $this->factoryobj->getOnclick('tab2',true) ));
         }
 
         $ret = $this->factoryobj->getRow($col,$rowparams);
