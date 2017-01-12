@@ -203,6 +203,7 @@ class ArticleChat extends ArticleComponent {
 
         /* NOTE: header might also return false */
         $headerdata = $this->getMyMatchItem( $this->other_user_play_id );
+
         if($headerdata){
             $object->header[] = $headerdata;
         }
@@ -365,6 +366,8 @@ class ArticleChat extends ArticleComponent {
         }
 
         $cache = Appcaching::getGlobalCache('chatheader-'.$this->chat_id);
+        $cache = false;
+
         if($cache){
             return $cache;
         }
@@ -422,14 +425,18 @@ class ArticleChat extends ArticleComponent {
         $rowparams['height'] = '80';
         $rowparams['vertical-align'] = 'middle';
         $rowparams['background-color'] = $this->factoryobj->color_topbar;
-        $rowparams['onclick'] = $this->factoryobj->getOnclick('tab2', true);
+        //$rowparams['onclick'] = $this->factoryobj->getOnclick('tab2', true);
+        $rowparams['width'] = '100%';
 
         $onclick_leave = new StdClass();
         $onclick_leave->id = 'leave-chat';
         $onclick_leave->action = 'submit-form-content';
 
         if ( $this->chat_info->owner_play_id != $this->playid AND Aechatusers::checkUser( $this->chat_id, $this->playid ) ) {
-            $col[] = $this->factoryobj->getText('{#leave_chat#}', array( 'style' => 'leave-chat-btn', 'onclick' => $onclick_leave ));
+            $col[] = $this->factoryobj->getImage('exit-round.png', array( 'height' => '50','margin' => '10 70 0 0','floating'=>'1','float' => 'right', 'onclick' => $onclick_leave ));
+            $col[] = $this->factoryobj->getImage('adduser-round.png', array( 'height' => '50','margin' => '10 10 0 0','floating'=>'1','float' => 'right', 'onclick' => $this->factoryobj->getOnclick('tab2',true) ));
+        } elseif($this->chat_info->owner_play_id == $this->playid) {
+            $col[] = $this->factoryobj->getImage('adduser-round.png', array( 'height' => '50','margin' => '10 10 0 0','floating'=>'1','float' => 'right', 'onclick' => $this->factoryobj->getOnclick('tab2',true) ));
         }
 
         $ret = $this->factoryobj->getRow($col,$rowparams);
