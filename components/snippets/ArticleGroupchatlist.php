@@ -165,8 +165,8 @@ class ArticleGroupchatlist extends ArticleComponent {
             $finalrow[] = $this->factoryobj->getColumn($col);
         }
 
-        return $this->factoryobj->getRow($finalrow, array('onclick' => $onclick));
-        //$lastcol[] = $this->factoryobj->getText('',array('margin' => '8 20 0 20','height' => '1','opacity' => '0.4'));
+        $lastcol[] = $this->factoryobj->getRow($finalrow, array('onclick' => $onclick));
+        $lastcol[] = $this->factoryobj->getText('',array('margin' => '8 20 0 20','height' => '1','opacity' => '0.4'));
 
         return $this->factoryobj->getRow( $lastcol );
     }
@@ -197,8 +197,8 @@ class ArticleGroupchatlist extends ArticleComponent {
             if ( !$tag_is_active ) {
                 continue;
             }
-
-            $active_tags .= '{#' .$tag . '#} ';
+            
+            $active_tags .= $tag. ' ';
         }
 
         $active_tags = substr($active_tags, 0, -2);
