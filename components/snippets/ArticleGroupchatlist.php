@@ -12,12 +12,15 @@ class ArticleGroupchatlist extends ArticleComponent {
     public $show_users_count;
     public $show_chat_tags;
     public $separator_styles;
+    public $allow_delete;
 
     public function template(){
 
         $this->mode = $this->addParam('mode', $this->options, 'mychats');
         $this->show_users_count = $this->addParam('show_users_count', $this->options, false);
         $this->show_chat_tags = $this->addParam('show_chat_tags', $this->options, false);
+        $this->allow_delete = $this->addParam('allow_delete', $this->options, true);
+
         $this->separator_styles = $this->addParam('separator_styles', $this->options, array(
                 'margin' => '8 20 4 20',
                 'background-color' => '#BABABA',
@@ -140,7 +143,7 @@ class ArticleGroupchatlist extends ArticleComponent {
 
         $col[] = $this->factoryobj->getColumn($row,array('width' => '180','onclick' => $onclick,'vertical-align' => 'middle'));
 
-        if($chatowner AND $chatowner == $this->playid){
+        if($chatowner AND $chatowner == $this->playid AND $this->allow_delete){
             $add = new stdClass();
             $add->id = 'delete_chat_'.$chatid;
             $add->action = 'submit-form-content';
