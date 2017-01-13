@@ -720,8 +720,8 @@ class ArticleController {
         $this->mobilechatobj->game_id = $this->gid;
         $this->mobilechatobj->context = $context;
         $this->mobilechatobj->context_key = $context_key;
-
-
+        $this->mobilechatobj->uservars = $this->varcontent;
+        
         // If Chat ID is provided, users would be able to only preview the chat
         if ( $chat_id ) {
             $this->mobilechatobj->current_chat_id = $chat_id;
