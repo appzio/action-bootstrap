@@ -141,7 +141,7 @@ class ArticleGroupchatlist extends ArticleComponent {
         if ( $this->show_chat_tags ) {
             $tags = $this->getFormattedTags( $chatinfo );
             if ( $tags ) {
-                $row[] = $this->factoryobj->getText($tags, array( 'style' => 'imate_title_subtext' ));
+                $row[] = $this->factoryobj->getText($tags, array( 'style' => 'imate_title_subtext_bigger' ));
             }
         } else {
             $row[] = $this->factoryobj->getText($names, array( 'style' => 'imate_title_subtext' ));
@@ -197,8 +197,10 @@ class ArticleGroupchatlist extends ArticleComponent {
             if ( !$tag_is_active ) {
                 continue;
             }
+
+            $tag = str_replace('_', ' ', $tag);
             
-            $active_tags .= $tag. ' ';
+            $active_tags .= ucfirst($tag) . ' ';
         }
 
         $active_tags = substr($active_tags, 0, -2);
