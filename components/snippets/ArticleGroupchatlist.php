@@ -14,6 +14,9 @@ class ArticleGroupchatlist extends ArticleComponent {
     public $separator_styles;
     public $return_array;
     public $allow_delete;
+    public $return_data_array;
+    public $filter;
+    public $filter_distance;
 
     public function template(){
 
@@ -22,6 +25,10 @@ class ArticleGroupchatlist extends ArticleComponent {
         $this->show_chat_tags = $this->addParam('show_chat_tags', $this->options, false);
         $this->return_array = $this->addParam('return_array', $this->options, false);
         $this->allow_delete = $this->addParam('allow_delete', $this->options, true);
+
+        /* this will return extra data you can use in view to do filtering*/
+        $this->filter = $this->addParam('filter', $this->options, false);
+        $this->filter_distance = $this->addParam('filter_distance', $this->options, false);
 
         $this->separator_styles = $this->addParam('separator_styles', $this->options, array(
             'margin' => '8 20 4 20',
@@ -39,7 +46,7 @@ class ArticleGroupchatlist extends ArticleComponent {
             Aechat::model()->deleteAllByAttributes(array('id' => $id,'owner_play_id' => $this->playid));
         }
 
-        $matches = $this->factoryobj->mobilechatobj->getGroupChats($this->mode);
+        $matches = $this->factoryobj->mobilechatobj->getGroupChats($this->mode,$this->filter);
 
         return $this->groupChats($matches);
     }
