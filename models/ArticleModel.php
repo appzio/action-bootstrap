@@ -76,8 +76,24 @@ class ArticleModel extends CActiveRecord {
         if(is_array($vars)){
             foreach ($vars as $var_id => $var_value) {
                 if(!isset($exclude[$var_id])){
-                    AeplayVariable::updateWithId($playid, $var_id, $var_value);
+                    if(is_numeric($var_id)){
+                        AeplayVariable::updateWithId($playid, $var_id, $var_value);
+                    } else {
+                        /* deals mainly tags or any other format where
+                        the variable value is a list of values */
+                        if(stristr($var_id,'_')){
+                            $id = substr($var_id,0,strpos($var_id,'_'));
+                            $fieldname=substr($var_id,strpos($var_id,'_')+1);
+                            $arraysave[$id][$fieldname] = $var_value;
+                        }
+                    }
                 }
+            }
+        }
+
+        if(isset($arraysave)){
+            foreach ($arraysave as $key=>$savebit){
+                AeplayVariable::updateWithId($playid, $key, $savebit);
             }
         }
         
