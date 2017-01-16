@@ -14,13 +14,17 @@ class Article_View_Formkitcheckbox extends ArticleComponent {
         $error = $this->addParam('error',$this->options,false);
         $onclick = $this->addParam('onclick',$this->options,false);
         $toggle_type = $this->addParam('type',$this->options,'default');
-        $this->value = $this->addParam('value',$this->options,'default');
+        $this->value = $this->addParam('value',$this->options,'');
 
-        if(!$this->value){
+        if ( empty($this->value) ) {
             $this->value = $this->factoryobj->getSubmittedVariableByName($variable);
-            if(!$this->value){
+            if ( empty($this->value) ) {
                 $this->value = $this->factoryobj->getSavedVariable($variable);
             }
+        }
+
+        if ( empty($this->value) ) {
+            $this->value = 'default';
         }
         
         $variable = $this->factoryobj->getVariableId($variable) ? $this->factoryobj->getVariableId($variable) : $variable;
