@@ -439,6 +439,36 @@ class ArticleController {
         }
     }
 
+    public function getOverriddenComponent( $class ) {
+
+        if ( !isset($this->configobj->article_action_theme) ) {
+            return false;
+        }
+
+        $has_overridden_file = false;
+
+        $theme = $this->configobj->article_action_theme;
+
+        $dirs = array(
+            'views', 'snippets'
+        );
+
+        foreach ($dirs as $dir) {
+            $source = 'application.modules.aelogic.packages.action'. $this->class .'.themes.'. $theme .'.views.'. $theme . '_' . $class;
+            $path = Yii::getPathOfAlias( $source );
+            if ( file_exists( $path . '.php' ) ) {
+                Yii::import( $source );
+                $has_overridden_file = true;
+            }
+        }
+
+        if ( !$has_overridden_file ) {
+            return false;
+        }
+
+        return $theme . '_' . $class;
+    }
+
     public function returnComponent($name,$type,$content=false,$params=array()){
         $name = str_replace(' ', '_', ucwords(str_replace('_', ' ', $name)));
 
@@ -448,7 +478,13 @@ class ArticleController {
             $class = 'Article' . ucfirst($name);
         }
 
+        $tmp_class = $this->getOverriddenComponent( $class );
+        if ( $tmp_class ) {
+            $class = $tmp_class;
+        }
+
         $field = new $class($this);
+
         $field->type = $name;
         $field->content = $content;
         $field->options = $params;
