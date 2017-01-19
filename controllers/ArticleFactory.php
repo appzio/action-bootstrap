@@ -465,7 +465,7 @@ class ArticleFactory {
             }
         }
 
-        /* if not found try the themes sub controller */
+        /* if not found try the modes sub controller */
         if(!$controller_included AND isset($this->configobj->mode) AND !empty($this->configobj->mode)){
             $modeclass = $this->configobj->mode .ucfirst($actiontype).'Sub';
             $modepath = $dir_root . '.controllers.' . $modeclass;
@@ -479,6 +479,19 @@ class ArticleFactory {
         }
 
         /* if not found try the themes sub controller */
+        if(!$controller_included AND isset($this->configobj->article_action_theme) AND !empty($this->configobj->article_action_theme)){
+            $modeclass = $this->configobj->article_action_theme.$this->class.'SubController';
+            $modepath = $themes_dir_root . '.controllers.' . $modeclass;
+            $modefile = Yii::getPathOfAlias($modepath);
+
+            if ( file_exists($modefile . '.php') ) {
+                Yii::import($modeclass);
+                $controller_included = true;
+                $class = $modeclass;
+            }
+        }
+        
+        /* if not found try the themes sub controller */
         if(!$controller_included){
             $modeclass = $this->class.'Controller';
             $modepath = $dir_root . '.controllers.' . $modeclass;
@@ -490,6 +503,7 @@ class ArticleFactory {
                 $class = $modeclass;
             }
         }
+
 
 
         $this->setupChecksumChecker($actiontype);
