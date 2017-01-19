@@ -95,6 +95,8 @@ class ArticleController {
     public $current_playid;
     public $current_gid;
 
+    public $menuparameters;
+
     /* automatically created bottom menu gets put here. To disable it for
     some tab or view, you can simply set it empty (it gets created upon init) */
     public $bottom_menu_json;
@@ -497,6 +499,15 @@ class ArticleController {
 
     /* setters and getters should go here */
 
+
+    public function getClickParam($param){
+        if(isset($this->menuparameters[$param])){
+            return $this->menuparameters[$param];
+        } else {
+            return false;
+        }
+    }
+
     public function requireConfigParam($param,$customerror=false){
         if(isset($this->configobj->$param)){
             return $this->configobj->$param;
@@ -595,7 +606,16 @@ class ArticleController {
                 $onclick->action_config = $param;
                 break;
 
+            /* this is a special case where we can save also id's or some other info with the request */
+            case 'submit':
+                $identifier = md5(serialize($param));
+                if(isset($param['params'])){
+                    Appcaching::setGlobalCache($this->playid.$identifier,$param);
+                }
 
+                $onclick->action = 'submit-form-content';
+                $onclick->id = $identifier;
+                break;
         }
 
         if($back){

@@ -98,6 +98,7 @@ class ArticleFactory {
     to do an update of its view */
     public $no_output = false;
     public $bottom_menu_id;
+    public $menuparameters;
 
     /* gets called when object is created & fed with initial values */
     public function playInit() {
@@ -123,13 +124,30 @@ class ArticleFactory {
         }
     }
 
+    /* its possible to link parameters to a click, the parameters are decoded here */
+    public function setCurrentMenuId(){
+        $menuid = $this->getParam('menuid',$this->submit);
+
+        if(strlen($menuid) == 32){
+            $cache = Appcaching::getGlobalCache($this->playid.$menuid);
+            if(isset($cache['id'])){
+                $this->menuid = $cache['id'];
+                if(isset($cache['params'])){
+                    $this->menuparameters = $cache['params'];
+                }
+            }
+        }
+
+        if(!$this->menuid){
+            $this->menuid = $this->getParam('menuid',$this->submit);
+        }
+    }
 
     public function actionInit(){
 
         $this->current_tab = $this->getParam('tabid',$this->submit) ? $this->getParam('tabid',$this->submit) : 1;
-        $this->menuid = $this->getParam('menuid',$this->submit);
+        $this->setCurrentMenuId();
         $vars = $this->getParam('variables',$this->submit);
-
         $this->actionobj = AeplayAction::model()->with('aetask')->findByPk($this->actionid);
         
 /*        if(!isset($this->actionobj->action_id)){
@@ -385,6 +403,7 @@ class ArticleFactory {
     }
 
     public function createChildObj($actiontype){
+        $controller_included = false;
 
         if(!$this->available_branches){
             $this->available_branches = Appcaching::getPlayCache('branchlist-article',$this->gid,$this->playid,true);
@@ -392,50 +411,88 @@ class ArticleFactory {
 
         $this->class = ucfirst($actiontype);
         $cc = str_replace('Controller','',$this->class);
+        $rootPath = Yii::getPathOfAlias('application.modules.aelogic.packages.action' .$cc);
+
+        /* imports */
+        Yii::import('application.modules.aelogic.packages.ActivationEngineAction');
+        $dir_root = 'application.modules.aelogic.packages.action' . ucfirst($actiontype);
+
+        Yii::import($dir_root . '.controllers.*');
+        Yii::import($dir_root . '.models.*');
+
+        if ( isset($this->configobj->article_action_theme) AND !empty($this->configobj->article_action_theme) ) {
+            $theme = $this->configobj->article_action_theme;
+            $themes_dir_root = $dir_root . '.themes.' . $theme;
+            Yii::import($themes_dir_root . '.controllers.*');
+            Yii::import($themes_dir_root . '.models.*');
+        }
+
+        /* images */
         $this->imagespath = Yii::getPathOfAlias('application.modules.aelogic.packages.action' .$cc .'.images');
         $this->imagesobj->imagesearchpath[] = $this->imagespath .'/';
+
+        /* theme images (needs to be first to override) */
+        if ( isset($this->configobj->article_action_theme) AND !empty($this->configobj->article_action_theme) ) {
+            $this->imagesobj->imagesearchpath[] = $rootPath .'/themes/' . $theme . '/images/';
+        }
 
         /* component default images */
         $searchpath = Yii::getPathOfAlias('application.modules.aelogic.components.images');
         $this->imagesobj->imagesearchpath[] = $searchpath .'/';
 
-        Yii::import('application.modules.aelogic.packages.ActivationEngineAction');
-
-        $dir_root = 'application.modules.aelogic.packages.action' . ucfirst($actiontype);
-        $class = ucfirst($actiontype) . 'Controller';
-        $path = $dir_root . '.controllers.' . $class;
-
-        /* import also the models atuomatically */
-        $model = $dir_root . '.models.*';
-        Yii::import($model);
-
-        $this->setupChecksumChecker($actiontype);
-
-        $controller_included = false;
-
-        // Check for subcontrollers
-        if ( isset($this->configobj->article_action_theme) AND !empty($this->configobj->article_action_theme) ) {
-            $theme = $this->configobj->article_action_theme;
-
-            $rootPath = Yii::getPathOfAlias('application.modules.aelogic.packages.action' .$cc);
-            $this->imagesobj->imagesearchpath[] = $rootPath .'/themes/' . $theme . '/images/';
-
-            $subpath = $dir_root . '.themes.' . $theme . '.controllers.' . $theme . ucfirst($actiontype) . 'SubController';
-            $subfile = Yii::getPathOfAlias($subpath);
-
-            if ( file_exists($subfile . '.php') ) {
-                Yii::import($subpath);
-                $class = $theme . ucfirst($actiontype) . 'SubController';
+        /* find out the name for the controller */
+        /* start from the themes mode controller */
+        if(isset($this->configobj->mode) AND !empty($this->configobj->mode) AND isset($this->configobj->article_action_theme) AND !empty($this->configobj->article_action_theme)) {
+            $modeclass = $this->configobj->article_action_theme .ucfirst($this->configobj->mode) .ucfirst($actiontype);
+            $modepath = $themes_dir_root . '.controllers.' . $modeclass;
+            $modefile = Yii::getPathOfAlias($modepath);
+            if ( file_exists($modefile . '.php') ) {
                 $controller_included = true;
+                $class = $modeclass;
             }
         }
 
-        $file = Yii::getPathOfAlias($path);
-        if ( file_exists($file . '.php') ) {
-            Yii::import($path);
-            $controller_included = true;
+        /* traverse to mode main controller */
+        if(!$controller_included AND isset($this->configobj->mode) AND !empty($this->configobj->mode) ){
+            $modeclass = ucfirst($this->configobj->mode) .ucfirst($actiontype);
+            $modepath = $dir_root . '.controllers.' . $modeclass;
+            $modefile = Yii::getPathOfAlias($modepath);
+
+            if ( file_exists($modefile . '.php') ) {
+                Yii::import($modeclass);
+                $controller_included = true;
+                $class = $modeclass;
+            }
         }
 
+        /* if not found try the themes sub controller */
+        if(!$controller_included AND isset($this->configobj->mode) AND !empty($this->configobj->mode)){
+            $modeclass = $this->configobj->mode .ucfirst($actiontype).'Sub';
+            $modepath = $dir_root . '.controllers.' . $modeclass;
+            $modefile = Yii::getPathOfAlias($modepath);
+
+            if ( file_exists($modefile . '.php') ) {
+                Yii::import($modeclass);
+                $controller_included = true;
+                $class = $modeclass;
+            }
+        }
+
+        /* if not found try the themes sub controller */
+        if(!$controller_included){
+            $modeclass = $this->class.'Controller';
+            $modepath = $dir_root . '.controllers.' . $modeclass;
+            $modefile = Yii::getPathOfAlias($modepath);
+
+            if ( file_exists($modefile . '.php') ) {
+                Yii::import($modeclass);
+                $controller_included = true;
+                $class = $modeclass;
+            }
+        }
+
+
+        $this->setupChecksumChecker($actiontype);
 
         if ( !$controller_included ) {
             return array();
