@@ -46,6 +46,7 @@ class ArticleFactory {
     /** @var ArticleMenuComponents */
     public $articlemenuobj;
 
+    /** @var ArticleController */
     public $childobj;
 
     public $actiondata;
@@ -98,7 +99,7 @@ class ArticleFactory {
     to do an update of its view */
     public $no_output = false;
     public $bottom_menu_id;
-    public $menuparameters;
+    public $click_parameters_saved;
 
     /* gets called when object is created & fed with initial values */
     public function playInit() {
@@ -129,11 +130,12 @@ class ArticleFactory {
         $menuid = $this->getParam('menuid',$this->submit);
 
         if(strlen($menuid) == 32){
-            $cache = Appcaching::getGlobalCache($this->playid.$menuid);
-            if(isset($cache['id'])){
-                $this->menuid = $cache['id'];
-                if(isset($cache['params'])){
-                    $this->menuparameters = $cache['params'];
+            $cache = Appcaching::getGlobalCache($this->playid.'menuparams');
+
+            if(isset($cache[$menuid]['id'])){
+                $this->menuid = $cache[$menuid]['id'];
+                if(isset($cache[$menuid]['params'])){
+                    $this->click_parameters_saved = $cache[$menuid]['params'];
                 }
             }
         }
@@ -226,6 +228,15 @@ class ArticleFactory {
                 $op = new StdClass();
                 $op->scroll = $this->childobj->errorMsgs;
             }
+        }
+
+        if(!empty($this->childobj->click_parameters_to_save)){
+            if(is_array($this->childobj->click_parameters_saved)){
+                $params = $this->childobj->click_parameters_saved + $this->childobj->click_parameters_to_save;
+            } else {
+                $params = $this->childobj->click_parameters_to_save;
+            }
+            Appcaching::setGlobalCache($this->playid.'menuparams',$params);
         }
 
         /* save debug to cache, so that it can be shown by the debug or delete if none is set */

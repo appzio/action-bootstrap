@@ -95,7 +95,6 @@ class ArticleController {
     public $current_playid;
     public $current_gid;
 
-    public $menuparameters;
 
     /* automatically created bottom menu gets put here. To disable it for
     some tab or view, you can simply set it empty (it gets created upon init) */
@@ -132,6 +131,10 @@ class ArticleController {
     
     /* bottom navigation, which is handled entirely on server side */
     public $bottom_menu_id;
+
+    /* these are used to save parameters for clicks */
+    public $click_parameters_to_save;
+    public $click_parameters_saved;
 
     public function __construct($obj){
 
@@ -537,8 +540,8 @@ class ArticleController {
 
 
     public function getClickParam($param){
-        if(isset($this->menuparameters[$param])){
-            return $this->menuparameters[$param];
+        if(isset($this->click_parameters_saved[$param])){
+            return $this->click_parameters_saved[$param];
         } else {
             return false;
         }
@@ -646,7 +649,7 @@ class ArticleController {
             case 'submit':
                 $identifier = md5(serialize($param));
                 if(isset($param['params'])){
-                    Appcaching::setGlobalCache($this->playid.$identifier,$param);
+                    $this->click_parameters_to_save[$identifier] = $param;
                 }
 
                 $onclick->action = 'submit-form-content';
