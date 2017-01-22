@@ -185,7 +185,7 @@ class ArticleFactory {
 
         if(!empty($data)){
             if(is_array($this->session_storage)){
-                $cache = $this->session_storage + $data;
+                $cache = $data + $this->session_storage;
             } else {
                 $cache = $data;
             }

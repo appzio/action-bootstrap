@@ -604,13 +604,13 @@ class ArticleController {
     }
 
 
-    public function getOnclickTabAndSave($idname,$id,$tabnumber=2){
+    public function getOnclickTabAndSave($idname,$id,$tabnumber=2,$back_button=true,$tab_change_parameters=false){
         $params['id'] = $idname;
         $params['params'][$idname] = $id;
         $params['save_async'] = true;
 
         $onclick[] = $this->getOnclick('submit',false,$params);
-        $onclick[] = $this->getOnclick('tab'.$tabnumber);
+        $onclick[] = $this->getOnclick('tab'.$tabnumber,$back_button,$tab_change_parameters);
 
         return $onclick;
 
@@ -702,7 +702,9 @@ class ArticleController {
     }
 
     public function sessionSet($key,$value){
-        $this->to_session_storage[$key] = $value;
+        if($value){
+            $this->to_session_storage[$key] = $value;
+        }
     }
 
     public function sessionGet($key){
