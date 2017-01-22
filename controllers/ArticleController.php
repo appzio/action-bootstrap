@@ -136,6 +136,9 @@ class ArticleController {
     public $click_parameters_to_save;
     public $click_parameters_saved;
 
+    public $to_session_storage;
+    public $session_storage;
+
     public function __construct($obj){
 
         /* this exist to make the referencing of
@@ -648,13 +651,24 @@ class ArticleController {
             /* this is a special case where we can save also id's or some other info with the request */
             case 'submit':
                 $identifier = md5(serialize($param));
+
                 if(isset($param['params'])){
+                    if(isset($param['async_save']) AND $param['async_save']) {
+                        $this->sessionSetArray($param['params']);
+                        $param['saving_async'] = 1;
+                    }
+
+                    if(isset($param['sync_save']) AND $param['sync_save']) {
+                        $this->sessionSetArray($param['params']);
+                    }
+
                     $this->click_parameters_to_save[$identifier] = $param;
                 }
 
                 $onclick->action = 'submit-form-content';
                 $onclick->id = $identifier;
                 break;
+
         }
 
         if($back){
@@ -663,6 +677,30 @@ class ArticleController {
 
         return $onclick;
 
+    }
+
+
+
+    public function sessionSetArray($array){
+        if(is_array($array) AND !empty($array)){
+            foreach($array as $key=>$value) {
+                $this->sessionSet($key,$value);
+            }
+        }
+    }
+
+    public function sessionSet($key,$value){
+        $this->to_session_storage[$key] = $value;
+    }
+
+    public function sessionGet($key){
+        if(isset($this->session_storage[$key])){
+            return $this->session_storage[$key];
+        } elseif(isset($this->to_session_storage[$key])) {
+            return $this->to_session_storage[$key];
+        } else {
+            return false;
+        }
     }
 
     public function getVariableId($varname){
@@ -1556,20 +1594,6 @@ class ArticleController {
         }
 
         return false;
-    }
-
-
-    /* session getters and setters */
-    public function sessionSet($pointer,$value){
-        $_SESSION[$pointer] = $value;
-    }
-
-    public function sessionGet($pointer){
-        if(isset($_SESSION[$pointer])){
-            return $_SESSION[$pointer];
-        } else {
-            return false;
-        }
     }
 
 

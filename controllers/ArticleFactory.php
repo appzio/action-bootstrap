@@ -100,6 +100,11 @@ class ArticleFactory {
     public $no_output = false;
     public $bottom_menu_id;
     public $click_parameters_saved;
+    public $model_name;
+
+    /* key value pairs, works like a session, but uses cache (mostly redis), so can actually persist between sessions */
+    public $session_storage;
+    public $click_cache;
 
     /* gets called when object is created & fed with initial values */
     public function playInit() {
@@ -123,14 +128,18 @@ class ArticleFactory {
             $this->menus[$nav['menu_safe_name']] = $nav['menuid'];
             $this->menuitems[$nav['item_safe_name']] = $nav['itemid'];
         }
+
+        $this->session_storage = Appcaching::getGlobalCache($this->playid.'playcache');
+
     }
 
     /* its possible to link parameters to a click, the parameters are decoded here */
     public function setCurrentMenuId(){
         $menuid = $this->getParam('menuid',$this->submit);
+        $cache = Appcaching::getGlobalCache($this->playid.'menuparams');
+        $this->click_cache = $cache;
 
         if(strlen($menuid) == 32){
-            $cache = Appcaching::getGlobalCache($this->playid.'menuparams');
 
             if(isset($cache[$menuid]['id'])){
                 $this->menuid = $cache[$menuid]['id'];
@@ -143,6 +152,28 @@ class ArticleFactory {
         if(!$this->menuid){
             $this->menuid = $this->getParam('menuid',$this->submit);
         }
+
+    }
+
+    public function clickSavers(){
+
+        /* atsave function can be added to model to handle the input saving. If it exists, api will output only ok. ie. its saved for async */
+        if($this->model_name AND $this->menuid){
+            if(method_exists($this->model_name,'atsave'.ucfirst($this->menuid))){
+                $function = 'atsave'.$this->menuid;
+                $class = $this->model_name;
+                $class::$function($this);
+                return false;
+            }
+        }
+
+        $cachename = $this->getParam('menuid',$this->submit);
+        if(isset($this->click_cache[$cachename]['save_async'])){
+            return false;
+        }
+
+        return true;
+
     }
 
     public function actionInit(){
@@ -165,8 +196,11 @@ class ArticleFactory {
             $this->branchconfig = @json_decode($this->branchobj->config);
         }
 
-        // makes sure module images are in right place
+        if(!$this->clickSavers()){
+            return false;
+        }
 
+        // makes sure module images are in right place
         if(isset($vars) AND is_array($vars)){
             foreach($vars as $var){
                 $key = key($var);
@@ -199,10 +233,18 @@ class ArticleFactory {
 
         $this->setScreenInfo();
 
+        return true;
+
     }
 
     public function renderData($actiontype){
-        $this->createChildObj($actiontype);
+
+        /* if childobj returns */
+        if(!$this->createChildObj($actiontype)){
+            $op = new stdClass();
+            $this->no_output = true;
+            return $op;
+        }
 
         if(method_exists($this->childobj,'init')){
             $this->childobj->init();
@@ -231,12 +273,23 @@ class ArticleFactory {
         }
 
         if(!empty($this->childobj->click_parameters_to_save)){
-            if(is_array($this->childobj->click_parameters_saved)){
-                $params = $this->childobj->click_parameters_saved + $this->childobj->click_parameters_to_save;
+            if(is_array($this->click_cache)){
+                $params = $this->click_cache + $this->childobj->click_parameters_to_save;
             } else {
                 $params = $this->childobj->click_parameters_to_save;
             }
+
             Appcaching::setGlobalCache($this->playid.'menuparams',$params);
+        }
+
+        if(!empty($this->childobj->to_session_storage)){
+            if(is_array($this->childobj->session_storage)){
+                $cache = $this->childobj->session_storage + $this->childobj->to_session_storage;
+            } else {
+                $cache = $this->childobj->to_session_storage;
+            }
+
+            Appcaching::setGlobalCache($this->playid.'playcache',$cache);
         }
 
         /* save debug to cache, so that it can be shown by the debug or delete if none is set */
@@ -438,6 +491,13 @@ class ArticleFactory {
             Yii::import($themes_dir_root . '.models.*');
         }
 
+        $model_alias = $dir_root .'.models.'.ucfirst($actiontype) .'Model';
+        $model_file = Yii::getPathOfAlias($model_alias);
+
+        if(file_exists($model_file .'.php')){
+            $this->model_name = ucfirst($actiontype) .'Model';
+        }
+
         /* images */
         $this->imagespath = Yii::getPathOfAlias('application.modules.aelogic.packages.action' .$cc .'.images');
         $this->imagesobj->imagesearchpath[] = $this->imagespath .'/';
@@ -515,8 +575,6 @@ class ArticleFactory {
             }
         }
 
-
-
         $this->setupChecksumChecker($actiontype);
 
         if ( !$controller_included ) {
@@ -527,7 +585,12 @@ class ArticleFactory {
             $this->actionid = $this->getParam('actionid',$this->submit);
         }
 
-        $this->actionInit();
+        /* if action init returns false, we will return ok right away
+            its used for savers that bypass lot of the initing
+        */
+        if(!$this->actionInit()){
+            return false;
+        }
 
         if (!isset($this->configobj) OR !is_object($this->configobj)) {
             return false;
@@ -535,6 +598,8 @@ class ArticleFactory {
 
         $this->childobj = new $class($this);
         $this->moduleAssets();
+
+        return true;
     }
 
     public function setupChecksumChecker($actiontype){
