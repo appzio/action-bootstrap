@@ -73,9 +73,9 @@ class ArticleBottommenu extends ArticleComponent {
         }
 
         if ($item['action_config'] == $this->factoryobj->action_id AND $item['action'] == 'open-action') {
-            return $this->factoryobj->getColumn($row, array('width' => $width, 'text-align' => 'center', 'background-color' => $this->factoryobj->color_topbar_hilite,'height' => '60'));
+            return $this->factoryobj->getColumn($row, array('width' => $width, 'text-align' => 'center', 'background-color' => $this->factoryobj->color_topbar_hilite,'height' => '60','onclick' => $onclick));
         } elseif($item['action_config'] == $this->factoryobj->branchobj->id AND $item['action'] == 'open-branch'){
-            return $this->factoryobj->getColumn($row, array('width' => $width, 'text-align' => 'center', 'background-color' => $this->factoryobj->color_topbar_hilite,'height' => '60'));
+            return $this->factoryobj->getColumn($row, array('width' => $width, 'text-align' => 'center', 'background-color' => $this->factoryobj->color_topbar_hilite,'height' => '60','onclick' => $onclick));
         } else {
             return $this->factoryobj->getColumn($row,array('width' => $width,'text-align' => 'center','onclick' => $onclick,'height' => '60'));
         }

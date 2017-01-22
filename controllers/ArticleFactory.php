@@ -169,11 +169,29 @@ class ArticleFactory {
 
         $cachename = $this->getParam('menuid',$this->submit);
         if(isset($this->click_cache[$cachename]['save_async'])){
+            if(isset($this->click_cache[$cachename]['params'])){
+                $this->sessionStorageSaver($this->click_cache[$cachename]['params']);
+            }
             return false;
         }
 
         return true;
 
+    }
+
+    public function sessionStorageSaver($data=false){
+
+        $data = $data ? $data : $this->childobj->to_session_storage;
+
+        if(!empty($data)){
+            if(is_array($this->session_storage)){
+                $cache = $this->session_storage + $data;
+            } else {
+                $cache = $data;
+            }
+
+            Appcaching::setGlobalCache($this->playid.'playcache',$cache);
+        }
     }
 
     public function actionInit(){
@@ -262,6 +280,9 @@ class ArticleFactory {
 
         $op = $this->getViews();
 
+        /* save to session */
+        $this->sessionStorageSaver();
+
         /* output any errors to view */
         if(!empty($this->childobj->errorMsgs)){
             if(isset($op->scroll) AND is_array($op->scroll)){
@@ -280,16 +301,6 @@ class ArticleFactory {
             }
 
             Appcaching::setGlobalCache($this->playid.'menuparams',$params);
-        }
-
-        if(!empty($this->childobj->to_session_storage)){
-            if(is_array($this->childobj->session_storage)){
-                $cache = $this->childobj->session_storage + $this->childobj->to_session_storage;
-            } else {
-                $cache = $this->childobj->to_session_storage;
-            }
-
-            Appcaching::setGlobalCache($this->playid.'playcache',$cache);
         }
 
         /* save debug to cache, so that it can be shown by the debug or delete if none is set */

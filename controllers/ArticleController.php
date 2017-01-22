@@ -137,7 +137,7 @@ class ArticleController {
     public $click_parameters_saved;
 
     public $to_session_storage;
-    public $session_storage;
+    public $session_storage = array();
 
     public function __construct($obj){
 
@@ -603,6 +603,18 @@ class ArticleController {
         return false;
     }
 
+
+    public function getOnclickTabAndSave($idname,$id,$tabnumber=2){
+        $params['id'] = $idname;
+        $params['params'][$idname] = $id;
+        $params['save_async'] = true;
+
+        $onclick[] = $this->getOnclick('submit',false,$params);
+        $onclick[] = $this->getOnclick('tab'.$tabnumber);
+
+        return $onclick;
+
+    }
 
     public function getOnclick($case='tab1',$back=false,$param=false){
         $onclick = new StdClass();
