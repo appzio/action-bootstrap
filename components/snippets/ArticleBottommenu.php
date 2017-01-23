@@ -59,7 +59,7 @@ class ArticleBottommenu extends ArticleComponent {
         $onclick = new stdClass();
         $onclick->action = $item['action'];
         $onclick->action_config = $item['action_config'];
-        $onclick->transition = 'none';
+        $onclick->transition = 'fade';
         if ($item['open_popup'] == 1) $onclick->open_popup = 1;
         if ($item['sync_open'] == 1) $onclick->sync_open = 1;
         if ($item['sync_close'] == 1) $onclick->sync_close = 1;
