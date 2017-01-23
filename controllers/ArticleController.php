@@ -187,10 +187,20 @@ class ArticleController {
 
     public function saveVariable($variable,$value){
         if ( !is_numeric($variable) ) {
-            $variable = $this->getVariableId($variable);
+            $varid = $this->getVariableId($variable);
+
+            if(!$varid AND $value){
+                $new = new Aevariable;
+                $new->game_id = $this->gid;
+                $new->name = $variable;
+                $new->insert();
+                $varid = $new->getPrimaryKey();
+            }
+        } else {
+            $varid = $variable;
         }
 
-        AeplayVariable::updateWithId($this->playid,$variable,$value);
+        AeplayVariable::updateWithId($this->playid,$varid,$value);
         $this->loadVariableContent(true);
     }
 
@@ -701,10 +711,9 @@ class ArticleController {
         }
     }
 
+    
     public function sessionSet($key,$value){
-        if($value){
-            $this->to_session_storage[$key] = $value;
-        }
+        $this->to_session_storage[$key] = $value;
     }
 
     public function sessionGet($key){
