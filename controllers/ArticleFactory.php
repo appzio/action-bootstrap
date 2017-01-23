@@ -23,6 +23,7 @@ class ArticleFactory {
     public $actionid;
 
     public $imagespath;
+    public $original_images_path;
     public $submitvariables;
 
     public $vars = array();
@@ -508,6 +509,10 @@ class ArticleFactory {
         if(file_exists($model_file .'.php')){
             $this->model_name = ucfirst($actiontype) .'Model';
         }
+
+        /* original images */
+        $this->original_images_path = Controller::getOriginalImagesPath( $this->gid );
+        $this->imagesobj->imagesearchpath[] = $this->original_images_path;
 
         /* images */
         $this->imagespath = Yii::getPathOfAlias('application.modules.aelogic.packages.action' .$cc .'.images');

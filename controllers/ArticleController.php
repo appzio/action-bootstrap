@@ -313,9 +313,9 @@ class ArticleController {
 
 
     public function copyAssetWithoutProcessing($filename){
-        $target = Controller::getImagesPath($this->gid) .$filename;
+        $target = Controller::getImagesPath($this->gid) . $filename;
 
-        if(file_exists($target)){
+        if ( file_exists($target) ) {
             return true;
         }
 
@@ -326,7 +326,7 @@ class ArticleController {
             }
         }
     }
-
+    
 
     /* this will return image filename that the client understands
         you can feed variable, filename, or clearname
