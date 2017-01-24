@@ -28,6 +28,10 @@ class Article_View_Formkitfield extends ArticleComponent {
             }
         }
 
+        if(!$this->value){
+            $this->value = $this->content;
+        }
+
         $col[] = $this->factoryobj->getText(strtoupper($title),array('style' => 'form-field-titletext'));
 
         if($error){
@@ -41,7 +45,7 @@ class Article_View_Formkitfield extends ArticleComponent {
         $args = array(
             'variable' => $param,
             'hint' => $hint,
-            'style' => $style,
+            'style' => $style
         );
 
         if ( $type ) {

@@ -655,6 +655,10 @@ class ArticleController {
                 $onclick->action_config = $param;
                 break;
 
+            case 'go-home':
+                $onclick->action = 'go-home';
+                break;
+
             case 'location':
                 $onclick->action = 'ask-location';
                 $onclick->action_config = $param;
@@ -711,7 +715,7 @@ class ArticleController {
         }
     }
 
-    
+
     public function sessionSet($key,$value){
         $this->to_session_storage[$key] = $value;
     }
@@ -960,13 +964,13 @@ class ArticleController {
         return $this->returnComponent('formkitcheckbox','field','',$params);
     }
 
-    public function formkitField($variable,$title,$hint,$type=false,$error=false){
+    public function formkitField($variable,$title,$hint,$type=false,$error=false,$value=false){
         $params['title'] = $title;
         $params['hint'] = $hint;
         $params['variable'] = $variable;
         $params['type'] = $type;
         $params['error'] = $error;
-        return $this->returnComponent('formkitfield','field','',$params);
+        return $this->returnComponent('formkitfield','field',$value,$params);
     }
 
     public function formkitTextarea($variable,$title,$hint,$type=false,$error=false){

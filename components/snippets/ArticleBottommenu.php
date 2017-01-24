@@ -22,6 +22,10 @@ class ArticleBottommenu extends ArticleComponent {
         $counter = 1;
 
         foreach($menudata as $menuitem){
+            /* show flag */
+            if($menuitem['slug'] == 'mailbox' AND $this->factoryobj->sessionGet('msgcount')){
+                $menuitem['flag'] = $this->factoryobj->sessionGet('msgcount');
+            }
             $column[] = $this->getItem($menuitem,$count,$counter);
             $counter++;
         }
