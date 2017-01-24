@@ -72,6 +72,7 @@ class ArticleBottommenu extends ArticleComponent {
         if(isset($item['flag']) AND $item['flag']){
             $some[] = $this->factoryobj->getText($item['flag'],array(
                 'font-size' => '11','background-color' => '#F80F26','color' => '#ffffff','padding' => '3 6 3 6','border-radius' => '4',
+                'border-color' => '#ffffff'
             ));
             $row[] = $this->factoryobj->getColumn($some,array('height' => '15','width' => '45','text-align' => 'right','margin' => '4 0 0 0','floating' => 1));
         }
