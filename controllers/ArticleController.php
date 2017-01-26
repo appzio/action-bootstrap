@@ -222,6 +222,19 @@ class ArticleController {
         $this->varcontent = ArticleModel::getVariableContent($this->playid);
     }
 
+    public function saveTags($temp_variable_name,$savevariable_name){
+        foreach($this->submitvariables as $key=>$val){
+            if(stristr($key,$temp_variable_name.'_')){
+                $id = str_replace($temp_variable_name.'_','',$key);
+                $savearray[$id] = $val;
+            }
+        }
+
+        if(isset($savearray)){
+            $this->saveVariable($savevariable_name,json_encode($savearray));
+        }
+    }
+
     public function setBranchList($list){
         if(!empty($list)){
             foreach($list as $item){
