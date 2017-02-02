@@ -172,6 +172,10 @@ class ArticleController {
     }
 
     public function initKeyValueStorage(){
+        if(isset($this->appkeyvaluestorage) AND $this->appkeyvaluestorage->game_id){
+            return true;
+        }
+
         /* user-specific values ( extended storage ) */
         $this->playdatastorage = new AeplayDatastorage();
         $this->playdatastorage->play_id = $this->playid;
@@ -304,6 +308,11 @@ class ArticleController {
 
 
     public function initLoginModel(){
+
+        if(isset($this->loginmodel->userid) AND $this->loginmodel->userid){
+            return true;
+        }
+
         Yii::import('application.modules.aelogic.packages.actionMobilelogin.models.*');
 
         $this->loginmodel = new MobileloginModel();
@@ -663,6 +672,10 @@ class ArticleController {
                 $onclick->action_config = '4';
                 break;
 
+            case 'list-branches':
+                $onclick->action = 'list-branches';
+                break;
+            
             case 'action':
                 $onclick->action = 'open-action';
                 $onclick->action_config = $param;
@@ -834,6 +847,11 @@ class ArticleController {
     }
 
     public function initMobileMatching($otheruserid=false,$debug=false){
+
+        if(isset($this->mobilematchingobj->playid_thisuser) AND $this->mobilematchingobj->playid_thisuser){
+            return true;
+        }
+
         Yii::import('application.modules.aelogic.packages.actionMobilematching.models.*');
 
         if($debug){
@@ -849,6 +867,10 @@ class ArticleController {
     }
 
     public function initMobileChat( $context, $context_key, $otheruserid = false, $chat_id = 0 ){
+
+        if(isset($this->mobilechatobj->current_chat_id) AND $this->mobilechatobj->current_chat_id){
+            return true;
+        }
         Yii::import('application.modules.aechat.models.*');
 
         $this->mobilechatobj = new Aechat();
