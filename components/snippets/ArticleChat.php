@@ -579,9 +579,11 @@ class ArticleChat extends ArticleComponent {
 
             case 'company':
                 $name = isset($vars['company']) ? $vars['company'] : false;
-                if(!$name){
-                    $name = isset($vars['real_name']) ? $this->getFirstName($vars['real_name']) : '{#anonymous#}';
+                
+                if ( !$name ) {
+                    $name = isset($vars['real_name']) ? $vars['real_name'] : '{#anonymous#}';
                 }
+
                 break;
 
             default:
@@ -604,7 +606,7 @@ class ArticleChat extends ArticleComponent {
             return false;
         }
 
-        if ( !isset($this->varcontent['name']) AND !isset($this->varcontent['real_name']) ){
+        if ( !$this->getUsername() ){
             return false;
         }
 
@@ -623,7 +625,7 @@ class ArticleChat extends ArticleComponent {
             return false;
         }
 
-        $username = isset($this->varcontent['real_name']) ? $this->varcontent['real_name'] : $this->varcontent['name'];
+        $username = $this->getUsername();
         $pic = 'anonymous.png';
 
         if ( $this->strip_urls AND $msg ){
@@ -830,13 +832,7 @@ class ArticleChat extends ArticleComponent {
         $this->debug = false;
         $output = array();
 
-        $name = '';
-
-        if ( isset($this->varcontent['name']) AND $this->varcontent['name'] ) {
-            $name = $this->varcontent['name'];
-        } else if ( isset($this->varcontent['real_name']) AND $this->varcontent['real_name'] ) {
-            $name = $this->varcontent['real_name'];
-        }
+        $name = $this->getUsername();
 
         // We should handle this differently
         if ( empty($name) ) {
@@ -944,6 +940,21 @@ class ArticleChat extends ArticleComponent {
         $msg = preg_replace('|https?://[a-z\.0-9]+|i', '{#url_removed#}', $msg);
         $msg = preg_replace('|www\.[a-z\.0-9]+|i', '{#url_removed#}', $msg);
         return $msg;
+    }
+
+    public function getUsername() {
+
+        $options = array(
+            'real_name', 'name', 'screen_name'
+        );
+
+        foreach ($options as $option) {
+            if ( isset($this->varcontent[$option]) AND !empty($this->varcontent[$option]) ) {
+                return $this->varcontent[$option];
+            }
+        }
+
+        return false;
     }
 
 }
