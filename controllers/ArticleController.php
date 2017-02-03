@@ -648,6 +648,31 @@ class ArticleController {
 
     }
 
+
+    public function getAppUrl($actionid,$menuid){
+        $from = isset($this->appinfo->name) ? $this->appinfo->name : 'Appzio';
+
+        $config = json_decode($this->mobilesettings->config_main,true);
+        if(isset($config['app_url'])){
+            $appurl = $config['app_url'];
+        } else {
+            $appurl = $from;
+        }
+
+        $link = $appurl .'://';
+
+        if($actionid){
+            $link .= 'action_id?'.$actionid;
+        }
+
+        if($menuid){
+            $link .= '&menuid='.$menuid;
+        }
+
+        return $link;
+    }
+
+
     public function getOnclick($case='tab1',$back=false,$param=false){
         $onclick = new StdClass();
 
