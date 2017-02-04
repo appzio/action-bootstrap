@@ -764,8 +764,18 @@ class ArticleFactory {
                     $onload = array_merge($onload, $tabcontent->onload);
                 }
 
-                $tabcontent = $this->bottomMenu($tabcontent,$key);
-                $output[$tabname] = (object)$tabcontent;
+                if($this->validateTabFormat($tabcontent)){
+                    $tabcontent = $this->bottomMenu($tabcontent,$key);
+                    $output[$tabname] = (object)$tabcontent;
+                } else {
+                    $tabcontent = new stdClass();
+                    $obj = new stdClass;
+                    $obj->type = 'msg-plain';
+                    $obj->content = 'Either header, scroll, footer or onload has a wrong data type (should be array)!';
+                    $tabcontent->scroll[] = $obj;
+                    $output[$tabname] = (object)$tabcontent;
+                }
+
             }
 
             $key++;
@@ -791,6 +801,25 @@ class ArticleFactory {
         }
 
         return $output;
+    }
+
+    /* rudimentary data type validation for segments */
+    private function validateTabFormat($tabcontent){
+        $segments = array('header','scroll','footer','onload');
+
+        if(!is_object($tabcontent)){
+            return false;
+        }
+
+        foreach($segments as $segment){
+            if(isset($tabcontent->$segment)){
+                if(!is_array($tabcontent->$segment)){
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
 

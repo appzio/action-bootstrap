@@ -1515,6 +1515,7 @@ class ArticleController {
             $buttonparams['margin'] = '15 40 40 40';
             $buttonparams['height'] = '50';
             $buttonparams['border-radius'] = '8';
+            $buttonparams['vertical-align'] = 'middle';
 
             $textparams['color'] = $this->colors['top_bar_text_color'];
         }
