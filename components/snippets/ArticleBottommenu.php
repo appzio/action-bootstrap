@@ -74,7 +74,7 @@ class ArticleBottommenu extends ArticleComponent {
                 'font-size' => '11','background-color' => '#F80F26','color' => '#ffffff','padding' => '3 6 3 6','border-radius' => '4',
                 'border-color' => '#ffffff'
             ));
-            $row[] = $this->factoryobj->getColumn($some,array('height' => round($width/4.5,0),'width' => round($width/2,0),'text-align' => 'right','margin' => '4 0 0 0','floating' => 1));
+            $row[] = $this->factoryobj->getColumn($some,array('height' => '21','width' => $width/2,'text-align' => 'right','margin' => '4 0 0 0','floating' => 1,'float' => 'right'));
         }
 
         if ($item['action_config'] == $this->factoryobj->action_id AND $item['action'] == 'open-action') {
