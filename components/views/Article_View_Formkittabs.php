@@ -59,8 +59,10 @@ class Article_View_Formkittabs extends ArticleComponent {
                 $btn = array($btn2, $btn1);                
             } else if ( $indicator_mode == 'bottom' ) {
                 $btn = array($btn1, $btn2);
-            } else {
+            } else if( $indicator_mode == 'off') {
                 $btn = array( $btn1 );
+            } else {
+                $btn = array($btn2, $btn1);
             }
 
             $col[] = $this->factoryobj->getColumn($btn,array('width' => $width,'onclick' => $onclick));
