@@ -130,7 +130,7 @@ class ArticleFactory {
             $this->menuitems[$nav['item_safe_name']] = $nav['itemid'];
         }
 
-        $this->session_storage = Appcaching::getGlobalCache($this->playid.'playcache');
+        $this->session_storage = Appcaching::getGlobalCache($this->playid.$this->userid.'playcache');
 
     }
 
@@ -191,7 +191,7 @@ class ArticleFactory {
                 $cache = $data;
             }
 
-            Appcaching::setGlobalCache($this->playid.'playcache',$cache);
+            Appcaching::setGlobalCache($this->playid.$this->userid.'playcache',$cache);
         }
     }
 
