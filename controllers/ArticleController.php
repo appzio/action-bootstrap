@@ -724,11 +724,7 @@ class ArticleController {
                 $onclick->action = 'open-url';
                 $onclick->action_config = $param;
                 break;
-
-            case 'list-branches':
-                $onclick->action = 'list-branches';
-                break;
-
+            
             /* this is a special case where we can save also id's or some other info with the request */
             case 'submit':
                 $identifier = md5(serialize($param));
