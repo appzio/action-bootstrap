@@ -712,7 +712,6 @@ class ArticleController {
 
             case 'location':
                 $onclick->action = 'ask-location';
-                $onclick->action_config = $param;
                 break;
 
             case 'id':
