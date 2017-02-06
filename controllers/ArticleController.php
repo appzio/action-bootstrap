@@ -706,6 +706,10 @@ class ArticleController {
                 $onclick->action_config = $param;
                 break;
 
+            case 'push-permission':
+                $onclick->action = 'push-permission';
+                break;
+
             case 'go-home':
                 $onclick->action = 'go-home';
                 break;
