@@ -128,7 +128,7 @@
   "form-field-textfield":{
     "font-size": "13",
     "width": "100%",
-    "padding" : "0 14 0 12",
+    "padding" : "0 14 0 14",
     "vertical-align": "top"
   },
 
@@ -139,7 +139,7 @@
 
   "form-field-textarea":{
     "font-size": "13",
-    "margin" : "0 14 0 14",
+    "margin" : "0 14 0 10",
     "vertical-align": "top"
   },
 
