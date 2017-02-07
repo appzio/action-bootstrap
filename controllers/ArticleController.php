@@ -706,13 +706,16 @@ class ArticleController {
                 $onclick->action_config = $param;
                 break;
 
+            case 'push-permission':
+                $onclick->action = 'push-permission';
+                break;
+
             case 'go-home':
                 $onclick->action = 'go-home';
                 break;
 
             case 'location':
                 $onclick->action = 'ask-location';
-                $onclick->action_config = $param;
                 break;
 
             case 'id':
@@ -724,7 +727,7 @@ class ArticleController {
                 $onclick->action = 'open-url';
                 $onclick->action_config = $param;
                 break;
-
+            
             /* this is a special case where we can save also id's or some other info with the request */
             case 'submit':
                 $identifier = md5(serialize($param));
@@ -1515,6 +1518,7 @@ class ArticleController {
             $buttonparams['margin'] = '15 40 40 40';
             $buttonparams['height'] = '50';
             $buttonparams['border-radius'] = '8';
+            $buttonparams['vertical-align'] = 'middle';
 
             $textparams['color'] = $this->colors['top_bar_text_color'];
         }

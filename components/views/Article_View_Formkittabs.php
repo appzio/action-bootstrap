@@ -9,7 +9,7 @@ class Article_View_Formkittabs extends ArticleComponent {
     public function template() {
 
         $content = $this->addParam('content',$this->options,false);
-        $indicator_mode = $this->addParam('indicator_mode',$this->options,false);
+        $indicator_mode = $this->addParam('indicator_mode',$this->options,'bottom');
         $divider = $this->addParam('divider',$this->options,false);
         $active = $this->addParam('active',$this->options,false);
         $btn_padding = $this->addParam('btn_padding',$this->options,'10 10 10 10');
