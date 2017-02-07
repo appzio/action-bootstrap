@@ -71,8 +71,6 @@ class Article_View_Formkittags extends ArticleComponent {
             $output[] = $this->factoryobj->getText('',array('style' => 'form-field-separator'));
         }
 
-
-
         return $this->factoryobj->getColumn($output, array('style' => 'form-field-row'));
     }
 

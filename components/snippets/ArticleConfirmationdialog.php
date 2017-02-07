@@ -13,7 +13,6 @@ class ArticleConfirmationdialog extends ArticleComponent
 {
 
     public function template(){
-
         $text = $this->addParam('text',$this->options,false);
         $button_yes = $this->addParam('button_yes',$this->options,false);
         $menuid = $this->addParam('menuid',$this->options,false);
@@ -25,7 +24,7 @@ class ArticleConfirmationdialog extends ArticleComponent
         $col[] = $this->factoryobj->getSpacer(50);
         $col[] = $this->factoryobj->getRow($row,array('height' => '50','text-align' => 'center'));
 
-        $output[] = $this->factoryobj->getColumn($col,array('margin' => '50 50 50 50', 'padding' => '50 50 50 50',
+        $output = $this->factoryobj->getColumn($col,array('margin' => '50 50 50 50', 'padding' => '50 50 50 50',
             'opacity' => '0.8','background-color' => '#000000','border-radius' => 12,'floating' => 1));
 
         return $output;
@@ -36,10 +35,16 @@ class ArticleConfirmationdialog extends ArticleComponent
         $onclick->action = 'submit-form-content';
         $onclick->id = $menuid;
 
-        return $this->factoryobj->getText($text,array('background-color' => '#ffffff','color' => '#000000','height' => '25','border-radius' => 7,'width' => '40%',
-            'font-size' => '12','text-align' => 'center','onclick' => $onclick));
+        return $this->factoryobj->getText($text, array(
+            'background-color' => '#ffffff',
+            'color' => '#000000',
+            'height' => '25',
+            'border-radius' => 7,
+            'width' => '40%',
+            'font-size' => '12',
+            'text-align' => 'center',
+            'onclick' => $onclick
+        ));
     }
-
-
 
 }

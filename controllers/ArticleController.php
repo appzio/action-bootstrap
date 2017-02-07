@@ -873,9 +873,9 @@ class ArticleController {
 
     public function initMobileMatching($otheruserid=false,$debug=false){
 
-        if(isset($this->mobilematchingobj->playid_thisuser) AND $this->mobilematchingobj->playid_thisuser){
-            return true;
-        }
+        // if(isset($this->mobilematchingobj->playid_thisuser) AND $this->mobilematchingobj->playid_thisuser){
+        //     return true;
+        // }
 
         Yii::import('application.modules.aelogic.packages.actionMobilematching.models.*');
 
