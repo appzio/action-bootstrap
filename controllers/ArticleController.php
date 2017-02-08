@@ -697,10 +697,14 @@ class ArticleController {
                 $onclick->action_config = '4';
                 break;
 
+            case 'complete-action':
+                $onclick->action = 'complete-action';
+                break;
+
             case 'list-branches':
                 $onclick->action = 'list-branches';
                 break;
-            
+
             case 'action':
                 $onclick->action = 'open-action';
                 $onclick->action_config = $param;

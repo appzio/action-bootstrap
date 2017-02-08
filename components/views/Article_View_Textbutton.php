@@ -32,7 +32,6 @@ class Article_View_Textbutton extends ArticleComponent {
         $producttype_android = $this->addParam('producttype_android',$this->options,false);
         $producttype_ios = $this->addParam('producttype_ios',$this->options,false);
 
-
         $onclick = $this->addParam('onclick',$this->options,false);
 
         if(is_object($onclick)){
@@ -63,8 +62,7 @@ class Article_View_Textbutton extends ArticleComponent {
             }
         }
 
-
-        $item = new StdClass;
+        $item = new stdClass;
         $item->id = $id;
 
         $bgcolor = $this->addParam('button_color',$colors,'#000000');
@@ -90,7 +88,7 @@ class Article_View_Textbutton extends ArticleComponent {
             if($smalltext){
                 $sty['font-size'] = 14;
             } else {
-                $sty['font-size'] = 18;
+                $sty['font-size'] = 16;
             }
 
             $sty['height'] = '50';

@@ -662,6 +662,9 @@ class ArticleFactory {
     public function setBottomMenuId(){
         $visualconfig = json_decode($this->appinfo->visual_config_params);
 
+        /* as we are reusing the same factory object with listbranches, this needs to be set false first */
+        $this->bottom_menu_id = false;
+
         if(isset($this->configobj->bottom_menu_id)){
 
             if($this->configobj->bottom_menu_id == 'none'){
