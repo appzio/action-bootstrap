@@ -8,9 +8,10 @@ class ArticleModel extends CActiveRecord {
 
     public $configobj;
     public $varcontent;
-    
-    public function init(){
+    public $factory;
 
+    public function factoryInit($data){
+        $this->factory = $data;
     }
   
     public function tableName(){
