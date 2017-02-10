@@ -8,6 +8,8 @@ class ArticleModel extends CActiveRecord {
 
     public $configobj;
     public $varcontent;
+
+    /* @var ArticleController */
     public $factory;
 
     public function factoryInit($data){
@@ -24,8 +26,8 @@ class ArticleModel extends CActiveRecord {
     }
 
     public static function model($className=__CLASS__){
-    return parent::model($className);
-  }
+        return parent::model($className);
+    }
 
     public function relations()
     {

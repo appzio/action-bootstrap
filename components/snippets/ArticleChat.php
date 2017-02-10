@@ -561,7 +561,7 @@ class ArticleChat extends ArticleComponent {
         
         if(!$vars){
             $vars = AeplayVariable::getArrayOfPlayvariables($id);
-            Appcaching::setGlobalCache($cachename,$vars,1400);
+            Appcaching::setGlobalCache($cachename,$vars,120);
         }
         
         switch($this->name_mode){
