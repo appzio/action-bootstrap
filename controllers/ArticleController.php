@@ -1060,6 +1060,10 @@ class ArticleController {
         return $this->returnComponent('formkitslider','field','',$params);
     }
 
+    public function formkitBox( $params = false ){
+        return $this->returnComponent('formkitbox','field','',$params);
+    }
+
     public function getTabs($content,$params=array(),$divider=false){
         /* you can configure the needed params here */
 
