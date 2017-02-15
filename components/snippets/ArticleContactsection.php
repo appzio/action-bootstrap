@@ -33,7 +33,9 @@ class ArticleContactsection extends ArticleComponent
             $output[] = $this->factoryobj->formkitField('email', '{#email#}', '{#your_email#}',false,$emailerror);
 
         if(!isset($hide['notify']))
-            $output[] = $this->factoryobj->formkitCheckbox('notify', '{#push_messages#}', false);
+            $output[] = $this->factoryobj->formkitCheckbox('notify', '{#push_messages#}', array(
+                'type' => 'toggle'
+            ));
 
         return $this->factoryobj->getColumn($output);
     }
