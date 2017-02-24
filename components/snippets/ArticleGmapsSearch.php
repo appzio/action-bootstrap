@@ -15,6 +15,7 @@ class ArticleGmapsSearch {
     private $data;
     private $key;
     private $baseUrl;
+    public $search_param;
     
     /**
      * Construct
@@ -27,21 +28,20 @@ class ArticleGmapsSearch {
         $this->baseUrl= "https://" . self::MAPS_HOST . "/maps/api/geocode/json?key=" . $this->key;
     }
 
-    public function getInfoLocation ($address) {
-        if (!empty($address)) {
-            return $this->connect($address);
+    public function getInfoLocation() {
+
+        if ( empty($this->search_param) ) {
+            die( 'Please enter a search parameter' );
         }
-        return false;    
+
+        return $this->connect();
     }
 
     /**
      * connect to Google Maps
-     *
-     * @param string $param
-     * @return boolean
      */
-    private function connect($param) {
-        $request_url = $this->baseUrl . '&address=' . urlencode($param);
+    private function connect() {
+        $request_url = $this->baseUrl . '&address=' . urlencode($this->search_param);
 
         $contents = @file_get_contents( $request_url );
 

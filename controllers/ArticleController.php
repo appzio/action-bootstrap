@@ -635,7 +635,6 @@ class ArticleController {
         return false;
     }
 
-
     public function getOnclickTabAndSave($idname,$id,$tabnumber=2,$back_button=true,$tab_change_parameters=false){
         $params['id'] = $idname;
         $params['params'][$idname] = $id;
@@ -647,7 +646,6 @@ class ArticleController {
         return $onclick;
 
     }
-
 
     public function getAppUrl($actionid,$menuid){
         $from = isset($this->appinfo->name) ? $this->appinfo->name : 'Appzio';
@@ -671,7 +669,6 @@ class ArticleController {
 
         return $link;
     }
-
 
     public function getOnclick($case='tab1',$back=false,$param=false){
         $onclick = new StdClass();
@@ -763,8 +760,6 @@ class ArticleController {
 
     }
 
-
-
     public function sessionSetArray($array){
         if(is_array($array) AND !empty($array)){
             foreach($array as $key=>$value) {
@@ -772,7 +767,6 @@ class ArticleController {
             }
         }
     }
-
 
     public function sessionSet($key,$value){
         $this->to_session_storage[$key] = $value;
@@ -809,8 +803,6 @@ class ArticleController {
             return false;
         }
     }
-
-
 
     public function getFullPageLoader($color='#000000',$text=false){
         $color = $color ? $color : '#000000';

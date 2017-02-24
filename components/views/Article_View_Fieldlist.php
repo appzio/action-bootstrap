@@ -19,7 +19,6 @@ class Article_View_Fieldlist extends ArticleComponent {
             $obj->value = $this->options['value'];
         }
 
-
         return $obj;
 	}
 
