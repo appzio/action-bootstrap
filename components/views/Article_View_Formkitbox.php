@@ -54,13 +54,17 @@ class Article_View_Formkitbox extends ArticleComponent {
             $onclick->sync_close = 1;
             $onclick->back_button = 1;
 
-            $data[] = $this->factoryobj->getImage('edit-icon.png', array(
-                'width' => 20,
-                'height' => 20,
+            $data[] = $this->factoryobj->getRow(array(
+                $this->factoryobj->getImage('edit-icon.png', array(
+                    'width' => 20,
+                    'height' => 20,
+                )),
+                $this->factoryobj->getText( 'Edit' )
+            ), array(
+                'onclick' => $onclick,
                 'floating' => 1,
                 'float' => 'right',
                 'text-align' => 'right',
-                'onclick' => $onclick,
             ));
             
         }
