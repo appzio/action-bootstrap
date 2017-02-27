@@ -51,7 +51,7 @@ class ArticleGmapsSearch {
 
         $data = json_decode( $contents, true );
 
-        if ( !isset($data['results']) ) {
+        if ( !isset($data['results']) OR empty($data['results']) ) {
             return false ;
         }
 
