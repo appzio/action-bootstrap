@@ -16,6 +16,7 @@ class Article_View_Formkittags extends ArticleComponent {
         $this->value = $this->addParam('value',$this->options,false);
         $items = $this->addParam('items',$this->options,false);
         $error = $this->addParam('error',$this->options,false);
+        $field_offset = $this->addParam('field_offset',$this->options,7);
 
         $savearray = array();
 
@@ -26,9 +27,9 @@ class Article_View_Formkittags extends ArticleComponent {
             }
         }
 
-        if(is_array($this->value) AND !empty($this->value)){
-
-        }elseif(empty($savearray)){
+        if (is_array($this->value) AND !empty($this->value)) {
+            // Do nothing
+        } elseif(empty($savearray)) {
             $this->value = json_decode($this->factoryobj->getSavedVariable($varname),true);
         } else {
             $this->value = $savearray;
@@ -44,7 +45,7 @@ class Article_View_Formkittags extends ArticleComponent {
         foreach ($items as $key=>$item){
             /* 27 is the width with paddings and margins */
             $counter = $counter + 35;
-            $counter = $counter + (strlen($item)*7);
+            $counter = $counter + (strlen($item) * $field_offset);
 
             if($counter > $this->factoryobj->screen_width){
                 $row[] = $this->factoryobj->getVerticalSpacer('');
@@ -53,7 +54,7 @@ class Article_View_Formkittags extends ArticleComponent {
                 $row[] = $this->getItemRow($key,$item);
                 $counter=0;
                 $counter = $counter + 35;
-                $counter = $counter + (strlen($item)*7);
+                $counter = $counter + (strlen($item) * $field_offset);
             } else {
                 $row[] = $this->getItemRow($key,$item);
             }

@@ -16,14 +16,15 @@ class Article_View_Formkitradiobuttons extends ArticleComponent {
         $items = $this->addParam('items',$this->options,false);
         $error = $this->addParam('error',$this->options,false);
         $show_separator = $this->addParam('show_separator',$this->options,true);
-
+        $field_offset = $this->addParam('field_offset',$this->options,6.5);
+        
         if(!$this->value){
             $this->value = $this->factoryobj->getSubmittedVariableByName($varname);
             if(!$this->value){
                 $this->value = $this->factoryobj->getSavedVariable($varname);
             }
         }
-
+        
         $this->variable = $this->factoryobj->getVariableId($varname) ? $this->factoryobj->getVariableId($varname) : $varname;
         $output[] = $this->factoryobj->getText(strtoupper($title), array('style' => 'form-field-textfield-onoff'));
 
@@ -34,7 +35,7 @@ class Article_View_Formkitradiobuttons extends ArticleComponent {
         foreach ($items as $key=>$item){
             /* 27 is the width with paddings and margins */
             $counter = $counter + 27;
-            $counter = $counter + (strlen($item)*6.5);
+            $counter = $counter + (strlen($item) * $field_offset);
 
             if($counter > $this->factoryobj->screen_width){
                 $row[] = $this->factoryobj->getVerticalSpacer('');
@@ -43,7 +44,7 @@ class Article_View_Formkitradiobuttons extends ArticleComponent {
                 $row[] = $this->getItemRow($key,$item);
                 $counter=0;
                 $counter = $counter + 27;
-                $counter = $counter + (strlen($item)*6.5);
+                $counter = $counter + (strlen($item) * $field_offset);
             } else {
                 $row[] = $this->getItemRow($key,$item);
             }
