@@ -15,7 +15,9 @@ class ArticleGmapsSearch {
     private $data;
     private $key;
     private $baseUrl;
+
     public $search_param;
+    public $search_type = 'address';
     
     /**
      * Construct
@@ -41,7 +43,12 @@ class ArticleGmapsSearch {
      * connect to Google Maps
      */
     private function connect() {
-        $request_url = $this->baseUrl . '&address=' . urlencode($this->search_param);
+
+        if ( $this->search_type == 'address' ) {
+            $request_url = $this->baseUrl . '&address=' . urlencode($this->search_param);
+        } else if ( $this->search_type == 'coords' ) {
+            $request_url = $this->baseUrl . '&latlng=' . urlencode($this->search_param);
+        }
 
         $contents = @file_get_contents( $request_url );
 
