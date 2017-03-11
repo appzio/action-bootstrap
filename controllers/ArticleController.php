@@ -1449,6 +1449,17 @@ class ArticleController {
         }
     }
 
+    public function getGoogleSignInButton($id,$submitmenu=false){
+        $styles = array( 'style' => 'fbbutton_text_style' );
+
+        if($submitmenu){
+            return $this->getButtonWithIcon('g-icon.png', $id, '{#sign_in_with_google#}', array('style' => 'google_button_style'), $styles);
+        } else {
+            return $this->getButtonWithIcon('g-icon.png', $id, '{#sign_in_with_google#}', array('style' => 'google_button_style','action' => 'google-login','sync_open' => true), $styles);
+        }
+    }
+
+
     public function getInstagramSignInButton($actionid){
 
         $onclick1 = new StdClass();
