@@ -1068,6 +1068,18 @@ class ArticleController {
         return $this->returnComponent('formkittabs','field','',$params);
     }
 
+    public function getRoundedTabs($content,$params=array()){
+        /* you can configure the needed params here */
+
+        // Supported indicator modes: top / bottom / fulltab
+
+        $params['content'] = $content;
+        $params['params'] = $params;
+
+        return $this->returnComponent('formkitroundtabs','field','',$params);
+    }
+
+
     public function rewriteActionConfigField($field,$newcontent){
         $this->rewriteconfigs[$field] = $newcontent;
     }
