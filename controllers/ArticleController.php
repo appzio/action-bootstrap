@@ -715,6 +715,10 @@ class ArticleController {
                 $onclick->action = 'go-home';
                 break;
 
+            case 'close-popup':
+                $onclick->action = 'close-popup';
+                break;
+
             case 'location':
                 $onclick->action = 'ask-location';
                 break;
