@@ -1,4 +1,14 @@
 {
+
+  "propertydetail-shadowbox-indent":{
+    "background-color": "#ffffff",
+    "padding": "8 0 0 0",
+    "margin" : "20 20 5 20",
+    "border-radius": "3",
+    "shadow-color" : "#33000000",
+    "shadow-radius" : "2",
+    "shadow-offset" : "0 1"
+  },
   "round_image_imate_stacked": {
     "crop": "round",
     "margin": "5 -30 5 5",
