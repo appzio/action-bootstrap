@@ -189,6 +189,58 @@ class ArticleController {
         $this->appkeyvaluestorage->game_id = $this->gid;
     }
 
+
+    /* this function treats variable as a json list where it removes a value if it exists */
+
+    public function removeFromVariable($variable,$value){
+        $var = $this->getSavedVariable($variable);
+
+        if($var){
+            $var = json_decode($var,true);
+            if(is_array($var) AND !empty($var)){
+                if(in_array($value,$var)){
+                    $key = array_search($value,$var);
+                    unset($var[$key]);
+                    $var = json_encode($var);
+                    $this->saveVariable($variable,$var);
+                } else {
+                    return false;
+                }
+            }
+        }
+        
+    }
+
+
+    /* this function treats variable as a json list where it adds a value
+        note that if variable includes a string, it will overwrite it */
+
+    public function addToVariable($variable,$value){
+
+        $var = $this->getSavedVariable($variable);
+
+        if($var){
+            $var = json_decode($var,true);
+            if(is_array($var) AND !empty($var)){
+                if(in_array($value,$var)){
+                    return false;
+                } else {
+                    array_push($var,$value);
+                }
+            }
+        }
+
+        if(!is_array($var) OR empty($var)){
+            $var = array();
+            array_push($var,$value);
+        }
+
+        $var = json_encode($var);
+        $this->saveVariable($variable,$var);
+
+
+    }
+
     public function saveVariable($variable,$value){
         if ( !is_numeric($variable) ) {
             $varid = $this->getVariableId($variable);
@@ -1006,6 +1058,14 @@ class ArticleController {
         $params['items'] = $items;
         $params['error'] = $error;
         return $this->returnComponent('formkittags','field','',$params);
+    }
+
+
+    public function formkitCheckboxes($title,$items,$params=array(),$error=''){
+        $params['title'] = $title;
+        $params['items'] = $items;
+        $params['error'] = $error;
+        return $this->returnComponent('formkitradiobuttons','field','',$params);
     }
 
     public function formkitRadiobuttons($title,$items,$params=false,$error=false){
