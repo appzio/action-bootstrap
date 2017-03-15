@@ -20,7 +20,8 @@ class ArticleRentaltenantproperties extends ArticleComponent
         $radioButtonsParameters = array(
             'variable' => 'residence_status',
             'field_offset' => '3',
-            'show_separator' => false
+            'show_separator' => false,
+            'clustered_mode' => false
         );
 
         $residenceStatusRow[] = $this->factoryobj->formkitRadiobuttons('{#residence_status#}', $residenceOptions, $radioButtonsParameters);
@@ -38,7 +39,8 @@ class ArticleRentaltenantproperties extends ArticleComponent
         $radioButtonsParameters = array(
             'variable' => 'family_situation',
             'field_offset' => 4,
-            'show_separator' => false
+            'show_separator' => false,
+            'clustered_mode' => false
         );
 
         $familySituationRow[] = $this->factoryobj->formkitRadiobuttons('{#family_situation#}', $familyOptions, $radioButtonsParameters);
