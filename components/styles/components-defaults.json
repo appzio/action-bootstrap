@@ -164,8 +164,9 @@
   },
   "form-field-textarea": {
     "font-size": "13",
-    "margin": "0 14 0 10",
-    "vertical-align": "top"
+    "margin": "0 14 3 14",
+    "vertical-align": "top",
+    "height": "100"
   },
   "form-field-textfield-error": {
     "font-size": "13",

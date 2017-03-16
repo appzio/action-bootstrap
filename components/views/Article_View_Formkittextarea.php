@@ -33,7 +33,6 @@ class Article_View_Formkittextarea extends ArticleComponent {
         }
 
         $col[] = $this->factoryobj->getText(strtoupper($title),array('style' => 'form-field-titletext'));
-        $col[] = $this->factoryobj->getSpacer(10);
 
         if($error){
             $style = 'form-field-textarea';
