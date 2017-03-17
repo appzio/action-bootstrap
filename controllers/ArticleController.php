@@ -95,6 +95,8 @@ class ArticleController {
     public $current_playid;
     public $current_gid;
 
+    public $permanames;
+
 
     /* automatically created bottom menu gets put here. To disable it for
     some tab or view, you can simply set it empty (it gets created upon init) */
@@ -157,8 +159,22 @@ class ArticleController {
             $this->bottom_menu_json = $this->getBottomMenu();
         }
 
+        $this->permanameCache();
+
     }
 
+    /* this will get the lookup table for permaname => actionid
+        its using cache, because not all init functions populate this array.
+        Lookup table is updated upon listbranches only.
+     */
+
+    public function permanameCache(){
+        $cachename = 'permaname-cache-'.$this->gid;
+        $cache = Appcaching::getGlobalCache($cachename);
+        if(!empty($cache)){
+            $this->permanames = $cache;
+        }
+    }
 
     public function saveVariables($exclude=false){
         ArticleModel::saveVariables($this->submitvariables,$this->playid,$exclude);
@@ -879,6 +895,17 @@ class ArticleController {
         } elseif(isset($this->varcontent[$varid])) {
             return false;
         }
+    }
+
+
+    /* returns mapping between permanent name & action id */
+    public function getActionidByPermaname($name){
+        if(isset($this->permanames[$name])){
+            return $this->permanames[$name];
+        }
+
+        return false;
+
     }
 
     public function validateEmail($email){
