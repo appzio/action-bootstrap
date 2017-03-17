@@ -1060,6 +1060,12 @@ class ArticleController {
         return $this->returnComponent('formkittags','field','',$params);
     }
 
+    public function formkitDate(string $title,string $variable,$params=false,$error=false){
+        $params['title'] = $title;
+        $params['error'] = $error;
+        $params['variable'] = $variable;
+        return $this->returnComponent('formkitdate','field','',$params);
+    }
 
     public function formkitCheckboxes($title,$items,$params=array(),$error=''){
         $params['title'] = $title;
