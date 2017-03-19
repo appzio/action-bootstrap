@@ -5,6 +5,7 @@ Yii::import('application.modules.aelogic.article.components.*');
 class Article_View_Formkittabs extends ArticleComponent {
 
     public $vars;
+    public $origin_tab;
 
     public function template() {
 
@@ -15,7 +16,7 @@ class Article_View_Formkittabs extends ArticleComponent {
         $btn_padding = $this->addParam('btn_padding',$this->options,'10 10 10 10');
         $color_topbar = $this->addParam('color_topbar',$this->options,$this->factoryobj->color_topbar);
         $color_topbar_hilite = $this->addParam('color_topbar_hilite',$this->options,$this->factoryobj->color_topbar_hilite);
-
+        $this->origin_tab = $this->addParam('origin_tab',$this->options,false);
 
         $params = $this->getTabParams( $content );
 
@@ -80,9 +81,11 @@ class Article_View_Formkittabs extends ArticleComponent {
 
     private function tabIsActive( $active, $tab_num ) {
 
-        if ( $active AND $active == $tab_num ) {
+        if($this->origin_tab AND $this->origin_tab == $tab_num){
             return true;
-        } else if ( !$active AND $this->factoryobj->current_tab == $tab_num ) {
+        } elseif ( !$this->origin_tab AND $active AND $active == $tab_num ) {
+            return true;
+        } else if ( !$this->origin_tab AND !$active AND $this->factoryobj->current_tab == $tab_num ) {
             return true;
         }
 

@@ -905,7 +905,6 @@ class ArticleController {
         }
 
         return false;
-
     }
 
     public function validateEmail($email){
@@ -1153,7 +1152,7 @@ class ArticleController {
         return $this->returnComponent('formkitbox','field','',$params);
     }
 
-    public function getTabs($content,$params=array(),$divider=false){
+    public function getTabs($content,$params=array(),$divider=false,$origin_tab=false){
         /* you can configure the needed params here */
 
         // Supported indicator modes: top / bottom / fulltab
@@ -1161,6 +1160,7 @@ class ArticleController {
         $params['divider'] = $divider;
         $params['content'] = $content;
         $params['params'] = $params;
+        $params['origin_tab'] = $origin_tab;
 
         return $this->returnComponent('formkittabs','field','',$params);
     }
