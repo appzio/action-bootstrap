@@ -170,7 +170,9 @@ class ArticleController {
 
     public function permanameCache(){
         $cachename = 'permaname-cache-'.$this->gid;
+        // Appcaching::removeGlobalCache( $cachename );
         $cache = Appcaching::getGlobalCache($cachename);
+
         if(!empty($cache)){
             $this->permanames = $cache;
         }
@@ -712,7 +714,19 @@ class ArticleController {
         $onclick[] = $this->getOnclick('tab'.$tabnumber,$back_button,$tab_change_parameters);
 
         return $onclick;
+    }
 
+    /**
+    * Returns all necessary "events" for a proper redirect from one action to another
+    * 
+    * @param integer $action_id - the action, where we would redirect the user
+    * 
+    * @return array of events
+    */
+    public function getRedirect( $action_id ) {
+        $reset_onload = $this->getOnclick( 'id', false, 'reset-form' );
+        $onload = $this->getOnclick( 'action', false, $action_id );
+        return array( $reset_onload, $onload );
     }
 
     public function getAppUrl($actionid,$menuid){
