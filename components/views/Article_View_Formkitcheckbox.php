@@ -14,6 +14,7 @@ class Article_View_Formkitcheckbox extends ArticleComponent {
         $error = $this->addParam('error',$this->options,false);
         $onclick = $this->addParam('onclick',$this->options,false);
         $toggle_type = $this->addParam('type',$this->options,'default');
+        $margin = $this->addParam('margin',$this->options,'0 15 9 0');
         $this->value = $this->addParam('value',$this->options,'');
 
         if ( empty($this->value) ) {
@@ -39,7 +40,7 @@ class Article_View_Formkitcheckbox extends ArticleComponent {
             'type' => $toggle_type,
             'value' => $this->value,
             'variable' => $variable,
-            'margin' => '0 15 9 0',
+            'margin' => $margin,
             'floating' => '1',
             'float' => 'right'
         );
@@ -54,7 +55,6 @@ class Article_View_Formkitcheckbox extends ArticleComponent {
         } else {
             $columns[] = $this->factoryobj->getText('',array('style' => 'form-field-separator'));
         }
-
 
         return $this->factoryobj->getColumn($columns, array('style' => 'form-field-row'));
 	}

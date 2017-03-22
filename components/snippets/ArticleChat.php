@@ -673,7 +673,7 @@ class ArticleChat extends ArticleComponent {
                 $this->factoryobj->mobilematchingobj->saveMatch();
             }
 
-            $notify = AeplayVariable::fetchWithName($this->playid,'notify',$this->gid);
+            $notify = AeplayVariable::fetchWithName($this->other_user_play_id, 'notify', $this->gid);
 
             if ( $notify ) {
                 $notification_text = $this->getFirstName($msg['name']) . ': ' . $message_text;
