@@ -106,6 +106,8 @@ class ArticleFactory {
     /* key value pairs, works like a session, but uses cache (mostly redis), so can actually persist between sessions */
     public $session_storage;
     public $click_cache;
+    public $recycleable_objects;
+    public $incoming_recycleable_objects;
 
     /* gets called when object is created & fed with initial values */
     public function playInit() {
@@ -331,6 +333,20 @@ class ArticleFactory {
 
         if($this->childobj->no_output){
             $this->no_output = $this->childobj->no_output;
+        }
+
+        if($this->childobj->recycleable_objects){
+
+            foreach($this->childobj->recycleable_objects as $obj){
+                $obs[$obj] = $this->childobj->$obj;
+            }
+
+            if(isset($obs)){
+                $this->childobj->recycleable_objects = $obs;
+            } else {
+                $this->childobj->recycleable_objects = array();
+            }
+
         }
 
         return $op;
@@ -601,6 +617,13 @@ class ArticleFactory {
             $this->actionid = $this->getParam('actionid',$this->submit);
         }
 
+        if($this->incoming_recycleable_objects){
+            foreach($this->incoming_recycleable_objects as $key=>$value)
+                if(isset($this->childobj->$key)){
+                    $this->childobj->$key = $value;
+            }
+        }
+
         /* if action init returns false, we will return ok right away
             its used for savers that bypass lot of the initing
         */
@@ -736,11 +759,12 @@ class ArticleFactory {
                 $output = new stdClass();
             }
 
+            $this->bottom_menu = $this->childobj->getBottomMenu();
+
             if(!isset($output->footer)){
-                $output->footer = new stdClass();
-                $output->footer = $this->childobj->bottom_menu_json;
+                $output->footer[] = $this->bottom_menu;
             } else {
-                $output->footer = array_merge($output->footer,$this->childobj->bottom_menu_json);
+                $output->footer = array_merge($output->footer,$this->bottom_menu);
             }
         }
 
@@ -769,6 +793,7 @@ class ArticleFactory {
 
                 if($this->validateTabFormat($tabcontent)){
                     $tabcontent = $this->bottomMenu($tabcontent,$key);
+
                     $output[$tabname] = (object)$tabcontent;
                 } else {
                     $tabcontent = new stdClass();

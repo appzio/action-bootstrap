@@ -97,6 +97,15 @@ class ArticleController {
 
     public $permanames;
 
+    /* global used to keep track of unread count between actions */
+    public $msgcount;
+
+    /* you can put objects that can be reused by actions during the same call
+        (mainly list branches, where we might get a lot of repeat calls for some inits
+     */
+
+    public $recycleable_objects = array();
+
 
     /* automatically created bottom menu gets put here. To disable it for
     some tab or view, you can simply set it empty (it gets created upon init) */
@@ -156,7 +165,7 @@ class ArticleController {
         $this->initKeyValueStorage();
 
         if($this->bottom_menu_id){
-            $this->bottom_menu_json = $this->getBottomMenu();
+            $this->bottom_menu_json = true;
         }
 
         $this->permanameCache();
