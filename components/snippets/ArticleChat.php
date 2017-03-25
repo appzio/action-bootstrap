@@ -351,7 +351,14 @@ class ArticleChat extends ArticleComponent {
 
         if($this->top_button){
             $btn[] = $this->top_button;
-            $columns[] = $this->factoryobj->getColumn($btn,array('float' => 'right','floating' => 1,'vertical-align' => 'middle','width' => '32%'));
+            $columns[] = $this->factoryobj->getColumn($btn, array(
+                'padding' => '0 10 0 0',
+                'text-align' => 'right',
+                'float' => 'right',
+                'floating' => 1,
+                'vertical-align' => 'middle',
+                'width' => '32%'
+            ));
         }
 
         return $this->factoryobj->getRow($columns,$rowparams);
