@@ -11,6 +11,7 @@ Yii::import('application.modules.aelogic.article.components.*');
 class ArticleGmapsSearch {
 
     const MAPS_HOST = 'maps.googleapis.com';
+    public $error;
 
     private $data;
     private $key;
@@ -33,7 +34,8 @@ class ArticleGmapsSearch {
     public function getInfoLocation() {
 
         if ( empty($this->search_param) ) {
-            die( 'Please enter a search parameter' );
+            $this->error[] = ( 'Please enter a search parameter' );
+            return false;
         }
 
         return $this->connect();
@@ -46,7 +48,7 @@ class ArticleGmapsSearch {
 
         if ( $this->search_type == 'address' ) {
             $request_url = $this->baseUrl . '&address=' . urlencode($this->search_param);
-        } else if ( $this->search_type == 'coords' ) {
+        } else {
             $request_url = $this->baseUrl . '&latlng=' . urlencode($this->search_param);
         }
 
@@ -64,7 +66,7 @@ class ArticleGmapsSearch {
 
         $this->data = $data['results'][0];
 
-        return true;
+        return $this->data;
     }
 
     /**
