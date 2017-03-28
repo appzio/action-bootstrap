@@ -759,12 +759,12 @@ class ArticleFactory {
                 $output = new stdClass();
             }
 
-            $this->bottom_menu = $this->childobj->getBottomMenu();
+            $bottom_menu = $this->childobj->getBottomMenu();
 
             if(!isset($output->footer)){
-                $output->footer[] = $this->bottom_menu;
+                $output->footer = $bottom_menu;
             } else {
-                $output->footer = array_merge($output->footer,$this->bottom_menu);
+                $output->footer = array_merge($output->footer,$bottom_menu);
             }
         }
 
