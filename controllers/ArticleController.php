@@ -6,6 +6,7 @@ Yii::import('application.modules.aegameauthor.components.*');
 Yii::import('application.modules.aegameauthor.components.snippets.*');
 Yii::import('application.modules.aelogic.article.components.*');
 Yii::import('application.modules.aelogic.article.components.snippets.*');
+Yii::import('application.modules.aeapi.models.*');
 
 class ArticleController {
 
