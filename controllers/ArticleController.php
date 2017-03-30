@@ -106,7 +106,7 @@ class ArticleController {
      */
 
     public $recycleable_objects = array();
-
+    public $global_recyclable = array('msgcount');
 
     /* automatically created bottom menu gets put here. To disable it for
     some tab or view, you can simply set it empty (it gets created upon init) */
@@ -143,6 +143,8 @@ class ArticleController {
     
     /* bottom navigation, which is handled entirely on server side */
     public $bottom_menu_id;
+
+    public $bottom_notifications;
 
     /* these are used to save parameters for clicks */
     public $click_parameters_to_save;
@@ -266,6 +268,12 @@ class ArticleController {
         $var = json_encode($var);
         $this->saveVariable($variable,$var);
 
+
+    }
+
+    /* by default, this */
+    public function updateMsgCount(){
+        print_r($this->appinfo);die();
 
     }
 
@@ -1073,6 +1081,9 @@ class ArticleController {
         return $this->returnComponent('bottommenu','module');
     }
 
+    public function getBottomNotifications($count){
+        return $this->returnComponent('bottomnotifications','module',$count);
+    }
 
     public function getText($content,$params=array()){
         /* you can configure the needed params here */
