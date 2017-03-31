@@ -7,14 +7,24 @@ class ArticleBottomnotifications extends ArticleComponent {
 
     public function template(){
 
+        if(!$this->factoryobj->getActionidByPermaname('chats')){
+            return $this->factoryobj->getText('');
+        }
+
+        $action = $this->factoryobj->getActionidByPermaname('chats');
+
+        $onclick = new stdClass();
+        $onclick->action = 'open-action';
+        $onclick->sync_open = 1;
+        $onclick->back_button = 1;
+        $onclick->action_config = $action;
 
         $txtcolor = $this->factoryobj->colors['top_bar_text_color'];
         $bg = $this->factoryobj->color_topbar;
         $count = $this->content;
-        $onclick = $this->factoryobj->getOnclick('action',false,$this->factoryobj->getActionidByPermaname('chats'));
 
-        $col[] = $this->factoryobj->getText($this->content,array('background-color' => $txtcolor,'color' => $bg,'padding' => '0 10 0 10','border-radius' => '6','font-size' => '13'));
-        $col[] = $this->factoryobj->getText('{#you_have#} ' .$this->content .' {#new_messages#}',array('color' => $txtcolor,'padding' => '2 4 2 4','font-size' => '13'));
+        $col[] = $this->factoryobj->getText($count,array('background-color' => $txtcolor,'color' => $bg,'padding' => '0 10 0 10','border-radius' => '6','font-size' => '13'));
+        $col[] = $this->factoryobj->getText('{#you_have#} ' .$count .' {#new_messages#}',array('color' => $txtcolor,'padding' => '2 4 2 4','font-size' => '13'));
 
         return $this->factoryobj->getRow($col,array('background-color' => $bg,'padding' => '9 0 9 0','text-align' => 'center','onclick' => $onclick));
 
