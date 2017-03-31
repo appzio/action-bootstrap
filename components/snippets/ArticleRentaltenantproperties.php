@@ -40,7 +40,8 @@ class ArticleRentaltenantproperties extends ArticleComponent
             'variable' => 'family_situation',
             'field_offset' => 4,
             'show_separator' => false,
-            'clustered_mode' => false
+            'clustered_mode' => false,
+            'row_mode' => true,
         );
 
         $familySituationRow[] = $this->factoryobj->formkitRadiobuttons('{#family_situation#}', $familyOptions, $radioButtonsParameters);
@@ -49,8 +50,6 @@ class ArticleRentaltenantproperties extends ArticleComponent
         ));
 
         return $this->factoryobj->getColumn($output);
-
-
     }
 
 }

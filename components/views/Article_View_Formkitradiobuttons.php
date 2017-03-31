@@ -26,6 +26,7 @@ class Article_View_Formkitradiobuttons extends ArticleComponent {
 
         /* this will show as many tags as possible on one row */
         $clustered_mode = $this->addParam('clustered_mode',$this->options,true);
+        $row_mode = $this->addParam('row_mode',$this->options,false);
 
         if(!$this->value){
             $this->value = $this->factoryobj->getSubmittedVariableByName($this->varname);
@@ -39,6 +40,8 @@ class Article_View_Formkitradiobuttons extends ArticleComponent {
 
         if($clustered_mode){
             $output = $this->cluster();
+        } else if ( $row_mode ) {
+            $output = $this->displayInRow();
         } else {
             $output = $this->sidebyside();
         }
@@ -56,6 +59,17 @@ class Article_View_Formkitradiobuttons extends ArticleComponent {
 
     }
 
+    public function displayInRow() {
+        $output[] = $this->factoryobj->getText(strtoupper($this->title), array('style' => 'form-field-textfield-onoff'));
+
+        foreach ($this->items as $key=>$item){
+            $output[] = $this->factoryobj->getRow(array(
+                $this->getItemRowBig($key,$item, 'onrow')
+            ));
+        }
+
+        return $output;
+    }
 
     public function sidebyside(){
         $output[] = $this->factoryobj->getText(strtoupper($this->title), array('style' => 'form-field-textfield-onoff'));
@@ -85,57 +99,13 @@ class Article_View_Formkitradiobuttons extends ArticleComponent {
         return $output;
     }
 
-    /*  "formkit-radiobutton-unselected": {
-    "font-size": "13",
-    "padding": "7 7 7 7",
-    "font-weight": "bold",
-    "border-radius": "8",
-    "border-color": "#eaeaea",
-    "border-width": "1",
-    "margin": "0 0 9 13",
-    "width": "auto",
-    "white-space": "nowrap"
-  },
-  "formkit-radiobutton-selected": {
-    "font-size": "13",
-    "padding": "7 7 7 7",
-    "font-weight": "bold",
-    "border-radius": "8",
-    "background-color": "#4cd864",
-    "color": "#ffffff",
-    "margin": "0 0 9 13",
-    "width": "auto",
-    "white-space": "nowrap"
-  },
-*/
-
-    public function getItemRowBig($key,$title) {
-/*        $selectstate['font-size'] = 13;
-        $selectstate['padding'] = '7 7 7 7';
-        $selectstate['font-weight'] = 'bold';
-        $selectstate['border-radius'] = 8;
-        $selectstate['border-color'] = $this->factoryobj->color_topbar;
-        $selectstate['border-width'] = 2;
-        $selectstate['margin'] = '0 0 9 13';
-        $selectstate['width'] = '50%';
-        $selectstate['whitespace'] = 'nowrap';
-        $selectstate['variable'] = $this->variable;
-        $selectstate['allow_unselect'] = 1;
-        $selectstate['variable_value'] = $key;
-        $selectstate['animation'] = 'fade';
-        $selectstate['active'] = 1;
-
-        $unselectstate = $selectstate;
-        $unselectstate['background-color'] = $this->factoryobj->color_topbar;
-        $unselectstate['selected_state'] = $selectstate;
-        $unselectstate['active'] = 0;*/
-
+    public function getItemRowBig($key,$title, $class = 'big') {
         if($this->value == $key){
-            $selectstate = array('style' => 'formkit-radiobutton-selected-big','active' => '1','variable_value' => $key,'allow_unselect' => 1,'animation' => 'fade');
-            return $this->factoryobj->getText($title,array('variable'=> $this->variable,'allow_unselect' => 1,'style' => 'formkit-radiobutton-unselected-big','variable_value' => $key,'selected_state' => $selectstate));
+            $selectstate = array('style' => 'formkit-radiobutton-selected-' . $class,'active' => '1','variable_value' => $key,'allow_unselect' => 1,'animation' => 'fade');
+            return $this->factoryobj->getText($title,array('variable'=> $this->variable,'allow_unselect' => 1,'style' => 'formkit-radiobutton-unselected-' . $class,'variable_value' => $key,'selected_state' => $selectstate));
         } else {
-            $selectstate = array('style' => 'formkit-radiobutton-selected-big','variable_value' => $key,'allow_unselect' => 1,'animation' => 'fade');
-            return $this->factoryobj->getText($title,array('variable'=> $this->variable,'allow_unselect' => 1,'style' => 'formkit-radiobutton-unselected-big','variable_value' => $key,'selected_state' => $selectstate));
+            $selectstate = array('style' => 'formkit-radiobutton-selected-' . $class,'variable_value' => $key,'allow_unselect' => 1,'animation' => 'fade');
+            return $this->factoryobj->getText($title,array('variable'=> $this->variable,'allow_unselect' => 1,'style' => 'formkit-radiobutton-unselected-' . $class,'variable_value' => $key,'selected_state' => $selectstate));
         }
     }
 
@@ -182,6 +152,5 @@ class Article_View_Formkitradiobuttons extends ArticleComponent {
         return $output;
 
     }
-
 
 }

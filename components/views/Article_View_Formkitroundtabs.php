@@ -26,7 +26,7 @@ class Article_View_Formkitroundtabs extends ArticleComponent {
             'color' => $this->factoryobj->colors['top_bar_text_color'],
             'text-align' => 'center',
             'border-radius' => '20',
-            'height' => '40',
+            'vertical-align' => 'middle',
             'font-size' => $fontsize
         );
 
@@ -49,8 +49,6 @@ class Article_View_Formkitroundtabs extends ArticleComponent {
 
             if(!$this->tabIsActive( 0, $tab_num )){
             }
-
-
 
             $btn1 = $this->factoryobj->getText($tab_title, $btn_params);
             $btn2 = array();
@@ -125,8 +123,6 @@ class Article_View_Formkitroundtabs extends ArticleComponent {
             $width = round($this->factoryobj->screen_width/6,0) - 49;
             $fontsize = '10';
         }
-
-
 
         return array(
             'width' => $width,

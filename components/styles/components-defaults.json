@@ -1,5 +1,4 @@
 {
-
   "datepicker": {
     "font-size": "14",
     "font-style": "normal",
@@ -9,23 +8,21 @@
     "font-ios": "RobotoRegular",
     "font-android": "Roboto"
   },
-
   "list_container": {
     "background-color": "#99ffffff",
     "color": "#000000",
     "height": "95",
     "vertical-align": "middle",
-    "text-align":"center"
+    "text-align": "center"
   },
-
-  "propertydetail-shadowbox-indent":{
+  "propertydetail-shadowbox-indent": {
     "background-color": "#ffffff",
     "padding": "8 0 0 0",
-    "margin" : "20 20 5 20",
+    "margin": "20 20 5 20",
     "border-radius": "3",
-    "shadow-color" : "#33000000",
-    "shadow-radius" : "2",
-    "shadow-offset" : "0 1"
+    "shadow-color": "#33000000",
+    "shadow-radius": "2",
+    "shadow-offset": "0 1"
   },
   "round_image_imate_stacked": {
     "crop": "round",
@@ -67,7 +64,6 @@
     "width": "auto",
     "white-space": "nowrap"
   },
-
   "formkit-radiobutton-unselected-big": {
     "font-size": "13",
     "padding": "7 7 7 7",
@@ -90,7 +86,28 @@
     "width": "45%",
     "white-space": "nowrap"
   },
-
+  "formkit-radiobutton-selected-onrow": {
+    "font-size": "13",
+    "padding": "7 7 7 7",
+    "font-weight": "bold",
+    "border-radius": "8",
+    "background-color": "#4cd864",
+    "color": "#ffffff",
+    "margin": "0 13 9 13",
+    "width": "100%",
+    "white-space": "nowrap"
+  },
+  "formkit-radiobutton-unselected-onrow": {
+    "font-size": "13",
+    "padding": "7 7 7 7",
+    "font-weight": "bold",
+    "border-radius": "8",
+    "border-color": "#eaeaea",
+    "border-width": "1",
+    "margin": "0 13 9 13",
+    "width": "100%",
+    "white-space": "nowrap"
+  },
   "round_image_stacked_text": {
     "crop": "round",
     "margin": "5 -38 5 5",
@@ -321,7 +338,6 @@
     "vertical-align": "middle",
     "margin": "5 40 0 40"
   },
-
   "google_button_style": {
     "background-color": "#df4a32",
     "text-align": "center",
@@ -330,7 +346,6 @@
     "vertical-align": "middle",
     "margin": "5 40 0 40"
   },
-
   "instagram_button_style": {
     "background-color": "#ffffff",
     "text-align": "center",
@@ -376,6 +391,17 @@
     "text-align": "center",
     "width": "30",
     "height": "30"
+  },
+  "general_textfield": {
+    "font-size": "12",
+    "font-style": "normal",
+    "background-color": "#ffffff",
+    "text-align": "center",
+    "color": "#000000",
+    "border-radius": "4",
+    "vertical-align": "middle",
+    "padding": "9 4 9 4",
+    "margin": "5 40 5 40"
   },
   "general-button": {
     "font-size": "14",
