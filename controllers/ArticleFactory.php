@@ -100,6 +100,7 @@ class ArticleFactory {
     to do an update of its view */
     public $no_output = false;
     public $bottom_menu_id;
+    public $bottom_notifications;
     public $click_parameters_saved;
     public $model_name;
 
@@ -108,6 +109,7 @@ class ArticleFactory {
     public $click_cache;
     public $recycleable_objects;
     public $incoming_recycleable_objects;
+    public $chat_msgcount = false;
 
     /* gets called when object is created & fed with initial values */
     public function playInit() {
@@ -133,6 +135,22 @@ class ArticleFactory {
         }
 
         $this->session_storage = Appcaching::getGlobalCache($this->playid.$this->userid.'playcache');
+        $this->updateChatCount();
+    }
+
+    private function updateChatCount(){
+
+        $conf = json_decode($this->appinfo->visual_config_params);
+
+        if(isset($conf->bottom_notifications) AND $conf->bottom_notifications){
+            Yii::import('application.modules.aechat.models.*');
+
+            $chat = new Aechat();
+            $chat->play_id = $this->playid;
+            $chat->gid = $this->gid;
+            $chat->game_id = $this->gid;
+            $this->chat_msgcount = $chat->getUsersUnreadCount();
+        }
 
     }
 
@@ -618,9 +636,16 @@ class ArticleFactory {
         }
 
         if($this->incoming_recycleable_objects){
-            foreach($this->incoming_recycleable_objects as $key=>$value)
-                if(isset($this->childobj->$key)){
+            foreach($this->incoming_recycleable_objects as $key=>$value){
+                if(isset($this->childobj->$key)) {
                     $this->childobj->$key = $value;
+                }
+            }
+            
+            foreach($this->childobj->global_recyclable as $key=>$value){
+                if(isset($this->childobj->$key)) {
+                    $this->childobj->$key = $value;
+                }
             }
         }
 
@@ -654,7 +679,6 @@ class ArticleFactory {
         }
     }
 
-
     public function loadVariables(){
         if(empty($this->vars)) {
             $vars = Aevariable::model()->findAllByAttributes(array('game_id' => $this->gid));
@@ -667,7 +691,6 @@ class ArticleFactory {
     }
 
     private function getViews(){
-
 
         /* preloading views */
 
@@ -748,9 +771,37 @@ class ArticleFactory {
             }
         }
 
+        $output = $this->bottomNotifications($output);
         $output = $this->bottomMenu($output);
+
         return $output;
     }
+
+
+
+    private function bottomNotifications($output,$key=1){
+
+        if($this->chat_msgcount === false OR $this->chat_msgcount == 0){
+            return $output;
+        }
+
+        if(!is_object($output)){
+            $output = new stdClass();
+        }
+
+        $bottom_notifications[] = $this->childobj->getBottomNotifications($this->chat_msgcount);
+
+        if(!isset($output->footer)){
+            $output->footer = $bottom_notifications;
+        } else {
+            $output->footer = array_merge($output->footer,$bottom_notifications);
+        }
+
+        //$output = $this->addTabJson($output,$key);
+
+        return $output;
+    }
+
 
     private function bottomMenu($output,$key=1){
         /* bottom menu which is created on article controllers init stage */
@@ -759,12 +810,12 @@ class ArticleFactory {
                 $output = new stdClass();
             }
 
-            $this->bottom_menu = $this->childobj->getBottomMenu();
+            $bottom_menu = $this->childobj->getBottomMenu();
 
             if(!isset($output->footer)){
-                $output->footer[] = $this->bottom_menu;
+                $output->footer = $bottom_menu;
             } else {
-                $output->footer = array_merge($output->footer,$this->bottom_menu);
+                $output->footer = array_merge($output->footer,$bottom_menu);
             }
         }
 
@@ -793,7 +844,7 @@ class ArticleFactory {
 
                 if($this->validateTabFormat($tabcontent)){
                     $tabcontent = $this->bottomMenu($tabcontent,$key);
-
+                    $tabcontent = $this->bottomNotifications($tabcontent,$key);
                     $output[$tabname] = (object)$tabcontent;
                 } else {
                     $tabcontent = new stdClass();
@@ -880,6 +931,10 @@ class ArticleFactory {
     }
 
 
+    private function addNotificationsJson($tabcontent,$num){
+
+    }
+
     /* rewrite the tab content to include the tab menu either in header, footer or just in the variable */
     private function addTabJson($tabcontent,$num){
         $menu = $this->tabMenu($num);
@@ -889,8 +944,6 @@ class ArticleFactory {
         }
 
         /* to get them out in right order */
-
-
         $output = $this->normaliseView($tabcontent);
 
         if($this->childobj->tabmode == 'top'){

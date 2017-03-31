@@ -74,7 +74,7 @@ class Article_View_Formkittabs extends ArticleComponent {
         }
 
         if(isset($col)){
-            $row = $this->factoryobj->getRow($col);
+            $row = $this->factoryobj->getRow($col,array('bakcground-color' => $this->factoryobj->color_topbar));
             return $row;
         }
     }
