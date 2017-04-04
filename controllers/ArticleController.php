@@ -98,6 +98,9 @@ class ArticleController {
 
     public $permanames;
 
+    /* actual layout code, often redeclared in controllers */
+    public $data;
+
     /* global used to keep track of unread count between actions */
     public $msgcount;
 
@@ -540,6 +543,74 @@ class ArticleController {
 
     }
 
+    public function askMonitorRegion($region){
+        if($region){
+            if($this->dialogPointer($region)){
+                $action = new stdClass();
+                $action->action = 'monitor-region';
+                $action->region = new stdClass();
+                $action->monitor_inside_beacons = 1;
+                $action->region->beacon_id = $this->getConfigParam('monitor_region');
+                //$this->data->onload[] = $action;
+                $this->sessionSet('region-monitoring-started',true);
+            }
+
+            $errors = json_decode($this->getSavedVariable('location_errors'),true);
+
+            if(isset($errors['bluetooth']) AND $errors['bluetooth']){
+                $alert = $this->getAlertBox('{#we_recommend_turning_bluetooth_on#}','error-bluetooth',true);
+
+                if($alert){
+                    $this->data->scroll[] = $alert;
+                }
+            }
+        }
+    }
+
+    public function askLocation(){
+        $pointer = 'location-';
+        if($this->dialogPointer($pointer)){
+            $this->data->onload[] = $this->getOnclick('location');
+        }
+    }
+
+    public function askPushPermission(){
+
+        if($this->getSavedVariable('system_source') == 'client_iphone'){
+            $pointer = 'pushpermission-';
+
+            if($this->dialogPointer($pointer)){
+                $pusher = $this->getOnclick('push-permission');
+                $this->data->onload[] = $pusher;
+            }
+        }
+    }
+
+    private function dialogPointer($key){
+        $key = 'pointer-'.$key;
+        $pointer = $this->sessionGet($key);
+
+        if(!$pointer){
+            $this->sessionSet($key.'-tries',1);
+            $this->sessionSet($key,time());
+            return true;
+        }
+
+        $tries = $this->sessionGet($key.'-tries');
+        $this->sessionSet($key.'-tries',$tries+1);
+
+        if($tries < 3){
+            $this->sessionSet($key,time());
+            return true;
+        }
+
+        if($pointer+600 < time()){
+            $this->sessionSet($key,time());
+            return true;
+        }
+
+        return false;
+    }
     
     public function getSettingsTitle($title, $columnparams = false, $show_border = true){
         $output[] = $this->getText(strtoupper($title),array('style' => 'form-field-section-title'));
