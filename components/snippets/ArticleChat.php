@@ -609,7 +609,7 @@ class ArticleChat extends ArticleComponent {
 
     private function saveChatMsg(){
 
-        if ( !isset($this->factoryobj->menuid) OR empty($this->factoryobj->menuid) ) {
+        if ( !isset($this->factoryobj->menuid) OR $this->factoryobj->menuid != 'submit-msg' ) {
             return false;
         }
 
