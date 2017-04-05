@@ -119,9 +119,14 @@ class ArticleFactory {
         }
 
         $this->playid = $this->playobj->id;
-        $this->userid = $this->playobj->user_id;
+
+        /* this is generally a bad idea, as this might result and incorrect userid in theory */
+        if(!$this->userid){
+            $this->userid = $this->playobj->user_id;
+        }
 
         $this->loadVariables();
+
 
         $this->articlemenuobj = new ArticleMenuComponents($this);
         $this->articlemenuobj->imagesobj = $this->imagesobj;
