@@ -1015,6 +1015,7 @@ class ArticleController {
         $validator->checkMX = true;
 
         if($email) {
+            $email = rtrim( $email );
             if ($validator->validateValue($email)) {
                 return 1;
             } else {
@@ -1528,7 +1529,7 @@ class ArticleController {
         } else {
             $var = $this->getSubmitVariable($id) ? $this->getSubmitVariable($id) : $this->getVariable($id);
             $column_data = $this->getColumn(array(
-                $this->getFieldtext($var,  $textfieldparams ),
+                $this->getFieldtext(rtrim($var),  $textfieldparams),
             ), array( 'style' => $class,'submit_menu_id' => $submit_menu_id ));
         }
 
