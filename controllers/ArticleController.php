@@ -768,7 +768,7 @@ class ArticleController {
     }
 
     public function getConfigParam($param,$default=false){
-    
+
         if (isset($this->configobj->$param)) {
             return $this->configobj->$param;
         } elseif ($default) {
