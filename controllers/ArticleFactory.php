@@ -225,6 +225,7 @@ class ArticleFactory {
         $this->current_tab = $this->getParam('tabid',$this->submit) ? $this->getParam('tabid',$this->submit) : 1;
         $this->setCurrentMenuId();
         $vars = $this->getParam('variables',$this->submit);
+
         $this->actionobj = AeplayAction::model()->with('aetask')->findByPk($this->actionid);
         
 /*        if(!isset($this->actionobj->action_id)){
@@ -278,7 +279,6 @@ class ArticleFactory {
         $this->setScreenInfo();
 
         return true;
-
     }
 
     public function renderData($actiontype){
