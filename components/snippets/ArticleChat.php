@@ -506,7 +506,7 @@ class ArticleChat extends ArticleComponent {
                 $img_params = array('imgwidth' => 300, 'imgheight' => 300, 'width' => '96%', 'radius' => 4, 'margin' => '4 4 4 4', 'priority' => '9',
                     'tap_to_open' => 1,'tap_image' => '');
 
-                $image = $this->factoryobj->getImage($msg['attachment'],array('imgwidth' => '900','imgheight' => '900'));
+                $image = $this->factoryobj->getImage($msg['attachment'],array('imgwidth' => '900','imgheight' => '900','priority' => 9));
                 if(isset($image->content)){
                     $bigimage = $image->content;
                     $img_params['tap_image'] = $bigimage;
@@ -516,7 +516,8 @@ class ArticleChat extends ArticleComponent {
             }
 
             $column1 = $this->factoryobj->getColumn(array(
-                    $this->factoryobj->getImage($userInfo['profilepic'], array('defaultimage' => 'anonymous2.png', 'crop' => 'round') )
+                    $this->factoryobj->getImage($userInfo['profilepic'], array('defaultimage' => 'anonymous2.png', 'crop' => 'round',
+                        'priority' => 9,'imgwidth' => 300, 'imgheight' => 300) )
                 ), array( 'style' => 'chat-column-1' ));
             $column2 = $this->factoryobj->getColumn(array(
                     $this->factoryobj->getImage('arrow-left.png')
