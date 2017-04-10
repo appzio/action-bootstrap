@@ -582,7 +582,11 @@ class ArticleChat extends ArticleComponent {
                 break;
 
             case 'firstname';
-                $name = isset($vars['real_name']) ? $this->getFirstName($vars['real_name']) : '{#anonymous#}';
+                $name = isset($vars['real_name']) ? $this->getChatName($vars['real_name']) : '{#anonymous#}';
+                break;
+
+            case 'last_name';
+                $name = isset($vars['real_name']) ? $this->getChatName($vars['real_name'], 'last') : '{#anonymous#}';
                 break;
 
             case 'company':
@@ -684,8 +688,8 @@ class ArticleChat extends ArticleComponent {
             $notify = AeplayVariable::fetchWithName($this->other_user_play_id, 'notify', $this->gid);
 
             if ( $notify ) {
-                $notification_text = $this->getFirstName($msg['name']) . ': ' . $message_text;
-                $title = $this->factoryobj->localizationComponent->smartLocalize('{#message_from#} ') . $this->getFirstName($msg['name']);
+                $notification_text = $this->getChatName($msg['name']) . ': ' . $message_text;
+                $title = $this->factoryobj->localizationComponent->smartLocalize('{#message_from#} ') . $this->getChatName($msg['name']);
                 Aenotification::addUserNotification( $this->other_user_play_id, $title, $notification_text,0,$this->gid );
             }
 
@@ -709,16 +713,25 @@ class ArticleChat extends ArticleComponent {
 
     }
 
-    public function getFirstName($name){
-        if (!strstr($name, ' ')) {
-            return $name;
-        } elseif($name) {
-            $firstname = explode(' ', trim($name));
-            $firstname = $firstname[0];
-            return $firstname;
-        } else {
-            return 'Anonymous';
+    public function getChatName( $name, $type = 'first' ){
+        if ( empty($name) ) {
+            return '{#anonymous#}';
         }
+
+        if ( !strstr($name, ' ') ) {
+            return $name;
+        }
+
+        if ( $name ) {
+            $name_pieces = explode(' ', trim($name));
+
+            if ( $type == 'first' ) {
+                return $name_pieces[0];
+            } else if ( $type == 'last' AND isset($name_pieces[1]) ) {
+                return $name_pieces[1];
+            }
+
+        }        
     }
 
     private function handlePicPermission(){
