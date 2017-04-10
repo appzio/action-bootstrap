@@ -124,19 +124,7 @@ class ArticleChat extends ArticleComponent {
         }
 
         if($this->factoryobj->mobilechatobj->error_state == true){
-            $this->factoryobj->mobilechatobj->addChat($this->context,$this->context_key,$this->otheruser);
-
-            /* only one-on-one chats should be created automatically if they are missing */
-            /*
-                if(strstr($this->context_key,'-chat-')){
-                    $this->factoryobj->mobilechatobj->addChat($this->context,$this->context_key,$this->otheruser);
-                    if($this->factoryobj->mobilechatobj->error_state == true){
-                        return false;
-                    }
-                } else {
-                    return false;
-                }
-            */
+            $this->factoryobj->mobilechatobj->addChat($this->context,$this->context_key,$this->otheruser,'fromarticle');
         }
 
         /* we look for the user's playid using from the chat id */
@@ -235,6 +223,11 @@ class ArticleChat extends ArticleComponent {
     }
 
     public function disableChat($content){
+
+        if(isset($this->chat_info->blocked) AND $this->chat_info->blocked == 1){
+            $this->disable_chat = true;
+        }
+
         if($this->limit_monologue){
             $reverse = array_reverse($content);
             $count = 1;
@@ -622,6 +615,10 @@ class ArticleChat extends ArticleComponent {
             return false;
         }
 
+        if(isset($this->chat_info->blocked) AND $this->chat_info->blocked == 1){
+            return false;
+        }
+
         // Make sure all previously uploaded images are deleted
         // AeplayVariable::deleteWithName($this->custom_play_id,'chat_upload_temp',$this->gid);
 
@@ -680,20 +677,22 @@ class ArticleChat extends ArticleComponent {
         }
 
         if ( $this->other_user_play_id ) {
-            if($this->factoryobj->getConfigParam('save_match_when_chatting')){
-                $this->factoryobj->initMobileMatching( $this->other_user_play_id, true );
-                $this->factoryobj->mobilematchingobj->saveMatch();
+
+            if(isset($this->chat_info->blocked) AND $this->chat_info->blocked == 0){
+                if($this->factoryobj->getConfigParam('save_match_when_chatting')){
+                    $this->factoryobj->mobilematchingobj->saveMatch();
+                }
+
+                $notify = AeplayVariable::fetchWithName($this->other_user_play_id, 'notify', $this->gid);
+
+                if ( $notify ) {
+                    $notification_text = $this->getChatName($msg['name']) . ': ' . $message_text;
+                    $title = $this->factoryobj->localizationComponent->smartLocalize('{#message_from#} ') . $this->getChatName($msg['name']);
+                    Aenotification::addUserNotification( $this->other_user_play_id, $title, $notification_text,0,$this->gid );
+                }
+
+                $this->factoryobj->mobilematchingobj->addNotificationToBanner('msg');
             }
-
-            $notify = AeplayVariable::fetchWithName($this->other_user_play_id, 'notify', $this->gid);
-
-            if ( $notify ) {
-                $notification_text = $this->getChatName($msg['name']) . ': ' . $message_text;
-                $title = $this->factoryobj->localizationComponent->smartLocalize('{#message_from#} ') . $this->getChatName($msg['name']);
-                Aenotification::addUserNotification( $this->other_user_play_id, $title, $notification_text,0,$this->gid );
-            }
-
-            $this->factoryobj->mobilematchingobj->addNotificationToBanner('msg');
         }
 
         // Ditto related only
@@ -844,12 +843,19 @@ class ArticleChat extends ArticleComponent {
 
     private function getFooter(){
 
+        if(isset($this->chat_info->blocked) AND $this->chat_info->blocked == 1){
+            $output = array();
+            $output[] = $this->factoryobj->getText('{#this_chat_has_ended#}',array('style' => 'chat-msg-text-centered'));
+            $output[] = $this->factoryobj->getSpacer(10);
+            return $output;
+        }
+
         if($this->disable_chat === true){
             $output = array();
             $output[] = $this->factoryobj->getText('{#sorry_message_limit_reached#}',array('style' => 'chat-msg-text-centered'));
             return $output;
         }
-
+        
         $this->debug = false;
         $output = array();
 

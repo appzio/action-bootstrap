@@ -1086,6 +1086,7 @@ class ArticleController {
         $this->mobilematchingobj->gid = $this->gid;
         $this->mobilematchingobj->actionid = $this->actionid;
         $this->mobilematchingobj->uservars = $this->varcontent;
+        $this->mobilematchingobj->factoryInit($this);
         $this->mobilematchingobj->initMatching($otheruserid,true);
     }
 
@@ -1094,6 +1095,7 @@ class ArticleController {
         if(isset($this->mobilechatobj->current_chat_id) AND $this->mobilechatobj->current_chat_id){
             return true;
         }
+
         Yii::import('application.modules.aechat.models.*');
 
         $this->mobilechatobj = new Aechat();
