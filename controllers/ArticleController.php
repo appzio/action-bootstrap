@@ -551,7 +551,7 @@ class ArticleController {
                 $action->region = new stdClass();
                 $action->monitor_inside_beacons = 1;
                 $action->region->beacon_id = $this->getConfigParam('monitor_region');
-                //$this->data->onload[] = $action;
+                $this->data->onload[] = $action;
                 $this->sessionSet('region-monitoring-started',true);
             }
 
@@ -566,6 +566,19 @@ class ArticleController {
             }
         }
     }
+
+    public function askOtherAppInstalled($scheme,$variable_name){
+        if($scheme AND $variable_name){
+            if($this->dialogPointer($scheme)){
+                $checker = new stdClass();
+                $checker->action = 'check-scheme';
+                $checker->variable = $variable_name;
+                $checker->action_config = $scheme;
+                $this->data->onload[] = $checker;
+            }
+        }
+    }
+
 
     public function askLocation(){
         $pointer = 'location-';
