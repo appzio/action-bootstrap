@@ -18,7 +18,7 @@ class ArticleConfirmationdialog extends ArticleComponent
         $menuid = $this->addParam('menuid',$this->options,false);
 
         $col[] = $this->factoryobj->getText($text,array('color' => '#ffffff','height' => '50','text-align' => 'center'));
-        $row[] = $this->getButton('cancel','whtaver');
+        $row[] = $this->getButton('{#cancel#}','whtaver');
         $row[] = $this->factoryobj->getVerticalSpacer('30');
         $row[] = $this->getButton($button_yes,$menuid);
         $col[] = $this->factoryobj->getSpacer(50);
