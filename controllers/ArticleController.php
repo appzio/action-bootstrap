@@ -1086,7 +1086,7 @@ class ArticleController {
         $this->mobilematchingobj->gid = $this->gid;
         $this->mobilematchingobj->actionid = $this->actionid;
         $this->mobilematchingobj->uservars = $this->varcontent;
-        //$this->mobilematchingobj->factoryInit($this);
+        $this->mobilematchingobj->factoryInit($this);
         $this->mobilematchingobj->initMatching($otheruserid,true);
     }
 
