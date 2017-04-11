@@ -299,7 +299,7 @@ class ArticleChat extends ArticleComponent {
         }
 
         $userinfo = $this->getUserInfo($id);
-        $name = $userinfo['name'];
+        $name = ucfirst($userinfo['name']);
         $profilepic = $userinfo['profilepic'];
         $vars = $userinfo['vars'];
 
