@@ -26,6 +26,7 @@ class ArticleChat extends ArticleComponent {
     public $otheruser;
     public $save_match;
     public $notify;
+    public $use_server_time;
     
     public $pic_permission;
     public $strip_urls;
@@ -94,6 +95,7 @@ class ArticleChat extends ArticleComponent {
         $firstname_only = $this->addParam('firstname_only',$this->options,false);
         $this->hide_time = $this->addParam('hide_time',$this->options,false);
         $this->notify = $this->addParam('notify',$this->options,false);
+        $this->use_server_time = $this->addParam('use_server_time',$this->options,false);
 
         $this->pic_permission = $this->addParam('pic_permission',$this->options,false);
         $this->strip_urls = $this->addParam('strip_urls',$this->options,false);
@@ -646,7 +648,7 @@ class ArticleChat extends ArticleComponent {
         }
 
         $new['name'] = $username;
-        $new['date'] = Helper::getCurrentTime();
+        $new['date'] = ( $this->use_server_time ? time() : Helper::getCurrentTime() );
         $new['profilepic'] = $this->factoryobj->getImageFileName($pic);
         $new['msg'] = $msg['66666660'];
         $new['user'] = $this->playid;
@@ -667,7 +669,7 @@ class ArticleChat extends ArticleComponent {
         $msg = end($this->chat_content['msgs']);
         $message_text = $msg['msg'];
 
-        $current_time = Helper::getCurrentTime();
+        $current_time = ( $this->use_server_time ? time() : Helper::getCurrentTime() );
         $time = date('Y-m-d H:i:s', $current_time);
 
         $message_id = $this->factoryobj->mobilechatobj->addMessage( $message_text, $time );
