@@ -690,7 +690,7 @@ class ArticleChat extends ArticleComponent {
                 if ( $notify ) {
                     $notification_text = $this->getChatName($msg['name']) . ': ' . $message_text;
                     $title = $this->factoryobj->localizationComponent->smartLocalize('{#message_from#} ') . $this->getChatName($msg['name']);
-                    Aenotification::addUserNotification( $this->other_user_play_id, $title, $notification_text,0,$this->gid );
+                    Aenotification::addUserNotification( $this->other_user_play_id, $title, $notification_text, 1, $this->gid );
                 }
 
                 $this->factoryobj->mobilematchingobj->addNotificationToBanner('msg');
