@@ -1562,6 +1562,53 @@ class ArticleController {
         return $output;
     }
 
+    public function getClickableField($image='icon_email.png', $id, $fieldname, $action_id, $error=false) {
+
+        $column_image = $this->getColumn(array(
+            $this->getImage( $image )
+        ), array( 'style' => 'field-icon-column-left' ));
+
+        $var = $this->getSubmitVariable($id) ? $this->getSubmitVariable($id) : $this->getVariable($id);
+        $label = ( $var ? $var : $fieldname );
+
+        $column_data = $this->getColumn(array(
+            $this->getText($label, array(
+                'style' => 'register_field',
+                'id' => $id,
+                'variable' => $id,
+            )),
+            $this->getFieldtext($var, array(
+                'variable' => $id,
+                'width' => 1,
+                'height' => 1,
+                'opacity' => 0
+            )),
+        ), array(
+            'style' => ( $error ? 'field-icon-column-right-error' : 'field-icon-column-right' ),
+        ));
+
+        $onclick = new StdClass();
+        $onclick->action = 'open-action';
+        $onclick->id = 'open-helper-popup';
+        $onclick->sync_open = 1;
+        $onclick->open_popup = true;
+        $onclick->action_config = $action_id;
+
+        $output = $this->getRow(array(
+            $column_image, $column_data
+        ), array(
+            'style' => ( $error ? 'field-with-icon-error' : 'field-with-icon' ),
+            'onclick' => $onclick,
+        ));
+
+        if ( $error ) {
+            $err = $this->getText($error,array( 'style' => 'register-text-step-error'));
+            $output = $this->getColumn(array($output,$err));
+        }
+
+        return $output;
+    }
+
     public function controlRefreshAction(){
         $onload['action'] = 'submit-form-content';
         return $onload;

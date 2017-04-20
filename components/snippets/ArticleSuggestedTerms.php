@@ -17,6 +17,7 @@ class ArticleSuggestedTerms {
         $key = strtolower($key);
 
         foreach($words AS $word){
+            $original_word = $word;
             $word = strtolower($word);
             $len = strlen($key);
             $pointerlength = $len+1;
@@ -25,7 +26,7 @@ class ArticleSuggestedTerms {
             if ($loosematch) {
                 if(strstr($word,$key)){
                     if(!isset($output[$pointer]) OR count($output[$pointer]) < $limit){
-                        $output[] = $word;
+                        $output[] = $original_word;
                         //$output[$pointer][] = $word;
                     }
                 }
@@ -34,7 +35,7 @@ class ArticleSuggestedTerms {
                 if($wordpart == $key){
                     if(!isset($output[$pointer]) OR count($output[$pointer]) < $limit) {
                         //$output[$pointer][] = $word;
-                        $output[] = $word;
+                        $output[] = $original_word;
                     }
                 }
             }
