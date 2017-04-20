@@ -680,7 +680,9 @@ class ArticleChat extends ArticleComponent {
 
         if ( $this->other_user_play_id ) {
 
-            if(isset($this->chat_info->blocked) AND $this->chat_info->blocked == 0){
+            $blocked = isset($this->chat_info->blocked) ? $this->chat_info->blocked : 0;
+
+            if(!$blocked){
                 if($this->factoryobj->getConfigParam('save_match_when_chatting')){
                     $this->factoryobj->mobilematchingobj->saveMatch();
                 }
