@@ -56,9 +56,9 @@ class Article_View_Formkittags extends ArticleComponent {
         }
 
         if ( $this->show_separator ) {
-            if($error){
+            if($this->error){
                 $output[] = $this->factoryobj->getText('',array('style' => 'form-field-separator-error'));
-                $output[] = $this->factoryobj->getText($error,array('style' => 'formkit-error'));
+                $output[] = $this->factoryobj->getText($this->error,array('style' => 'formkit-error'));
             } else {
                 $output[] = $this->factoryobj->getText('',array('style' => 'form-field-separator'));
             }
