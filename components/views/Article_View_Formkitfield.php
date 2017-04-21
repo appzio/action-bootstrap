@@ -14,10 +14,11 @@ class Article_View_Formkitfield extends ArticleComponent {
         $error = $this->addParam('error',$this->options,false);
         $hint = $this->addParam('hint',$this->options,false);
         $type = $this->addParam('type',$this->options,false);
-        $param = $this->factoryobj->getVariableId($variable);
+        $popup_action_id = $this->addParam('popup_action_id',$this->options,false);
+        $var_id = $this->factoryobj->getVariableId($variable);
 
-        if(!$param){
-            $param = $variable;
+        if ( !$var_id ) {
+            $var_id = $variable;
         }
 
         if(!$this->value){
@@ -43,7 +44,7 @@ class Article_View_Formkitfield extends ArticleComponent {
         }
 
         $args = array(
-            'variable' => $param,
+            'variable' => $var_id,
             'hint' => $hint,
             'style' => $style
         );
@@ -51,8 +52,35 @@ class Article_View_Formkitfield extends ArticleComponent {
         if ( $type ) {
             $args['input_type'] = $type;
         }
-        
-        $col[] = $this->factoryobj->getFieldtext($this->value, $args);
+            
+        if ( $popup_action_id ) {
+
+            $var = $this->factoryobj->getSubmitVariable($var_id) ? $this->factoryobj->getSubmitVariable($var_id) : $this->factoryobj->getVariable($var_id);
+            $label = ( $var ? $var : '{#select#} ' . strtolower($title) );
+
+            $onclick = new StdClass();
+            $onclick->action = 'open-action';
+            $onclick->id = 'open-helper-popup';
+            $onclick->sync_open = 1;
+            $onclick->open_popup = true;
+            $onclick->action_config = $popup_action_id;
+
+            $col[] = $this->factoryobj->getText($label, array(
+                'variable' => $var_id,
+                'style' => $style,
+                'onclick' => $onclick,
+            ));
+
+            $col[] = $this->factoryobj->getFieldtext($var, array(
+                'variable' => $var_id,
+                'width' => 1,
+                'height' => 1,
+                'opacity' => 0
+            ));
+
+        } else {
+            $col[] = $this->factoryobj->getFieldtext($this->value, $args);
+        }
 
         $col[] = $this->factoryobj->getText('',array('style' => $style_separator));
 

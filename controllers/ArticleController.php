@@ -1241,12 +1241,13 @@ class ArticleController {
         return $this->returnComponent('formkitcheckbox','field','',$params);
     }
 
-    public function formkitField($variable,$title,$hint,$type=false,$error=false,$value=false){
+    public function formkitField($variable,$title,$hint,$type=false,$error=false,$value=false,$popup_action_id=false){
         $params['title'] = $title;
         $params['hint'] = $hint;
         $params['variable'] = $variable;
         $params['type'] = $type;
         $params['error'] = $error;
+        $params['popup_action_id'] = $popup_action_id;
         return $this->returnComponent('formkitfield','field',$value,$params);
     }
 
