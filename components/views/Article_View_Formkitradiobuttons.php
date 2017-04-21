@@ -37,7 +37,6 @@ class Article_View_Formkitradiobuttons extends ArticleComponent {
 
         $this->variable = $this->factoryobj->getVariableId($this->varname) ? $this->factoryobj->getVariableId($this->varname) : $this->varname;
 
-
         if($clustered_mode){
             $output = $this->cluster();
         } else if ( $row_mode ) {

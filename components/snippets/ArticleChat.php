@@ -976,7 +976,7 @@ class ArticleChat extends ArticleComponent {
     public function getUsername() {
 
         $options = array(
-            'real_name', 'name', 'screen_name'
+            'real_name', 'name', 'screen_name', 'surname'
         );
 
         foreach ($options as $option) {
