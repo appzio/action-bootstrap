@@ -141,7 +141,7 @@ class Article_View_Formkittags extends ArticleComponent {
         foreach ($this->items as $key=>$item){
             /* 27 is the width with paddings and margins */
             $counter = $counter + 35;
-            $counter = $counter + (strlen($item) * $field_offset);
+            $counter = $counter + (strlen($item) * $this->field_offset);
 
             if($counter > $this->factoryobj->screen_width){
                 $row[] = $this->factoryobj->getVerticalSpacer('');
@@ -150,7 +150,7 @@ class Article_View_Formkittags extends ArticleComponent {
                 $row[] = $this->getItemRow($key,$item);
                 $counter=0;
                 $counter = $counter + 35;
-                $counter = $counter + (strlen($item) * $field_offset);
+                $counter = $counter + (strlen($item) * $this->field_offset);
             } else {
                 $row[] = $this->getItemRow($key,$item);
             }
