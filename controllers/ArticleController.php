@@ -1024,19 +1024,26 @@ class ArticleController {
     }
 
     public function validateEmail($email){
+
+        if ( empty($email) ) {
+            return false;
+        }
+
         $validator = new CEmailValidator;
         $validator->checkMX = true;
 
-        if($email) {
-            $email = rtrim( $email );
-            if ($validator->validateValue($email)) {
-                return 1;
-            } else {
-                return false;
-            }
-        } else {
+        $email = rtrim( $email );
+
+        // Email must contain only lowercase letters
+        if ( preg_match('/[A-Z]/', $email) ) {
             return false;
         }
+
+        if ($validator->validateValue($email)) {
+            return true;
+        }
+
+        return false;
     }
 
     public function validateWebsite($url){
