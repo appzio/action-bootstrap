@@ -337,6 +337,15 @@ class ArticleChat extends ArticleComponent {
         $textparams['font-size'] = 15;
         $textparams['text-align'] = 'left';
 
+        if(isset($vars['private_photos']) AND $vars['private_photos']){
+            $test = AeplayKeyvaluestorage::model()->findByAttributes(array('play_id' => $id, 'key' => 'two-way-matches','value' => $this->playid));
+
+            if(!is_object($test)){
+                $profilepic = 'sila-private-photos.png';
+            }
+        }
+
+
         $columns[] = $this->factoryobj->getImage($profilepic, $imageparams);
         $columns[] = $this->factoryobj->getText($name, $textparams);
 
