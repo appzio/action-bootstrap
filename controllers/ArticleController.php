@@ -815,6 +815,7 @@ class ArticleController {
         $onclick[] = $this->getOnclick('submit',false,$params);
         $onclick[] = $this->getOnclick('tab'.$tabnumber,$back_button,$tab_change_parameters);
 
+
         return $onclick;
     }
 
@@ -876,6 +877,11 @@ class ArticleController {
             case 'tab4':
                 $onclick->action = 'open-tab';
                 $onclick->action_config = '4';
+                break;
+
+            case 'tab5':
+                $onclick->action = 'open-tab';
+                $onclick->action_config = '5';
                 break;
 
             case 'complete-action':
