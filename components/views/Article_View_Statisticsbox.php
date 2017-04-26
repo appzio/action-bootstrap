@@ -25,7 +25,7 @@ class Article_View_Statisticsbox extends ArticleComponent {
             'text-align' => 'center','padding' => '0 20 0 20',
             'background-color' => $this->factoryobj->color_topbar,
             'color' => $this->factoryobj->colors['top_bar_text_color'],
-            'font-size' => '78'
+            'font-size' => '25'
              ));
 
         $title = $this->addParam('title',$this->options,false);
