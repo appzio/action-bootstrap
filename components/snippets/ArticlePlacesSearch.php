@@ -192,6 +192,28 @@ class ArticlePlacesSearch {
 
                     break;
 
+                case 'autocomplete':
+                    if (!isset($parameters['location']))
+                    {
+                        throw new \Exception('You must specify a location before calling autocomplete().');
+                    }
+                    elseif (!isset($parameters['radius']))
+                    {
+                        throw new \Exception('You must specify a radius.');
+                    }
+                    elseif (empty($parameters['input'])
+                        && empty($parameters['types']))
+                    {
+                        throw new \Exception('You much specify at least one of the following: "input", "types".');
+                    }
+
+                    if (isset($parameters['rankby']))
+                    {
+                        unset($this->rankby, $parameters['rankby']);
+                    }
+
+                    break;
+
                 case 'details':
                     if (!(isset($parameters['reference'])
                         ^ isset($parameters['placeid'])))
@@ -337,7 +359,6 @@ class ArticlePlacesSearch {
     }
 
     public function getResults( $url ) {
-
         $curl = curl_init();
 
         $options = array(
