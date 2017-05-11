@@ -21,7 +21,7 @@ class ArticleSuggestedTerms {
             $word = strtolower($word);
             $len = strlen($key);
             $pointerlength = $len+1;
-            $pointer = substr($word,0,$pointerlength);
+            $pointer = mb_substr($word,0,$pointerlength);
 
             if ($loosematch) {
                 if(strstr($word,$key)){
@@ -31,7 +31,7 @@ class ArticleSuggestedTerms {
                     }
                 }
             } else {
-                $wordpart = substr($word,0,$len);
+                $wordpart = mb_substr($word,0,$len);
                 if($wordpart == $key){
                     if(!isset($output[$pointer]) OR count($output[$pointer]) < $limit) {
                         //$output[$pointer][] = $word;

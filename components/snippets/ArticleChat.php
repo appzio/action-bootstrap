@@ -393,10 +393,10 @@ class ArticleChat extends ArticleComponent {
         }
 
         if($names){
-            $names = substr($names,0,-2);
+            $names = mb_substr($names,0,-2);
 
             if(strlen($names) > 35){
-                $names = substr($names,0,32) .'...';
+                $names = mb_substr($names,0,32) .'...';
             }
         }
 
