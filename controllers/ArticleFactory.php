@@ -484,12 +484,17 @@ class ArticleFactory {
 
     public function setColors(){
 
-        $cache = Appcaching::getActionCache($this->action_id,$this->playid,$this->gid,'tabcolors');
+        $cachename = $this->gid.'-colors';
+        $cached = Appcaching::getGlobalCache($cachename);
 
-        if($cache){
-            $this->color_topbar = $cache['background'];
-            $this->color_topbar_hilite = $cache['active'];
-            $this->colors = $cache['colors'];
+        if(isset($cached['time']) AND time() + 600 < $cached['time']){
+            $cached = array();
+        }
+
+        if(isset($cached['actions'][$this->action_id])){
+            $this->color_topbar = $cached['actions'][$this->action_id]['background'];
+            $this->color_topbar_hilite = $cached['actions'][$this->action_id]['active'];
+            $this->colors = $cached['actions'][$this->action_id]['colors'];
         } else {
             /* take the tab control colors from the action if not defined */
             $colors = Controller::getColors(false,false,$this->action_id);
@@ -511,9 +516,9 @@ class ArticleFactory {
             }
 
             $this->colors = $newcolors;
+            $cached['actions'][$this->action_id] = $newcolors;
 
-
-            Appcaching::setActionCache($this->action_id,$this->gid,'tabcolors',$colorarray);
+            Appcaching::setGlobalCache($cachename,$cached,600);
         }
     }
 
@@ -1039,7 +1044,12 @@ class ArticleFactory {
     /* these handle creating data that actions might need like assets, variables and menus */
 
     private function moduleAssets(){
-        $cached = Yii::app()->cache->get( $this->gid .'-modulefiles');
+        $cachename = $this->gid.$this->action_id.'-factory-modulefiles';
+        $cached = Appcaching::getGlobalCache($cachename);
+
+        if(time() + 300 < $cached){
+            return true;
+        }
 
         if($cached == true AND $this->caching == true){
             return true;
@@ -1048,15 +1058,23 @@ class ArticleFactory {
         $this->moduleMenus();
         $this->moduleVariables();
 
-        Yii::app()->cache->set( $this->gid .'-modulefiles',true);
+        Appcaching::setGlobalCache($cachename,time(),300);
         return true;
     }
 
 
     private function moduleVariables(){
 
+        $cachename = $this->gid.$this->action_id.'-factory-modulevars';
+        $cached = Appcaching::getGlobalCache($cachename);
+
+        if(time() + 400 < $cached){
+            return true;
+        }
+
         $sourcepath = Yii::getPathOfAlias('application.modules.aelogic.packages.action' .$this->class .'.sql');
         $sourcepath = $sourcepath .'/Variables.php';
+        Appcaching::setGlobalCache($cachename,time(),300);
 
         if(file_exists($sourcepath)){
 
@@ -1081,9 +1099,16 @@ class ArticleFactory {
 
 
     private function moduleMenus(){
+        $cachename = $this->gid.$this->action_id.'-factory-modulemenus';
+        $cached = Appcaching::getGlobalCache($cachename);
+
+        if(time() + 330 < $cached){
+            return true;
+        }
 
         $sourcepath = Yii::getPathOfAlias('application.modules.aelogic.packages.action' .$this->class .'.sql');
         $sourcepath = $sourcepath .'/Menus.php';
+        Appcaching::setGlobalCache($cachename,time(),300);
 
         if(file_exists($sourcepath)){
 
