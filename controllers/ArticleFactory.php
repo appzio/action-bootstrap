@@ -1066,7 +1066,10 @@ class ArticleFactory {
     }
 
 
+    /* deprecated. Variables are created on the fly when needed */
     private function moduleVariables(){
+
+        return true;
 
         $cachename = $this->gid.$this->action_id.'-factory-modulevars';
         $cached = Appcaching::getGlobalCache($cachename);
@@ -1077,7 +1080,7 @@ class ArticleFactory {
 
         $sourcepath = Yii::getPathOfAlias('application.modules.aelogic.packages.action' .$this->class .'.sql');
         $sourcepath = $sourcepath .'/Variables.php';
-        Appcaching::setGlobalCache($cachename,time(),300);
+        Appcaching::setGlobalCache($cachename,time(),400);
 
         if(file_exists($sourcepath)){
 
