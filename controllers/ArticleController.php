@@ -98,6 +98,8 @@ class ArticleController {
 
     public $permanames;
 
+    public $branch_id;
+
     /* actual layout code, often redeclared in controllers */
     public $data;
 
@@ -2055,7 +2057,7 @@ class ArticleController {
         $this->loadVariables();
         $this->loadVariableContent();
         $this->actionobj = AeplayAction::model()->with('aetask')->findByPk($this->actionid);
-        $this->configobj = json_decode($this->actionobj->aetask->config);
+        $this->configobj = json_decode($this->actionobj->config);
     }
 
     public function saveAction(){

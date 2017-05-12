@@ -110,6 +110,8 @@ class ArticleFactory {
     public $recycleable_objects;
     public $incoming_recycleable_objects;
     public $chat_msgcount = false;
+    public $branchdata;
+    public $branch_id;
 
     /* gets called when object is created & fed with initial values */
     public function playInit() {
@@ -226,17 +228,21 @@ class ArticleFactory {
         $this->setCurrentMenuId();
         $vars = $this->getParam('variables',$this->submit);
 
-        $this->actionobj = AeplayAction::model()->with('aetask')->findByPk($this->actionid);
-        
-/*        if(!isset($this->actionobj->action_id)){
+        $this->actionobj = (object)$this->actionobj;
+        $this->branch_id = $this->actionobj->levelid;
+        $this->action_id = $this->actionobj->taskid;
+        $this->actionid = $this->actionobj->playtaskid;
+
+        /*      if(!isset($this->actionobj->action_id)){
             return false;
         }*/
 
-        if(isset($this->actionobj->action_id)){
-            $this->action_id = $this->actionobj->action_id;
-            $this->branchobj = Aebranch::model()->findByPk($this->actionobj->aetask->branch_id);
+        if(isset($this->branchdata[$this->branch_id])){
+            $this->branchobj = (object)$this->branchdata[$this->branch_id];
+        } else {
+            $this->branchobj = Aebranch::model()->findByPk($this->branch_id);
         }
-
+        
         if(isset($this->branchobj->config)){
             $this->branchconfig = @json_decode($this->branchobj->config);
         }
@@ -491,13 +497,12 @@ class ArticleFactory {
             $cached = array();
         }
 
-        if(isset($cached['actions'][$this->action_id]) AND isset($cached['actions'][$this->action_id]['background'])
-        AND isset($cached['actions'][$this->action_id]['active']) AND isset($cached['actions'][$this->action_id]['colors'])
-        ){
+        if(isset($cached['actions'][$this->action_id]) AND isset($cached['actions'][$this->action_id]['background_color'])
+                AND isset($cached['actions'][$this->action_id]['active'])){
 
-            $this->color_topbar = $cached['actions'][$this->action_id]['background'];
+            $this->color_topbar = $cached['actions'][$this->action_id]['background_color'];
             $this->color_topbar_hilite = $cached['actions'][$this->action_id]['active'];
-            $this->colors = $cached['actions'][$this->action_id]['colors'];
+            $this->colors = $cached['actions'][$this->action_id];
         } else {
             /* take the tab control colors from the action if not defined */
             $colors = Controller::getColors(false,false,$this->action_id);
@@ -518,6 +523,8 @@ class ArticleFactory {
                 $newcolors[$key] = Helper::normalizeColor($col);
             }
 
+            $newcolors['active'] = $this->color_topbar_hilite;
+            $newcolors['background_color'] = $this->color_topbar;
             $this->colors = $newcolors;
             $cached['actions'][$this->action_id] = $newcolors;
 
