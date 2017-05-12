@@ -491,7 +491,10 @@ class ArticleFactory {
             $cached = array();
         }
 
-        if(isset($cached['actions'][$this->action_id])){
+        if(isset($cached['actions'][$this->action_id]) AND isset($cached['actions'][$this->action_id]['background'])
+        AND isset($cached['actions'][$this->action_id]['active']) AND isset($cached['actions'][$this->action_id]['colors'])
+        ){
+
             $this->color_topbar = $cached['actions'][$this->action_id]['background'];
             $this->color_topbar_hilite = $cached['actions'][$this->action_id]['active'];
             $this->colors = $cached['actions'][$this->action_id]['colors'];
