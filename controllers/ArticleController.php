@@ -2053,6 +2053,7 @@ class ArticleController {
         }
     }
 
+    /* reload all variable data */
     public function reloadData(){
         $this->loadVariables();
         $this->loadVariableContent();
@@ -2060,6 +2061,7 @@ class ArticleController {
         $this->configobj = json_decode($this->actionobj->config);
     }
 
+    /* saves action and reloads data */
     public function saveAction(){
         $action = Aeaction::model()->findByPk($this->action_id);
         $action->config = json_encode($this->configobj);
