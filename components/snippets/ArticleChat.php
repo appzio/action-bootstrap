@@ -585,7 +585,7 @@ class ArticleChat extends ArticleComponent {
                 $name = isset($vars['screen_name']) ? $vars['screen_name'] : '{#anonymous#}';
                 break;
 
-            case 'firstname';
+            case 'first_name';
                 $name = isset($vars['real_name']) ? $this->getChatName($vars['real_name']) : '{#anonymous#}';
                 break;
 
