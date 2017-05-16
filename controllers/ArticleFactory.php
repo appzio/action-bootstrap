@@ -113,6 +113,9 @@ class ArticleFactory {
     public $branchdata;
     public $branch_id;
 
+    /* the actual session is saved by api default controller, not here */
+    public $session_cache_out;
+
     /* gets called when object is created & fed with initial values */
     public function playInit() {
 
@@ -207,19 +210,24 @@ class ArticleFactory {
 
     }
 
-    public function sessionStorageSaver($data=false){
+    public function sessionStorageSaver($data=array()){
 
-        $data = $data ? $data : $this->childobj->to_session_storage;
-
-        if(!empty($data)){
-            if(is_array($this->session_storage)){
-                $cache = $data + $this->session_storage;
-            } else {
-                $cache = $data;
-            }
-
-            Appcaching::setGlobalCache($this->playid.$this->userid.'playcache',$cache);
+        if(isset($this->childobj->to_session_storage['reports_tab1'])){
+            //print_r($this->childobj->to_session_storage['reports_tab1']);die();
         }
+
+        if(is_array($this->session_storage)){
+            $cache = $data + $this->session_storage + $this->childobj->to_session_storage;
+        } else {
+            $cache = $data + $this->childobj->to_session_storage;
+        }
+
+        if(isset($this->childobj->to_session_storage['reports_tab1'])) {
+            //print_r($cache);die();
+        }
+
+        $this->session_cache_out = $cache;
+        
     }
 
     public function actionInit(){

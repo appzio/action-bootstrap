@@ -156,7 +156,7 @@ class ArticleController {
     public $click_parameters_to_save;
     public $click_parameters_saved;
 
-    public $to_session_storage;
+    public $to_session_storage = array();
     public $session_storage = array();
 
     public function __construct($obj){
