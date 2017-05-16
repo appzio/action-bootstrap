@@ -111,7 +111,8 @@ class ArticleController {
      */
 
     public $recycleable_objects = array();
-    public $global_recyclable = array('msgcount');
+    public $global_recycleable = array('msgcount');
+    public $recycleable_object_names = array();
 
     /* automatically created bottom menu gets put here. To disable it for
     some tab or view, you can simply set it empty (it gets created upon init) */

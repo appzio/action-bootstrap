@@ -364,18 +364,18 @@ class ArticleFactory {
             $this->no_output = $this->childobj->no_output;
         }
 
-        if($this->childobj->recycleable_objects){
+        if($this->childobj->recycleable_object_names){
 
-            foreach($this->childobj->recycleable_objects as $obj){
-                $obs[$obj] = $this->childobj->$obj;
+            foreach($this->childobj->recycleable_object_names as $name){
+                $obs[$name] = $this->childobj->$name;
             }
 
             if(isset($obs)){
                 $this->childobj->recycleable_objects = $obs;
+                $this->recycleable_objects = $obs;
             } else {
                 $this->childobj->recycleable_objects = array();
             }
-
         }
 
         return $op;
@@ -655,19 +655,6 @@ class ArticleFactory {
             $this->actionid = $this->getParam('actionid',$this->submit);
         }
 
-        if($this->incoming_recycleable_objects){
-            foreach($this->incoming_recycleable_objects as $key=>$value){
-                if(isset($this->childobj->$key)) {
-                    $this->childobj->$key = $value;
-                }
-            }
-            
-            foreach($this->childobj->global_recyclable as $key=>$value){
-                if(isset($this->childobj->$key)) {
-                    $this->childobj->$key = $value;
-                }
-            }
-        }
 
         /* if action init returns false, we will return ok right away
             its used for savers that bypass lot of the initing
@@ -681,6 +668,23 @@ class ArticleFactory {
         }
 
         $this->childobj = new $class($this);
+
+        /* objects coming from Apiaction with some object content */
+        if($this->incoming_recycleable_objects){
+
+            foreach($this->incoming_recycleable_objects as $key=>$value){
+                if(property_exists($this->childobj,$key)) {
+                    $this->childobj->$key = $value;
+                }
+            }
+
+            foreach($this->childobj->global_recycleable as $key=>$value){
+                if(property_exists($this->childobj,$key)) {
+                    $this->childobj->$key = $value;
+                }
+            }
+        }
+
         $this->moduleAssets();
 
         return true;
