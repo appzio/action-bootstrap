@@ -607,6 +607,8 @@ class ArticleController {
     }
 
     private function dialogPointer($key){
+
+
         $key = 'pointer-'.$key;
         $pointer = $this->sessionGet($key);
 
@@ -617,6 +619,7 @@ class ArticleController {
         }
 
         $tries = $this->sessionGet($key.'-tries');
+
         $this->sessionSet($key.'-tries',$tries+1);
 
         if($tries < 3){
@@ -970,14 +973,12 @@ class ArticleController {
     }
 
     public function sessionSet($key,$value){
-        $this->to_session_storage[$key] = $value;
+        $this->session_storage[$key] = $value;
     }
 
     public function sessionGet($key){
         if(isset($this->session_storage[$key])){
             return $this->session_storage[$key];
-        } elseif(isset($this->to_session_storage[$key])) {
-            return $this->to_session_storage[$key];
         } else {
             return false;
         }

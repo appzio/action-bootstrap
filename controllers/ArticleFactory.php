@@ -211,23 +211,7 @@ class ArticleFactory {
     }
 
     public function sessionStorageSaver($data=array()){
-
-        if(isset($this->childobj->to_session_storage['reports_tab1'])){
-            //print_r($this->childobj->to_session_storage['reports_tab1']);die();
-        }
-
-        if(is_array($this->session_storage)){
-            $cache = $data + $this->session_storage + $this->childobj->to_session_storage;
-        } else {
-            $cache = $data + $this->childobj->to_session_storage;
-        }
-
-        if(isset($this->childobj->to_session_storage['reports_tab1'])) {
-            //print_r($cache);die();
-        }
-
-        $this->session_cache_out = $cache;
-        
+        $this->session_storage = $this->session_storage+$data;
     }
 
     public function actionInit(){
@@ -320,9 +304,6 @@ class ArticleFactory {
 
         $op = $this->getViews();
 
-        /* save to session */
-        $this->sessionStorageSaver();
-
         /* output any errors to view */
         if(!empty($this->childobj->errorMsgs)){
             if(isset($op->scroll) AND is_array($op->scroll)){
@@ -385,6 +366,8 @@ class ArticleFactory {
                 $this->childobj->recycleable_objects = array();
             }
         }
+
+        $this->session_storage = $this->childobj->session_storage;
 
         return $op;
     }
