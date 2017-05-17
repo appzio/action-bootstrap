@@ -419,11 +419,15 @@ class ArticleController {
         $this->loginmodel->password = $this->getSavedVariable('password');
 
         if($this->getConfigParam('login_branch')){
-            $this->saveVariable('login_branch_id',$this->getConfigParam('login_branch'));
+            if($this->getConfigParam('login_branch') != $this->getSavedVariable('login_branch_id')){
+                $this->saveVariable('login_branch_id',$this->getConfigParam('login_branch'));
+            }
         }
 
         if($this->getConfigParam('register_branch')){
-            $this->saveVariable('register_branch_id',$this->getConfigParam('register_branch'));
+            if($this->getConfigParam('register_branch') != $this->getSavedVariable('register_branch_id')) {
+                $this->saveVariable('register_branch_id', $this->getConfigParam('register_branch'));
+            }
         }
 
     }
