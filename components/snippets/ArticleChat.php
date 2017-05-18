@@ -575,7 +575,8 @@ class ArticleChat extends ArticleComponent {
             $vars = AeplayVariable::getArrayOfPlayvariables($id);
             Appcaching::setGlobalCache($cachename,$vars,120);
         }
-        
+
+
         switch($this->name_mode){
             case 'invisible';
                 $name = '';
@@ -609,6 +610,14 @@ class ArticleChat extends ArticleComponent {
 
         $profilepic = isset($vars['profilepic']) ? $vars['profilepic'] : $profilepic;
 
+        if(isset($vars['private_photos']) AND $vars['private_photos']){
+            $test = AeplayKeyvaluestorage::model()->findByAttributes(array('play_id' => $id, 'key' => 'two-way-matches','value' => $this->playid));
+
+            if(!is_object($test)){
+                $profilepic = 'sila-private-photos.png';
+            }
+        }
+        
         return array(
             'profilepic' => $profilepic,
             'name'       => $name,
