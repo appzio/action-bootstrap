@@ -211,7 +211,7 @@ class ArticleFactory {
     }
 
     public function sessionStorageSaver($data=array()){
-        $this->session_storage = $this->session_storage+$data;
+        $this->session_storage = array_merge($this->session_storage,$data);
     }
 
     public function actionInit(){
