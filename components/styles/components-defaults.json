@@ -297,9 +297,8 @@
     "border-width": "1"
   },
   "field-icon-column-left": {
-    "width": "15%",
-    "height": "35",
-    "margin": "4 10 0 10"
+    "paddding": "10 10 10 10",
+    "height": "40"
   },
   "field-icon-column-right": {
     "width": "85%",
