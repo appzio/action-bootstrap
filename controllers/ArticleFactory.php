@@ -115,6 +115,7 @@ class ArticleFactory {
 
     /* the actual session is saved by api default controller, not here */
     public $session_cache_out;
+    public $userinfo;
 
     /* gets called when object is created & fed with initial values */
     public function playInit() {
@@ -146,6 +147,19 @@ class ArticleFactory {
 
         $this->session_storage = Appcaching::getGlobalCache($this->playid.$this->userid.'playcache');
         $this->updateChatCount();
+
+        if(isset($this->userinfo->fbtoken)){
+            $this->fbtoken = $this->userinfo->fbtoken;
+        } else {
+            $this->fbtoken = UserGroupsUseradmin::getFbToken($this->userid);
+        }
+
+        if(isset($this->params['fb_login'])){
+            $this->fblogin = filter_var($this->params['fb_login'],FILTER_VALIDATE_BOOLEAN);
+        } else {
+            $this->fblogin = false;
+        }
+
     }
 
     private function updateChatCount(){
@@ -264,14 +278,6 @@ class ArticleFactory {
 
         if(isset($_REQUEST['context'])){
             $this->context = $_REQUEST['context'];
-        }
-
-        $this->fbtoken = UserGroupsUseradmin::getFbToken($this->userid);
-
-        if(isset($this->params['fb_login'])){
-            $this->fblogin = filter_var($this->params['fb_login'],FILTER_VALIDATE_BOOLEAN);
-        } else {
-            $this->fblogin = false;
         }
 
         $this->setScreenInfo();
