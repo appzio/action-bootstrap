@@ -148,6 +148,8 @@ class ArticleFactory {
         $this->session_storage = Appcaching::getGlobalCache($this->playid.$this->userid.'playcache');
         $this->updateChatCount();
 
+        /* note: this has been changed from having client providing it every call,
+        which can potentially lead to out-of-sync issue in regards to facebook logged in status */
         if(isset($this->varcontent['fb_login'])){
             $this->fblogin = $this->varcontent['fb_login'];
         } else {
