@@ -83,10 +83,14 @@ class ArticleFactory {
     public $context = false;
 
     public $api_version;
+    public $build_version;
+    public $app_version;
 
     public $aspect_ratio;
     public $screen_width;
     public $screen_height;
+
+    public $deviceparams;
 
     public $appinfo;
 
@@ -116,6 +120,7 @@ class ArticleFactory {
     /* the actual session is saved by api default controller, not here */
     public $session_cache_out;
     public $userinfo;
+
 
     /* gets called when object is created & fed with initial values */
     public function playInit() {
@@ -150,7 +155,9 @@ class ArticleFactory {
 
         /* note: this has been changed from having client providing it every call,
         which can potentially lead to out-of-sync issue in regards to facebook logged in status */
-        if(isset($this->varcontent['fb_login'])){
+        if(isset($this->params['fb_login'])){
+            $this->fblogin = $this->params['fb_login'];
+        }elseif(isset($this->varcontent['fb_login'])){
             $this->fblogin = $this->varcontent['fb_login'];
         } else {
             $this->fblogin = false;
@@ -277,6 +284,7 @@ class ArticleFactory {
         }
 
         $this->setScreenInfo();
+        $this->setVersionInfo();
 
         return true;
     }
@@ -412,33 +420,50 @@ class ArticleFactory {
 
     }
 
+    public function setVersionInfo() {
+
+        if(isset($this->deviceparams['build_version'])){
+            $this->build_version = $this->deviceparams['build_version'];
+            $this->app_version = $this->deviceparams['app_version'];
+            $this->api_version = $this->deviceparams['api_version'];
+        } else {
+            $this->version_build = 1;
+            $this->version_app = 1;
+            $this->version_api = 2.0;
+        }
+    }
+
+
     public function setScreenInfo() {
 
-        if(isset($_REQUEST['screen_width']) AND isset($_REQUEST['screen_height'])){
-            $this->aspect_ratio = round($_REQUEST['screen_width'] / $_REQUEST['screen_height'],3);
+        if(isset($this->deviceparams['screen_width']) AND isset($this->deviceparams['screen_height'])){
+            $this->screen_width = $this->deviceparams['screen_width'];
+            $this->screen_height = $this->deviceparams['screen_height'];
+        }elseif(isset($_REQUEST['screen_width']) AND isset($_REQUEST['screen_height'])){
             $this->screen_width = $_REQUEST['screen_width'];
             $this->screen_height = $_REQUEST['screen_height'];
-
-            if(!isset($this->varcontent['screen_width'])){
-                AeplayVariable::updateWithName($this->playid,'screen_width',$_REQUEST['screen_width'],$this->gid,$this->userid);
-            } elseif(isset($this->varcontent['screen_width']) AND $this->varcontent['screen_width'] != $this->screen_width){
-                AeplayVariable::updateWithName($this->playid,'screen_width',$_REQUEST['screen_width'],$this->gid,$this->userid);
-            }
-
-            if(!isset($this->varcontent['screen_height'])){
-                AeplayVariable::updateWithName($this->playid,'screen_height',$_REQUEST['screen_height'],$this->gid,$this->userid);
-            } elseif(isset($this->varcontent['screen_height']) AND $this->varcontent['screen_height'] != $this->screen_height){
-                AeplayVariable::updateWithName($this->playid,'screen_height',$_REQUEST['screen_height'],$this->gid,$this->userid);
-            }
-
         } elseif(isset($this->varcontent['screen_width']) AND isset($this->varcontent['screen_height']) AND $this->varcontent['screen_width'] > 0 AND $this->varcontent['screen_height'] > 0){
-            $this->aspect_ratio = round($this->varcontent['screen_width'] / $this->varcontent['screen_height'],3);
             $this->screen_width = $this->varcontent['screen_width'];
             $this->screen_height = $this->varcontent['screen_height'];
         } else {
             $this->screen_width = 750;
             $this->screen_height = 1136;
         }
+
+        $this->aspect_ratio = round($this->screen_width / $this->screen_height,3);
+
+        if(!isset($this->varcontent['screen_height'])){
+            AeplayVariable::updateWithName($this->playid,'screen_height',$this->screen_height,$this->gid,$this->userid);
+        } elseif(isset($this->varcontent['screen_height']) AND $this->varcontent['screen_height'] != $this->screen_height){
+            AeplayVariable::updateWithName($this->playid,'screen_height',$this->screen_height,$this->gid,$this->userid);
+        }
+
+        if(!isset($this->varcontent['screen_width'])){
+            AeplayVariable::updateWithName($this->playid,'screen_width',$this->screen_width,$this->gid,$this->userid);
+        } elseif(isset($this->varcontent['screen_width']) AND $this->varcontent['screen_width'] != $this->screen_width){
+            AeplayVariable::updateWithName($this->playid,'screen_width',$this->screen_width,$this->gid,$this->userid);
+        }
+
     }
 
     public function setBranchList($list){

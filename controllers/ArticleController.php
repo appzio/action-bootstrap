@@ -99,6 +99,11 @@ class ArticleController {
     public $permanames;
 
     public $branch_id;
+    public $deviceparams;
+
+    public $build_version;
+    public $app_version;
+
 
     /* actual layout code, often redeclared in controllers */
     public $data;
