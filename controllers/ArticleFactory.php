@@ -120,7 +120,10 @@ class ArticleFactory {
     /* the actual session is saved by api default controller, not here */
     public $session_cache_out;
     public $userinfo;
+    public $is_a_view = false;
 
+    /* @var ArticlePreprocessor */
+    public $articleProcessor;
 
     /* gets called when object is created & fed with initial values */
     public function playInit() {
@@ -141,6 +144,9 @@ class ArticleFactory {
 
         $this->articlemenuobj = new ArticleMenuComponents($this);
         $this->articlemenuobj->imagesobj = $this->imagesobj;
+
+        $this->articleProcessor = new ArticlePreprocessor();
+        $this->articleProcessor->gid = $this->gid;
 
         $menuitems = Aenavigation::getAllAppMenuItems($this->gid);
 
@@ -163,6 +169,10 @@ class ArticleFactory {
             $this->fblogin = false;
         }
 
+    }
+
+    public function saveViewStyles(){
+        $this->articleProcessor->saveStyles();
     }
 
     private function updateChatCount(){
@@ -298,6 +308,7 @@ class ArticleFactory {
             return $op;
         }
 
+
         if(method_exists($this->childobj,'init')){
             $this->childobj->init();
         }
@@ -313,6 +324,7 @@ class ArticleFactory {
         }
 
         $op = $this->getViews();
+
 
         /* output any errors to view */
         if(!empty($this->childobj->errorMsgs)){
@@ -552,6 +564,7 @@ class ArticleFactory {
 
     public function createChildObj($actiontype){
         $controller_included = false;
+        $this->is_a_view = false;
 
         if(!$this->available_branches){
             $this->available_branches = Appcaching::getPlayCache('branchlist-article',$this->gid,$this->playid,true);
@@ -649,8 +662,24 @@ class ArticleFactory {
                 $class = $modeclass;
             }
         }
-        
-        /* if not found try the themes sub controller */
+
+        /* if not found go to the main controller */
+        if(!$controller_included) {
+            $modeclass = $this->class.'View';
+            $modepath = $dir_root . '.views.' . $modeclass;
+            $modefile = Yii::getPathOfAlias($modepath);
+
+            if ( file_exists($modefile . '.php') ) {
+                $this->is_a_view = true;
+                Yii::import($modepath);
+                Yii::import($modeclass);
+                $controller_included = true;
+                $class = $modeclass;
+            }
+        }
+
+
+        /* if not found go to the main controller */
         if(!$controller_included){
             $modeclass = $this->class.'Controller';
             $modepath = $dir_root . '.controllers.' . $modeclass;
@@ -813,6 +842,10 @@ class ArticleFactory {
             }
         }
 
+        if($this->is_a_view){
+            $output = $this->articleProcessor->process($output);
+        }
+
         $output = $this->bottomNotifications($output);
         $output = $this->bottomMenu($output);
 
@@ -875,6 +908,8 @@ class ArticleFactory {
 
         while ($key < 6) {
             $tabname = 'tab' . $key;
+
+
 
             /* satisfy all others from cache except for the currently active tab */
             if(method_exists($this->childobj,$tabname) ) {
