@@ -164,6 +164,11 @@ class ArticleController {
     public $to_session_storage = array();
     public $session_storage = array();
 
+    /* this is either client_iphone or client_android */
+    public $client_device;
+
+
+
     public function __construct($obj){
 
         /* this exist to make the referencing of
@@ -910,6 +915,11 @@ class ArticleController {
             case 'action':
                 $onclick->action = 'open-action';
                 $onclick->action_config = $param;
+                break;
+
+            case 'permaname':
+                $onclick->action = 'open-action';
+                $onclick->action_config = $this->getActionidByPermaname($param);
                 break;
 
             case 'push-permission':

@@ -125,6 +125,9 @@ class ArticleFactory {
     /* @var ArticlePreprocessor */
     public $articleProcessor;
 
+    /* this is either client_iphone or client_android */
+    public $client_device;
+
     /* gets called when object is created & fed with initial values */
     public function playInit() {
 
@@ -442,8 +445,13 @@ class ArticleFactory {
             $this->version_app = 1;
             $this->version_api = 2.0;
         }
-    }
 
+        if(isset($this->deviceparams['system_source'])){
+            $this->client_device = $this->deviceparams['system_source'];
+        } elseif(isset($this->varcontent['system_source'])){
+            $this->client_device = $this->varcontent['system_source'];
+        }
+    }
 
     public function setScreenInfo() {
 
@@ -464,6 +472,8 @@ class ArticleFactory {
             $this->screen_width = 750;
             $this->screen_height = 1136;
         }
+
+
         
         $this->aspect_ratio = round($this->screen_width / $this->screen_height,3);
 
@@ -964,7 +974,7 @@ class ArticleFactory {
 
     /* rudimentary data type validation for segments */
     private function validateTabFormat($tabcontent){
-        $segments = array('header','scroll','footer','onload');
+        $segments = array('header','scroll','footer','onload','command');
 
         if(!is_object($tabcontent)){
             return false;
