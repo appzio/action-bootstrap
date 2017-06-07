@@ -141,7 +141,6 @@ class ArticleFactory {
 
         $this->loadVariables();
 
-
         $this->articlemenuobj = new ArticleMenuComponents($this);
         $this->articlemenuobj->imagesobj = $this->imagesobj;
 
@@ -448,6 +447,10 @@ class ArticleFactory {
 
     public function setScreenInfo() {
 
+        if(is_string($this->deviceparams)){
+            $this->deviceparams = json_decode($this->deviceparams,true);
+        }
+
         if(isset($this->deviceparams['screen_width']) AND isset($this->deviceparams['screen_height'])){
             $this->screen_width = $this->deviceparams['screen_width'];
             $this->screen_height = $this->deviceparams['screen_height'];
@@ -461,7 +464,7 @@ class ArticleFactory {
             $this->screen_width = 750;
             $this->screen_height = 1136;
         }
-
+        
         $this->aspect_ratio = round($this->screen_width / $this->screen_height,3);
 
         if(!isset($this->varcontent['screen_height'])){
