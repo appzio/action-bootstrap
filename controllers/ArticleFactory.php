@@ -391,7 +391,13 @@ class ArticleFactory {
             }
         }
 
-        $this->session_storage = array_merge($this->session_storage,$this->childobj->session_storage);
+        if(is_array($this->session_storage) AND is_array($this->childobj->session_storage)){
+            $this->session_storage = array_merge($this->session_storage,$this->childobj->session_storage);
+        } elseif(is_array($this->childobj->session_storage)) {
+            $this->session_storage = $this->childobj->session_storage;
+        } else {
+            $this->session_storage = array();
+        }
 
         return $op;
     }
