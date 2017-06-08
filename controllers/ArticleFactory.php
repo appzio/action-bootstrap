@@ -158,7 +158,8 @@ class ArticleFactory {
             $this->menuitems[$nav['item_safe_name']] = $nav['itemid'];
         }
 
-        $this->session_storage = Appcaching::getGlobalCache($this->playid.$this->userid.'playcache');
+        $cachename = $this->playid.'-' .$this->userid.'-playcache';
+        $this->session_storage = Appcaching::getGlobalCache($cachename);
         $this->updateChatCount();
 
         /* note: this has been changed from having client providing it every call,
