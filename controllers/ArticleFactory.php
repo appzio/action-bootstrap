@@ -391,7 +391,7 @@ class ArticleFactory {
             }
         }
 
-        $this->session_storage = $this->childobj->session_storage;
+        $this->session_storage = array_merge($this->session_storage,$this->childobj->session_storage);
 
         return $op;
     }
