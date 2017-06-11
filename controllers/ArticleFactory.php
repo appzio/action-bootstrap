@@ -127,6 +127,7 @@ class ArticleFactory {
 
     /* this is either client_iphone or client_android */
     public $client_device;
+    public $actionRootDir;
 
     /* gets called when object is created & fed with initial values */
     public function playInit() {
@@ -597,15 +598,21 @@ class ArticleFactory {
         /* imports */
         Yii::import('application.modules.aelogic.packages.ActivationEngineAction');
         $dir_root = 'application.modules.aelogic.packages.action' . ucfirst($actiontype);
+        $this->actionRootDir = $dir_root;
 
         Yii::import($dir_root . '.controllers.*');
         Yii::import($dir_root . '.models.*');
+        Yii::import($dir_root . '.views.*');
 
         if ( isset($this->configobj->article_action_theme) AND !empty($this->configobj->article_action_theme) ) {
             $theme = $this->configobj->article_action_theme;
             $themes_dir_root = $dir_root . '.themes.' . $theme;
             Yii::import($themes_dir_root . '.controllers.*');
+            Yii::import($themes_dir_root . '.views.*');
             Yii::import($themes_dir_root . '.models.*');
+        } else {
+            $theme = false;
+            $themes_dir_root = false;
         }
 
         $model_alias = $dir_root .'.models.'.ucfirst($actiontype) .'Model';
@@ -632,96 +639,16 @@ class ArticleFactory {
         $searchpath = Yii::getPathOfAlias('application.modules.aelogic.components.images');
         $this->imagesobj->imagesearchpath[] = $searchpath .'/';
 
-        /* find out the name for the controller */
-        /* start from the themes mode controller */
-        if(isset($this->configobj->mode) AND !empty($this->configobj->mode) AND isset($this->configobj->article_action_theme) AND !empty($this->configobj->article_action_theme)) {
-            $modeclass = $this->configobj->article_action_theme .ucfirst($this->configobj->mode) .ucfirst($actiontype);
-            $modepath = $themes_dir_root . '.controllers.' . $modeclass;
-            $modefile = Yii::getPathOfAlias($modepath);
-            if ( file_exists($modefile . '.php') ) {
-                $controller_included = true;
-                $class = $modeclass;
-            }
-        }
-
-        /* traverse to mode main controller */
-        if(!$controller_included AND isset($this->configobj->mode) AND !empty($this->configobj->mode) ){
-            $modeclass = ucfirst($this->configobj->mode) .ucfirst($actiontype);
-            $modepath = $dir_root . '.controllers.' . $modeclass;
-            $modefile = Yii::getPathOfAlias($modepath);
-
-            if ( file_exists($modefile . '.php') ) {
-                Yii::import($modeclass);
-                $controller_included = true;
-                $class = $modeclass;
-            }
-        }
-
-        /* if not found try the modes sub controller */
-        if(!$controller_included AND isset($this->configobj->mode) AND !empty($this->configobj->mode)){
-            $modeclass = $this->configobj->mode .ucfirst($actiontype).'Sub';
-            $modepath = $dir_root . '.controllers.' . $modeclass;
-            $modefile = Yii::getPathOfAlias($modepath);
-
-            if ( file_exists($modefile . '.php') ) {
-                Yii::import($modeclass);
-                $controller_included = true;
-                $class = $modeclass;
-            }
-        }
-
-        /* if not found try the themes sub controller */
-        if(!$controller_included AND isset($this->configobj->article_action_theme) AND !empty($this->configobj->article_action_theme)){
-            $modeclass = $this->configobj->article_action_theme.$this->class.'SubController';
-            $modepath = $themes_dir_root . '.controllers.' . $modeclass;
-            $modefile = Yii::getPathOfAlias($modepath);
-
-            if ( file_exists($modefile . '.php') ) {
-                Yii::import($modeclass);
-                $controller_included = true;
-                $class = $modeclass;
-            }
-        }
-
-        /* if not found go to the main controller */
-        if(!$controller_included) {
-            $modeclass = $this->class.'View';
-            $modepath = $dir_root . '.views.' . $modeclass;
-            $modefile = Yii::getPathOfAlias($modepath);
-
-            if ( file_exists($modefile . '.php') ) {
-                $this->is_a_view = true;
-                Yii::import($modepath);
-                Yii::import($modeclass);
-                $controller_included = true;
-                $class = $modeclass;
-            }
-        }
-
-
-        /* if not found go to the main controller */
-        if(!$controller_included){
-            $modeclass = $this->class.'Controller';
-            $modepath = $dir_root . '.controllers.' . $modeclass;
-            $modefile = Yii::getPathOfAlias($modepath);
-
-            if ( file_exists($modefile . '.php') ) {
-                Yii::import($modeclass);
-                $controller_included = true;
-                $class = $modeclass;
-            }
-        }
-
+        $class = $this->inclusions($actiontype);
         $this->setupChecksumChecker($actiontype);
 
-        if ( !$controller_included ) {
+        if ( !$class ) {
             return array();
         }
 
         if ( !$this->actionid ) {
             $this->actionid = $this->getParam('actionid',$this->submit);
         }
-
 
         /* if action init returns false, we will return ok right away
             its used for savers that bypass lot of the initing
@@ -755,6 +682,112 @@ class ArticleFactory {
         $this->moduleAssets();
 
         return true;
+    }
+
+    /*
+        find out the name for the controller
+        be very very careful with this section, as the lookup order
+        is crucial frot he functioning of the app
+
+        the naming has been changed in June 2017
+
+        namings & the inclusion order:
+
+            // mode inside a theme
+            [Mode][Actionname][Theme][Controller | View]
+
+            // mode inside a main folder
+            [Mode][Actionname][Controller | View]
+
+            // main file inside a theme
+            [Actionname][Theme][Controller | View]
+
+            // main file on main folder
+            [Actionname][Controller | View]
+
+    */
+
+    public function inclusions($actiontype){
+
+        $class = false;
+
+        /* mode inside a theme */
+        if(isset($this->configobj->mode) AND !empty($this->configobj->mode) AND isset($this->configobj->article_action_theme) AND !empty($this->configobj->article_action_theme)) {
+            $modeclass = ucfirst($this->configobj->mode) .ucfirst($actiontype) .ucfirst($this->configobj->article_action_theme) .'Controller';
+            $class = $this->checkClassFile($modeclass,$this->configobj->article_action_theme);
+        }
+
+        /* start from the themes mode controller - OLD */
+        if(isset($this->configobj->mode) AND !empty($this->configobj->mode) AND isset($this->configobj->article_action_theme) AND !empty($this->configobj->article_action_theme)) {
+            $modeclass = $this->configobj->article_action_theme .ucfirst($this->configobj->mode) .ucfirst($actiontype);
+            $class = $this->checkClassFile($modeclass,$this->configobj->article_action_theme);
+        }
+
+        /* if not found try the themes sub controller */
+        if(!$class AND isset($this->configobj->article_action_theme) AND !empty($this->configobj->article_action_theme)){
+            $modeclass = $this->configobj->article_action_theme.$this->class.'SubController';
+            $class = $this->checkClassFile($modeclass,$this->configobj->article_action_theme);
+        }
+
+
+        /* mode inside a main folder */
+        if(!$class AND isset($this->configobj->mode) AND !empty($this->configobj->mode) ){
+            $modeclass = ucfirst($this->configobj->mode) .ucfirst($actiontype) .'Controller';
+            $class = $this->checkClassFile($modeclass);
+        }
+
+        /* if not found try the modes sub controller */
+        if(!$class AND isset($this->configobj->mode) AND !empty($this->configobj->mode)){
+            $modeclass = $this->configobj->mode .ucfirst($actiontype).'Sub';
+            $class = $this->checkClassFile($modeclass);
+        }
+
+        /* traverse to mode main controller */
+        if(!$class AND isset($this->configobj->mode) AND !empty($this->configobj->mode) ){
+            $modeclass = ucfirst($this->configobj->mode) .ucfirst($actiontype);
+            $class = $this->checkClassFile($modeclass);
+        }
+
+        /* main file inside a theme */
+        if(!$class AND isset($this->configobj->article_action_theme) AND !empty($this->configobj->article_action_theme)){
+            $modeclass = ucfirst($actiontype) .ucfirst($this->configobj->article_action_theme) .'Controller';
+            $class = $this->checkClassFile($modeclass,$this->configobj->article_action_theme);
+        }
+
+        /* if not found go to the main controller */
+        if(!$class){
+            $modeclass = $this->class.'Controller';
+            $class = $this->checkClassFile($modeclass);
+        }
+
+        return $class;
+    }
+
+    /* checks whether file exists and if it does, returns the class name */
+    public function checkClassFile($modeclass,$theme=false){
+
+        $dir = $this->actionRootDir;
+
+        if($theme){
+            $dir .= '.themes.'.$theme;
+        }
+
+        $view = str_replace('Controller','View',$modeclass);
+        $file = Yii::getPathOfAlias($dir.'.views.'.$view);
+
+
+        if ( file_exists($file . '.php') ) {
+            return $view;
+        }
+
+        $file = Yii::getPathOfAlias($dir.'.controllers.'.$modeclass);
+
+        if ( file_exists($file . '.php') ) {
+            return $modeclass;
+        }
+
+
+        return false;
     }
 
     public function setupChecksumChecker($actiontype){
@@ -928,8 +961,6 @@ class ArticleFactory {
 
         while ($key < 6) {
             $tabname = 'tab' . $key;
-
-
 
             /* satisfy all others from cache except for the currently active tab */
             if(method_exists($this->childobj,$tabname) ) {
