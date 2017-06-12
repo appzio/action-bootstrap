@@ -150,6 +150,9 @@ class ArticleFactory {
 
         $this->articleProcessor = new ArticlePreprocessor();
         $this->articleProcessor->gid = $this->gid;
+        $this->articleProcessor->playid = $this->playid;
+        $this->articleProcessor->mobileobj = $this->mobilesettings;
+        $this->articleProcessor->playobj = $this->playobj;
 
         $menuitems = Aenavigation::getAllAppMenuItems($this->gid);
 
@@ -176,7 +179,7 @@ class ArticleFactory {
     }
 
     public function saveViewStyles(){
-        $this->articleProcessor->saveStyles();
+        $this->articleProcessor->saveStyles($this->playobj);
     }
 
     private function updateChatCount(){
@@ -639,7 +642,10 @@ class ArticleFactory {
         $searchpath = Yii::getPathOfAlias('application.modules.aelogic.components.images');
         $this->imagesobj->imagesearchpath[] = $searchpath .'/';
 
+        /* main inclusion code */
         $class = $this->inclusions($actiontype);
+
+
         $this->setupChecksumChecker($actiontype);
 
         if ( !$class ) {
@@ -775,8 +781,8 @@ class ArticleFactory {
         $view = str_replace('Controller','View',$modeclass);
         $file = Yii::getPathOfAlias($dir.'.views.'.$view);
 
-
         if ( file_exists($file . '.php') ) {
+            $this->is_a_view = true;
             return $view;
         }
 
@@ -891,13 +897,13 @@ class ArticleFactory {
         foreach ($methods as $method) {
             if ( method_exists($this->childobj, $method) ) {
                 $output = call_user_func( array( $this->childobj, $method ) );
+                if($this->is_a_view){
+                    $output = $this->articleProcessor->process($output);
+                }
                 break;
             }
         }
 
-        if($this->is_a_view){
-            $output = $this->articleProcessor->process($output);
-        }
 
         $output = $this->bottomNotifications($output);
         $output = $this->bottomMenu($output);
