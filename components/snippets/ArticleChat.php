@@ -575,7 +575,8 @@ class ArticleChat extends ArticleComponent {
             $vars = AeplayVariable::getArrayOfPlayvariables($id);
             Appcaching::setGlobalCache($cachename,$vars,120);
         }
-        
+
+
         switch($this->name_mode){
             case 'invisible';
                 $name = '';
@@ -585,8 +586,17 @@ class ArticleChat extends ArticleComponent {
                 $name = isset($vars['screen_name']) ? $vars['screen_name'] : '{#anonymous#}';
                 break;
 
+            case 'firstname';
             case 'first_name';
-                $name = isset($vars['real_name']) ? $this->getChatName($vars['real_name']) : '{#anonymous#}';
+
+                if ( isset($vars['first_name']) AND !empty($vars['first_name']) ) {
+                    $name = $vars['first_name'];
+                } else if ( isset($vars['real_name']) AND !empty($vars['real_name']) ) {
+                    $name = $this->getChatName($vars['real_name']);
+                } else {
+                    $name = '{#anonymous#}';
+                }
+
                 break;
 
             case 'last_name';
@@ -609,6 +619,14 @@ class ArticleChat extends ArticleComponent {
 
         $profilepic = isset($vars['profilepic']) ? $vars['profilepic'] : $profilepic;
 
+        if(isset($vars['private_photos']) AND $vars['private_photos']){
+            $test = AeplayKeyvaluestorage::model()->findByAttributes(array('play_id' => $id, 'key' => 'two-way-matches','value' => $this->playid));
+
+            if(!is_object($test)){
+                $profilepic = 'sila-private-photos.png';
+            }
+        }
+        
         return array(
             'profilepic' => $profilepic,
             'name'       => $name,

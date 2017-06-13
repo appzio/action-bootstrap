@@ -99,6 +99,11 @@ class ArticleController {
     public $permanames;
 
     public $branch_id;
+    public $deviceparams;
+
+    public $build_version;
+    public $app_version;
+
 
     /* actual layout code, often redeclared in controllers */
     public $data;
@@ -158,6 +163,11 @@ class ArticleController {
 
     public $to_session_storage = array();
     public $session_storage = array();
+
+    /* this is either client_iphone or client_android */
+    public $client_device;
+
+
 
     public function __construct($obj){
 
@@ -607,6 +617,8 @@ class ArticleController {
     }
 
     private function dialogPointer($key){
+
+
         $key = 'pointer-'.$key;
         $pointer = $this->sessionGet($key);
 
@@ -617,6 +629,7 @@ class ArticleController {
         }
 
         $tries = $this->sessionGet($key.'-tries');
+
         $this->sessionSet($key.'-tries',$tries+1);
 
         if($tries < 3){
@@ -904,6 +917,11 @@ class ArticleController {
                 $onclick->action_config = $param;
                 break;
 
+            case 'permaname':
+                $onclick->action = 'open-action';
+                $onclick->action_config = $this->getActionidByPermaname($param);
+                break;
+
             case 'push-permission':
                 $onclick->action = 'push-permission';
                 break;
@@ -970,14 +988,12 @@ class ArticleController {
     }
 
     public function sessionSet($key,$value){
-        $this->to_session_storage[$key] = $value;
+        $this->session_storage[$key] = $value;
     }
 
     public function sessionGet($key){
         if(isset($this->session_storage[$key])){
             return $this->session_storage[$key];
-        } elseif(isset($this->to_session_storage[$key])) {
-            return $this->to_session_storage[$key];
         } else {
             return false;
         }

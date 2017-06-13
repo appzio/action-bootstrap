@@ -83,10 +83,14 @@ class ArticleFactory {
     public $context = false;
 
     public $api_version;
+    public $build_version;
+    public $app_version;
 
     public $aspect_ratio;
     public $screen_width;
     public $screen_height;
+
+    public $deviceparams;
 
     public $appinfo;
 
@@ -115,6 +119,15 @@ class ArticleFactory {
 
     /* the actual session is saved by api default controller, not here */
     public $session_cache_out;
+    public $userinfo;
+    public $is_a_view = false;
+
+    /* @var ArticlePreprocessor */
+    public $articleProcessor;
+
+    /* this is either client_iphone or client_android */
+    public $client_device;
+    public $actionRootDir;
 
     /* gets called when object is created & fed with initial values */
     public function playInit() {
@@ -132,9 +145,14 @@ class ArticleFactory {
 
         $this->loadVariables();
 
-
         $this->articlemenuobj = new ArticleMenuComponents($this);
         $this->articlemenuobj->imagesobj = $this->imagesobj;
+
+        $this->articleProcessor = new ArticlePreprocessor();
+        $this->articleProcessor->gid = $this->gid;
+        $this->articleProcessor->playid = $this->playid;
+        $this->articleProcessor->mobileobj = $this->mobilesettings;
+        $this->articleProcessor->playobj = $this->playobj;
 
         $menuitems = Aenavigation::getAllAppMenuItems($this->gid);
 
@@ -144,8 +162,24 @@ class ArticleFactory {
             $this->menuitems[$nav['item_safe_name']] = $nav['itemid'];
         }
 
-        $this->session_storage = Appcaching::getGlobalCache($this->playid.$this->userid.'playcache');
+        $cachename = $this->playid.'-' .$this->userid.'-playcache';
+        $this->session_storage = Appcaching::getGlobalCache($cachename);
         $this->updateChatCount();
+
+        /* note: this has been changed from having client providing it every call,
+        which can potentially lead to out-of-sync issue in regards to facebook logged in status */
+        if(isset($this->params['fb_login'])){
+            $this->fblogin = $this->params['fb_login'];
+        }elseif(isset($this->varcontent['fb_login'])){
+            $this->fblogin = $this->varcontent['fb_login'];
+        } else {
+            $this->fblogin = false;
+        }
+
+    }
+
+    public function saveViewStyles(){
+        $this->articleProcessor->saveStyles($this->playobj);
     }
 
     private function updateChatCount(){
@@ -211,23 +245,7 @@ class ArticleFactory {
     }
 
     public function sessionStorageSaver($data=array()){
-
-        if(isset($this->childobj->to_session_storage['reports_tab1'])){
-            //print_r($this->childobj->to_session_storage['reports_tab1']);die();
-        }
-
-        if(is_array($this->session_storage)){
-            $cache = $data + $this->session_storage + $this->childobj->to_session_storage;
-        } else {
-            $cache = $data + $this->childobj->to_session_storage;
-        }
-
-        if(isset($this->childobj->to_session_storage['reports_tab1'])) {
-            //print_r($cache);die();
-        }
-
-        $this->session_cache_out = $cache;
-        
+        $this->session_storage = array_merge($this->session_storage,$data);
     }
 
     public function actionInit(){
@@ -282,15 +300,8 @@ class ArticleFactory {
             $this->context = $_REQUEST['context'];
         }
 
-        $this->fbtoken = UserGroupsUseradmin::getFbToken($this->userid);
-
-        if(isset($this->params['fb_login'])){
-            $this->fblogin = filter_var($this->params['fb_login'],FILTER_VALIDATE_BOOLEAN);
-        } else {
-            $this->fblogin = false;
-        }
-
         $this->setScreenInfo();
+        $this->setVersionInfo();
 
         return true;
     }
@@ -303,6 +314,7 @@ class ArticleFactory {
             $this->no_output = true;
             return $op;
         }
+
 
         if(method_exists($this->childobj,'init')){
             $this->childobj->init();
@@ -320,8 +332,6 @@ class ArticleFactory {
 
         $op = $this->getViews();
 
-        /* save to session */
-        $this->sessionStorageSaver();
 
         /* output any errors to view */
         if(!empty($this->childobj->errorMsgs)){
@@ -386,6 +396,14 @@ class ArticleFactory {
             }
         }
 
+        if(is_array($this->session_storage) AND is_array($this->childobj->session_storage)){
+            $this->session_storage = array_merge($this->session_storage,$this->childobj->session_storage);
+        } elseif(is_array($this->childobj->session_storage)) {
+            $this->session_storage = $this->childobj->session_storage;
+        } else {
+            $this->session_storage = array();
+        }
+
         return $op;
     }
 
@@ -427,33 +445,61 @@ class ArticleFactory {
 
     }
 
+    public function setVersionInfo() {
+
+        if(isset($this->deviceparams['build_version'])){
+            $this->build_version = $this->deviceparams['build_version'];
+            $this->app_version = $this->deviceparams['app_version'];
+            $this->api_version = $this->deviceparams['api_version'];
+        } else {
+            $this->version_build = 1;
+            $this->version_app = 1;
+            $this->version_api = 2.0;
+        }
+
+        if(isset($this->deviceparams['system_source'])){
+            $this->client_device = $this->deviceparams['system_source'];
+        } elseif(isset($this->varcontent['system_source'])){
+            $this->client_device = $this->varcontent['system_source'];
+        }
+    }
+
     public function setScreenInfo() {
 
-        if(isset($_REQUEST['screen_width']) AND isset($_REQUEST['screen_height'])){
-            $this->aspect_ratio = round($_REQUEST['screen_width'] / $_REQUEST['screen_height'],3);
+        if(is_string($this->deviceparams)){
+            $this->deviceparams = json_decode($this->deviceparams,true);
+        }
+
+        if(isset($this->deviceparams['screen_width']) AND isset($this->deviceparams['screen_height'])){
+            $this->screen_width = $this->deviceparams['screen_width'];
+            $this->screen_height = $this->deviceparams['screen_height'];
+        }elseif(isset($_REQUEST['screen_width']) AND isset($_REQUEST['screen_height'])){
             $this->screen_width = $_REQUEST['screen_width'];
             $this->screen_height = $_REQUEST['screen_height'];
-
-            if(!isset($this->varcontent['screen_width'])){
-                AeplayVariable::updateWithName($this->playid,'screen_width',$_REQUEST['screen_width'],$this->gid,$this->userid);
-            } elseif(isset($this->varcontent['screen_width']) AND $this->varcontent['screen_width'] != $this->screen_width){
-                AeplayVariable::updateWithName($this->playid,'screen_width',$_REQUEST['screen_width'],$this->gid,$this->userid);
-            }
-
-            if(!isset($this->varcontent['screen_height'])){
-                AeplayVariable::updateWithName($this->playid,'screen_height',$_REQUEST['screen_height'],$this->gid,$this->userid);
-            } elseif(isset($this->varcontent['screen_height']) AND $this->varcontent['screen_height'] != $this->screen_height){
-                AeplayVariable::updateWithName($this->playid,'screen_height',$_REQUEST['screen_height'],$this->gid,$this->userid);
-            }
-
         } elseif(isset($this->varcontent['screen_width']) AND isset($this->varcontent['screen_height']) AND $this->varcontent['screen_width'] > 0 AND $this->varcontent['screen_height'] > 0){
-            $this->aspect_ratio = round($this->varcontent['screen_width'] / $this->varcontent['screen_height'],3);
             $this->screen_width = $this->varcontent['screen_width'];
             $this->screen_height = $this->varcontent['screen_height'];
         } else {
             $this->screen_width = 750;
             $this->screen_height = 1136;
         }
+
+
+        
+        $this->aspect_ratio = round($this->screen_width / $this->screen_height,3);
+
+        if(!isset($this->varcontent['screen_height'])){
+            AeplayVariable::updateWithName($this->playid,'screen_height',$this->screen_height,$this->gid,$this->userid);
+        } elseif(isset($this->varcontent['screen_height']) AND $this->varcontent['screen_height'] != $this->screen_height){
+            AeplayVariable::updateWithName($this->playid,'screen_height',$this->screen_height,$this->gid,$this->userid);
+        }
+
+        if(!isset($this->varcontent['screen_width'])){
+            AeplayVariable::updateWithName($this->playid,'screen_width',$this->screen_width,$this->gid,$this->userid);
+        } elseif(isset($this->varcontent['screen_width']) AND $this->varcontent['screen_width'] != $this->screen_width){
+            AeplayVariable::updateWithName($this->playid,'screen_width',$this->screen_width,$this->gid,$this->userid);
+        }
+
     }
 
     public function setBranchList($list){
@@ -542,6 +588,7 @@ class ArticleFactory {
 
     public function createChildObj($actiontype){
         $controller_included = false;
+        $this->is_a_view = false;
 
         if(!$this->available_branches){
             $this->available_branches = Appcaching::getPlayCache('branchlist-article',$this->gid,$this->playid,true);
@@ -554,15 +601,21 @@ class ArticleFactory {
         /* imports */
         Yii::import('application.modules.aelogic.packages.ActivationEngineAction');
         $dir_root = 'application.modules.aelogic.packages.action' . ucfirst($actiontype);
+        $this->actionRootDir = $dir_root;
 
         Yii::import($dir_root . '.controllers.*');
         Yii::import($dir_root . '.models.*');
+        Yii::import($dir_root . '.views.*');
 
         if ( isset($this->configobj->article_action_theme) AND !empty($this->configobj->article_action_theme) ) {
             $theme = $this->configobj->article_action_theme;
             $themes_dir_root = $dir_root . '.themes.' . $theme;
             Yii::import($themes_dir_root . '.controllers.*');
+            Yii::import($themes_dir_root . '.views.*');
             Yii::import($themes_dir_root . '.models.*');
+        } else {
+            $theme = false;
+            $themes_dir_root = false;
         }
 
         $model_alias = $dir_root .'.models.'.ucfirst($actiontype) .'Model';
@@ -589,80 +642,19 @@ class ArticleFactory {
         $searchpath = Yii::getPathOfAlias('application.modules.aelogic.components.images');
         $this->imagesobj->imagesearchpath[] = $searchpath .'/';
 
-        /* find out the name for the controller */
-        /* start from the themes mode controller */
-        if(isset($this->configobj->mode) AND !empty($this->configobj->mode) AND isset($this->configobj->article_action_theme) AND !empty($this->configobj->article_action_theme)) {
-            $modeclass = $this->configobj->article_action_theme .ucfirst($this->configobj->mode) .ucfirst($actiontype);
-            $modepath = $themes_dir_root . '.controllers.' . $modeclass;
-            $modefile = Yii::getPathOfAlias($modepath);
-            if ( file_exists($modefile . '.php') ) {
-                $controller_included = true;
-                $class = $modeclass;
-            }
-        }
+        /* main inclusion code */
+        $class = $this->inclusions($actiontype);
 
-        /* traverse to mode main controller */
-        if(!$controller_included AND isset($this->configobj->mode) AND !empty($this->configobj->mode) ){
-            $modeclass = ucfirst($this->configobj->mode) .ucfirst($actiontype);
-            $modepath = $dir_root . '.controllers.' . $modeclass;
-            $modefile = Yii::getPathOfAlias($modepath);
-
-            if ( file_exists($modefile . '.php') ) {
-                Yii::import($modeclass);
-                $controller_included = true;
-                $class = $modeclass;
-            }
-        }
-
-        /* if not found try the modes sub controller */
-        if(!$controller_included AND isset($this->configobj->mode) AND !empty($this->configobj->mode)){
-            $modeclass = $this->configobj->mode .ucfirst($actiontype).'Sub';
-            $modepath = $dir_root . '.controllers.' . $modeclass;
-            $modefile = Yii::getPathOfAlias($modepath);
-
-            if ( file_exists($modefile . '.php') ) {
-                Yii::import($modeclass);
-                $controller_included = true;
-                $class = $modeclass;
-            }
-        }
-
-        /* if not found try the themes sub controller */
-        if(!$controller_included AND isset($this->configobj->article_action_theme) AND !empty($this->configobj->article_action_theme)){
-            $modeclass = $this->configobj->article_action_theme.$this->class.'SubController';
-            $modepath = $themes_dir_root . '.controllers.' . $modeclass;
-            $modefile = Yii::getPathOfAlias($modepath);
-
-            if ( file_exists($modefile . '.php') ) {
-                Yii::import($modeclass);
-                $controller_included = true;
-                $class = $modeclass;
-            }
-        }
-        
-        /* if not found try the themes sub controller */
-        if(!$controller_included){
-            $modeclass = $this->class.'Controller';
-            $modepath = $dir_root . '.controllers.' . $modeclass;
-            $modefile = Yii::getPathOfAlias($modepath);
-
-            if ( file_exists($modefile . '.php') ) {
-                Yii::import($modeclass);
-                $controller_included = true;
-                $class = $modeclass;
-            }
-        }
 
         $this->setupChecksumChecker($actiontype);
 
-        if ( !$controller_included ) {
+        if ( !$class ) {
             return array();
         }
 
         if ( !$this->actionid ) {
             $this->actionid = $this->getParam('actionid',$this->submit);
         }
-
 
         /* if action init returns false, we will return ok right away
             its used for savers that bypass lot of the initing
@@ -696,6 +688,112 @@ class ArticleFactory {
         $this->moduleAssets();
 
         return true;
+    }
+
+    /*
+        find out the name for the controller
+        be very very careful with this section, as the lookup order
+        is crucial frot he functioning of the app
+
+        the naming has been changed in June 2017
+
+        namings & the inclusion order:
+
+            // mode inside a theme
+            [Mode][Actionname][Theme][Controller | View]
+
+            // mode inside a main folder
+            [Mode][Actionname][Controller | View]
+
+            // main file inside a theme
+            [Actionname][Theme][Controller | View]
+
+            // main file on main folder
+            [Actionname][Controller | View]
+
+    */
+
+    public function inclusions($actiontype){
+
+        $class = false;
+
+        /* mode inside a theme */
+        if(isset($this->configobj->mode) AND !empty($this->configobj->mode) AND isset($this->configobj->article_action_theme) AND !empty($this->configobj->article_action_theme)) {
+            $modeclass = ucfirst($this->configobj->mode) .ucfirst($actiontype) .ucfirst($this->configobj->article_action_theme) .'Controller';
+            $class = $this->checkClassFile($modeclass,$this->configobj->article_action_theme);
+        }
+
+        /* start from the themes mode controller - OLD */
+        if(isset($this->configobj->mode) AND !empty($this->configobj->mode) AND isset($this->configobj->article_action_theme) AND !empty($this->configobj->article_action_theme)) {
+            $modeclass = $this->configobj->article_action_theme .ucfirst($this->configobj->mode) .ucfirst($actiontype);
+            $class = $this->checkClassFile($modeclass,$this->configobj->article_action_theme);
+        }
+
+        /* if not found try the themes sub controller */
+        if(!$class AND isset($this->configobj->article_action_theme) AND !empty($this->configobj->article_action_theme)){
+            $modeclass = $this->configobj->article_action_theme.$this->class.'SubController';
+            $class = $this->checkClassFile($modeclass,$this->configobj->article_action_theme);
+        }
+
+
+        /* mode inside a main folder */
+        if(!$class AND isset($this->configobj->mode) AND !empty($this->configobj->mode) ){
+            $modeclass = ucfirst($this->configobj->mode) .ucfirst($actiontype) .'Controller';
+            $class = $this->checkClassFile($modeclass);
+        }
+
+        /* if not found try the modes sub controller */
+        if(!$class AND isset($this->configobj->mode) AND !empty($this->configobj->mode)){
+            $modeclass = $this->configobj->mode .ucfirst($actiontype).'Sub';
+            $class = $this->checkClassFile($modeclass);
+        }
+
+        /* traverse to mode main controller */
+        if(!$class AND isset($this->configobj->mode) AND !empty($this->configobj->mode) ){
+            $modeclass = ucfirst($this->configobj->mode) .ucfirst($actiontype);
+            $class = $this->checkClassFile($modeclass);
+        }
+
+        /* main file inside a theme */
+        if(!$class AND isset($this->configobj->article_action_theme) AND !empty($this->configobj->article_action_theme)){
+            $modeclass = ucfirst($actiontype) .ucfirst($this->configobj->article_action_theme) .'Controller';
+            $class = $this->checkClassFile($modeclass,$this->configobj->article_action_theme);
+        }
+
+        /* if not found go to the main controller */
+        if(!$class){
+            $modeclass = $this->class.'Controller';
+            $class = $this->checkClassFile($modeclass);
+        }
+
+        return $class;
+    }
+
+    /* checks whether file exists and if it does, returns the class name */
+    public function checkClassFile($modeclass,$theme=false){
+
+        $dir = $this->actionRootDir;
+
+        if($theme){
+            $dir .= '.themes.'.$theme;
+        }
+
+        $view = str_replace('Controller','View',$modeclass);
+        $file = Yii::getPathOfAlias($dir.'.views.'.$view);
+
+        if ( file_exists($file . '.php') ) {
+            $this->is_a_view = true;
+            return $view;
+        }
+
+        $file = Yii::getPathOfAlias($dir.'.controllers.'.$modeclass);
+
+        if ( file_exists($file . '.php') ) {
+            return $modeclass;
+        }
+
+
+        return false;
     }
 
     public function setupChecksumChecker($actiontype){
@@ -799,9 +897,13 @@ class ArticleFactory {
         foreach ($methods as $method) {
             if ( method_exists($this->childobj, $method) ) {
                 $output = call_user_func( array( $this->childobj, $method ) );
+                if($this->is_a_view){
+                    $output = $this->articleProcessor->process($output);
+                }
                 break;
             }
         }
+
 
         $output = $this->bottomNotifications($output);
         $output = $this->bottomMenu($output);
@@ -916,7 +1018,7 @@ class ArticleFactory {
 
     /* rudimentary data type validation for segments */
     private function validateTabFormat($tabcontent){
-        $segments = array('header','scroll','footer','onload');
+        $segments = array('header','scroll','footer','onload','command');
 
         if(!is_object($tabcontent)){
             return false;
