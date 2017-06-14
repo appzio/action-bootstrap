@@ -3,7 +3,7 @@
 Yii::import('application.modules.aelogic.article.components.*');
 Yii::import('application.modules.aechat.models.*');
 
-class ArticleUserpreferences2 extends ArticleComponent
+class ArticleUserpreferences extends ArticleComponent
 {
     public $prefix;
 
