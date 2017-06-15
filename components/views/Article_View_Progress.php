@@ -4,17 +4,7 @@ Yii::import('application.modules.aelogic.article.components.*');
 
 class Article_View_Progress extends ArticleComponent {
 
-    /*
-        $obj = new StdClass;
-        $obj->type = 'progress';
-        $obj->content = $points / 30;
-        $obj->text_content = 'Cookify Chef, Level 1';
-        $obj->progress_image = $this->getImageFileName('progress-fill.png');
-        $obj->track_color = '#FFFFFF';
-        $obj->style = 'progress_style1';
-        $output[] = $obj;
-    */
-
+    public $required_params = array('track_color');
 
     public function template() {
     	$obj = new StdClass;
