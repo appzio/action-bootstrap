@@ -47,6 +47,7 @@ class ArticleUserpreferences extends ArticleComponent
         $onclick->id = $identifier . '|' . $this->prefix;
         $onclick->open_popup = 1;
         $onclick->sync_open = 1;
+        $onclick->sync_close = 1;
         $onclick->back_button = 1;
         $onclick->keep_user_data = 1;
 
