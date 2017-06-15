@@ -170,8 +170,14 @@ class ArticleFactory {
         which can potentially lead to out-of-sync issue in regards to facebook logged in status */
         if(isset($this->params['fb_login'])){
             $this->fblogin = $this->params['fb_login'];
+            if($this->fblogin == "false" OR $this->fblogin == false){
+                $this->fblogin = 0;
+            }
         }elseif(isset($this->varcontent['fb_login'])){
             $this->fblogin = $this->varcontent['fb_login'];
+            if($this->fblogin == "false" OR $this->fblogin == false){
+                $this->fblogin = 0;
+            }
         } else {
             $this->fblogin = false;
         }
