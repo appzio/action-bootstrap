@@ -162,6 +162,21 @@ class ArticleUserpreferences extends ArticleComponent
                     'No'
                 );
                 break;
+            case 'zodiac_sign':
+                return array(
+                    'Aquarius',
+                    'Aries',
+                    'Cancer',
+                    'Capricorn',
+                    'Gemini',
+                    'Leo',
+                    'Libra',
+                    'Pisces',
+                    'Sagittarius',
+                    'Scorpio',
+                    'Taurus',
+                    'Virgo'
+                );
             default:
                 return array();
                 break;
