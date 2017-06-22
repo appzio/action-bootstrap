@@ -98,6 +98,8 @@ class ArticleUserpreferences extends ArticleComponent
             }
         }
 
+        $content = empty($content) ? ' ' : $content;
+
         return $content;
     }
 
