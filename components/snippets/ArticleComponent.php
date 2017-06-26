@@ -126,7 +126,7 @@ class ArticleComponent {
             'align',
             'crop',
 
-            'text-style',
+            'font-style',
             'font-size',
             'text-color',
             'border-color',
