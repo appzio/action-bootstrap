@@ -2,6 +2,11 @@
 
 /* here is stuff that COULD be in the Aeaction model, but its hear mainly for security purposes */
 
+namespace Article\Models;
+
+use CActiveRecord;
+use Aevariable;
+use AeplayVariable;
 
 class ArticleModel extends CActiveRecord {
 
