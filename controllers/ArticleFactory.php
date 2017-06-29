@@ -889,7 +889,6 @@ class ArticleFactory {
         return $output;
     }
 
-
     /**
     * This method would try to retrieve the default output/response from a certain component
     */
@@ -910,14 +909,11 @@ class ArticleFactory {
             }
         }
 
-
         $output = $this->bottomNotifications($output);
         $output = $this->bottomMenu($output);
 
         return $output;
     }
-
-
 
     private function bottomNotifications($output,$key=1){
 
@@ -929,7 +925,14 @@ class ArticleFactory {
             $output = new stdClass();
         }
 
-        $bottom_notifications[] = $this->childobj->getBottomNotifications($this->chat_msgcount);
+        $notifications_obj = $this->childobj->getBottomNotifications($this->chat_msgcount);
+
+        // Notifications object is disabled
+        if ( empty($notifications_obj) ) {
+            return $output;
+        }
+
+        $bottom_notifications[] = $notifications_obj;
 
         if(!isset($output->footer)){
             $output->footer = $bottom_notifications;
@@ -937,11 +940,8 @@ class ArticleFactory {
             $output->footer = array_merge($output->footer,$bottom_notifications);
         }
 
-        //$output = $this->addTabJson($output,$key);
-
         return $output;
     }
-
 
     private function bottomMenu($output,$key=1){
         /* bottom menu which is created on article controllers init stage */

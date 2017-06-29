@@ -75,6 +75,7 @@ class ArticleChat extends ArticleComponent {
     }
 
     public function template() {
+
         $this->factoryobj->rewriteActionField( 'keep_scroll_in_bottom', 1 );
         $this->factoryobj->rewriteActionField( 'poll_update_view', 'scroll' );
 
