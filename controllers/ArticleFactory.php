@@ -1164,12 +1164,10 @@ class ArticleFactory {
         return $data;
     }
 
-
     public function flushModuleAssets(){
         Yii::app()->cache->set( $this->gid .'-modulefiles',false);
         $this->moduleAssets();
     }
-
 
     /* these handle creating data that actions might need like assets, variables and menus */
 
@@ -1192,11 +1190,8 @@ class ArticleFactory {
         return true;
     }
 
-
     /* deprecated. Variables are created on the fly when needed */
     private function moduleVariables(){
-
-        return true;
 
         $cachename = $this->gid.$this->action_id.'-factory-modulevars';
         $cached = Appcaching::getGlobalCache($cachename);
@@ -1229,7 +1224,6 @@ class ArticleFactory {
             return true;
         }
     }
-
 
     private function moduleMenus(){
         $cachename = $this->gid.$this->action_id.'-factory-modulemenus';
