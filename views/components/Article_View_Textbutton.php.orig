@@ -1,0 +1,98 @@
+<?php
+
+Yii::import('application.modules.aelogic.components.*');
+
+class Article_View_Textbutton extends ArticleComponent {
+
+    public $required_params = array('id');
+    public $image;
+
+    public function template() {
+        $id = $this->addParam('id',$this->options,rand(2333,2999));
+        $action = $this->addParam('action',$this->options,'submit-form-content');
+        $config = $this->addParam('config',$this->options,'');
+        $variable = $this->addParam('variable',$this->options,false);
+        $sync_open = $this->addParam('sync_open',$this->options,0);
+        $back_button = $this->addParam('back_button',$this->options,1);
+        $fallbackimage = $this->addParam('fallbackimage',$this->options,'');
+        $style = $this->addParam('style',$this->options,'');
+        $open_popup = $this->addParam('open_popup',$this->options,'');
+        $sync_upload = $this->addParam('sync_upload',$this->options,0);
+        $crop = $this->addParam('crop',$this->options,false);
+        $colors = $this->addParam('colors',$this->options,false);
+
+        $par['onclick'] = new StdClass();
+        $par['onclick']->id = $id;
+        $par['onclick']->state = 'active';
+        $par['onclick']->action = $action;
+
+        ( $config ? $par['onclick']->action_config = $config : false );
+        ( $open_popup ? $par['onclick']->open_popup = $open_popup : false );
+        ( $sync_open ? $par['onclick']->sync_open = $sync_open : false );
+        ( $sync_upload ? $par['onclick']->sync_upload = $sync_upload : false );
+        ( $back_button ? $par['onclick']->back_button = $back_button : false );
+        ( $variable ? $par['onclick']->variable = $variable : false );
+
+        $par['onclick']->text = $this->content;
+
+        $item = new StdClass;
+        $item->id = $id;
+
+        $bgcolor = $this->addParam('button_color',$colors,'#000000');
+        $color = $this->addParam('button_text_color',$colors,'#ffffff');
+
+        if(strstr($bgcolor,'rgba')){
+            $bgcolor = Helper::normalizeColor($bgcolor);
+        }
+
+        if(strstr($color,'rgba')){
+            $color = Helper::normalizeColor($color);
+        }
+
+<<<<<<< HEAD
+=======
+
+>>>>>>> ios-building
+        $sty['background-color'] = $bgcolor;
+        $sty['color'] = $color;
+        $sty['text-align'] = 'center';
+        $sty['vertical-align'] = 'middle';
+        $sty['font-ios'] = 'Roboto-Regular';
+        $sty['font-android'] = 'Roboto';
+        $sty['width'] = '100%';
+        $sty['font-size'] = 18;
+        //$sty['margin'] = '18 60 18 60';
+        //$sty['padding'] = '18 60 18 60';
+        $sty['height'] = '50';
+
+        /* obsolete */
+        $sty['background_color'] = $bgcolor;
+        $sty['text_color'] = $color;
+        $sty['align'] = 'center';
+        $sty['font_ios'] = 'Roboto-Regular';
+        $sty['font_android'] = 'Roboto';
+        $sty['text_size'] = 18;
+
+        $par['style_content'] = (object)$sty;
+
+/*      $obj->style_content = new StdClass();
+        $obj->style_content->children_style = $sty;
+        $obj->style_content->background_color = $this->addParam('button_color',$colors,'#000000');
+        $obj->style_content->text_color = $this->addParam('button_color',$colors,'#ffffff');
+        $obj->style_content->width = '100%';
+        $obj->style_content->border = 1;
+        $obj->style_content->border_color = '#000000';
+        $obj->style_content->height = '100';
+        $obj->style_content->text_size = 20;
+        $obj->style_content->font_ios = 'Roboto-Regular';
+        $obj->style_content->font_android = 'Roboto';
+        $obj->padding = '4 60 4 60';*/
+
+        $tt[] = $this->factoryobj->getText($this->content,$par);
+        $row = $this->factoryobj->getRow($tt,array('height' => '50'));
+
+        return $row;
+
+	}
+
+}

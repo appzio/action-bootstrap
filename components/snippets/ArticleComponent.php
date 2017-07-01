@@ -125,7 +125,6 @@ class ArticleComponent {
             'width',
             'align',
             'crop',
-
             'text-style',
             'font-size',
             'text-color',
@@ -137,23 +136,16 @@ class ArticleComponent {
             'background-image',
             'background-size',
             'color',
-
             'shadow-color',
             'shadow-offset',
             'shadow-radius',
-            
             'vertical-align',
             'border-radius',
-
             'text-align',
-
             'lazy',
-
             'floating',
             'float',
-
             'max-height'
-
         );
     }
 
