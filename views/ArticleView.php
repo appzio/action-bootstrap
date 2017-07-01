@@ -42,7 +42,7 @@ class ArticleView {
 
     public function getText(string $content,array $params=array(),array $styles=array()){
         $obj = new \stdClass();
-        $obj->type = 'text';
+        $obj->type = 'msg-plain';
         $obj->content = $content;
         return $obj;
     }
