@@ -1,6 +1,6 @@
 <?php
 
-namespace article\views\components;
+namespace Article\Views\Components;
 use Article\Views\ArticleView;
 
 trait Image {

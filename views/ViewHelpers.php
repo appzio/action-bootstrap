@@ -1,6 +1,6 @@
 <?php
 
-namespace article\views;
+namespace Article\Views;
 
 trait ViewHelpers {
 

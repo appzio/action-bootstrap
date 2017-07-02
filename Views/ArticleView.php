@@ -3,7 +3,7 @@
 namespace Article\Views;
 
 interface ArticleViewInterface {
-    function tab1();
+
 }
 
 class ArticleView implements ArticleViewInterface {
@@ -13,8 +13,17 @@ class ArticleView implements ArticleViewInterface {
     use Components\Image;
     use Components\Onclick;
 
-    public $model;
+    /* this is here just to fix a phpstorm auto complete bug with namespaces */
+    /* @var \Article\Models\ArticleModel */
+    public $phpstorm_bugfix;
+
+    /* @var \Article\Controllers\ArticleController */
     public $controller;
+
+    /* @var \Article\Models\ArticleModel */
+    public $model;
+
+
     public $data;
     public $colors;
 
@@ -40,9 +49,12 @@ class ArticleView implements ArticleViewInterface {
             }
         }
 
+
         $this->data = new \stdClass();
 
     }
+
+
 
     public function tab1(){
         $this->data = new \stdClass();

@@ -1,6 +1,6 @@
 <?php
 
-namespace article\views\components;
+namespace Article\Views\Components;
 use Article\Views\ArticleView;
 
 trait Onclick {
@@ -18,6 +18,9 @@ trait Onclick {
         $obj->action_config = $number;
 
         $obj = $this->attachParameters($obj,$parameters);
+        if($saveids){
+
+        }
 
         return $obj;
 	}
