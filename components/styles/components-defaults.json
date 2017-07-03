@@ -1,9 +1,5 @@
 {
 
-  "msg-plain-default": {
-    "padding": "5 5 5 5"
-  },
-
   "datepicker": {
     "font-size": "14",
     "font-style": "normal",
