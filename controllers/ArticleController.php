@@ -1131,7 +1131,6 @@ class ArticleController {
         $this->mobilematchingobj->initMatching($otheruserid,true);
 
         $this->mobilematchingmetaobj = new MobilematchingmetaModel();
-        $this->mobilematchingmetaobj->factoryInit($this);
     }
 
     public function initMobileChat( $context, $context_key, $otheruserid = false, $chat_id = 0 ){
