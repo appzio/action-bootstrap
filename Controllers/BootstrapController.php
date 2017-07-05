@@ -11,13 +11,13 @@ class BootstrapController implements BootstrapControllerInterface {
 
 
     /* this is here just to fix a phpstorm auto complete bug with namespaces */
-    /* @var \Article\Models\ArticleModel */
+    /* @var \Bootstrap\Models\BootstrapModel */
     public $phpstorm_bugfix;
 
     /* @var \Article\Views\ArticleView */
     public $view;
 
-    /* @var \Article\Models\ArticleModel */
+    /* @var \Bootstrap\Models\BootstrapModel */
     public $model;
 
     public function __construct($obj){

@@ -14,15 +14,14 @@ class ArticleView implements ArticleViewInterface {
     use Components\Onclick;
 
     /* this is here just to fix a phpstorm auto complete bug with namespaces */
-    /* @var \Article\Models\ArticleModel */
+    /* @var \Bootstrap\Models\BootstrapModel */
     public $phpstorm_bugfix;
 
-    /* @var \Article\Controllers\ArticleController */
+    /* @var \Bootstrap\Controllers\BootstrapController */
     public $controller;
 
-    /* @var \Article\Models\ArticleModel */
+    /* @var \Bootstrap\Models\BootstrapModel */
     public $model;
-
 
     public $data;
     public $colors;
@@ -49,12 +48,9 @@ class ArticleView implements ArticleViewInterface {
             }
         }
 
-
         $this->data = new \stdClass();
 
     }
-
-
 
     public function tab1(){
         $this->data = new \stdClass();
