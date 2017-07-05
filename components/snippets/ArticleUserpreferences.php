@@ -47,6 +47,7 @@ class ArticleUserpreferences extends ArticleComponent
         $onclick->id = $identifier . '|' . $this->prefix;
         $onclick->open_popup = 1;
         $onclick->sync_open = 1;
+        $onclick->sync_close = 1;
         $onclick->back_button = 1;
         $onclick->keep_user_data = 1;
 
@@ -96,6 +97,8 @@ class ArticleUserpreferences extends ArticleComponent
                 $content = substr($content, 0, 10) . '...';
             }
         }
+
+        $content = empty($content) ? ' ' : $content;
 
         return $content;
     }
@@ -161,6 +164,21 @@ class ArticleUserpreferences extends ArticleComponent
                     'No'
                 );
                 break;
+            case 'zodiac_sign':
+                return array(
+                    'Aquarius',
+                    'Aries',
+                    'Cancer',
+                    'Capricorn',
+                    'Gemini',
+                    'Leo',
+                    'Libra',
+                    'Pisces',
+                    'Sagittarius',
+                    'Scorpio',
+                    'Taurus',
+                    'Virgo'
+                );
             default:
                 return array();
                 break;
