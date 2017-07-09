@@ -1,6 +1,10 @@
 <?php
 
+/* turns inline styles into stylesheets */
+
 class ArticlePreprocessor {
+
+
 
     public $styles;
     public $gid;

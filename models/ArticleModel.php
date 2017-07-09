@@ -1,6 +1,6 @@
 <?php
 
-/* here is stuff that COULD be in the Aeaction model, but its hear mainly for security purposes */
+/* Old model */
 
 
 class ArticleModel extends CActiveRecord {

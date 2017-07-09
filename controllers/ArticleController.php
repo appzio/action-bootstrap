@@ -10,11 +10,14 @@ Yii::import('application.modules.aeapi.models.*');
 
 class ArticleController {
 
+
     public $allvars = array();
     public $datafile;
 
     /* @var ImagesController */
     public $imagesobj;
+
+    /* active menuid */
     public $menuid;
     public $mode;
     public $actionobj;
