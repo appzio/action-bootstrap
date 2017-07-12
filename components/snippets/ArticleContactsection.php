@@ -16,7 +16,6 @@ class ArticleContactsection extends ArticleComponent
 
         $hide = $this->addParam('hide',$this->options,false);
         $output[] = $this->factoryobj->formkitTitle('{#contact#}');
-
         $screen_name_error = $this->validateScreenName();
         $emailerror = $this->validateEmail();
 

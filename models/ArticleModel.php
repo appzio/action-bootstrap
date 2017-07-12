@@ -1,10 +1,9 @@
 <?php
 
-/* here is stuff that COULD be in the Aeaction model, but its hear mainly for security purposes */
+/* Old model */
 
 
 class ArticleModel extends CActiveRecord {
-
 
     public $configobj;
     public $varcontent;
@@ -15,7 +14,7 @@ class ArticleModel extends CActiveRecord {
     public function factoryInit($data){
         $this->factory = $data;
     }
-  
+
     public function tableName(){
         return 'ae_game_branch_action';
     }
@@ -99,7 +98,7 @@ class ArticleModel extends CActiveRecord {
                 AeplayVariable::updateWithId($playid, $key, $savebit);
             }
         }
-        
+
         return true;
 
     }
