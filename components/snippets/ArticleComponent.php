@@ -206,6 +206,21 @@ class ArticleComponent {
             $obj->visibility_delay = $this->options['visibility_delay'];
         }
 
+        if ( isset($this->options['initially']) ) {
+            $obj->initially = $this->options['initially'];
+        }
+
+        if ( isset($this->options['keep-open']) ) {
+            $name = 'keep-open';
+            $obj->$name = $this->options['keep-open'];
+        }
+
+
+        if ( isset($this->options['visibility_delay']) ) {
+            $obj->visibility_delay = $this->options['visibility_delay'];
+        }
+
+
         if ( isset($this->options['transition']) ) {
             $obj->transition = $this->options['transition'];
         }
