@@ -519,6 +519,12 @@ class ArticleChat extends ArticleComponent {
                 $colitems[] = $this->factoryobj->getImage($msg['attachment'], $img_params);
             }
 
+            // TODO: clear this up
+            $rightArrow = $this->factoryobj->getImage('arrow-right-yellow.png');
+            $rightArrow = $rightArrow->content == 'Image not found' ?
+                $this->factoryobj->getImage('arrow-right.png') :
+                $rightArrow;
+
             $column1 = $this->factoryobj->getColumn(array(
                     $this->factoryobj->getImage($userInfo['profilepic'], array('defaultimage' => 'anonymous2.png', 'crop' => 'round',
                         'priority' => 9,'imgwidth' => 300, 'imgheight' => 300) )
@@ -530,7 +536,7 @@ class ArticleChat extends ArticleComponent {
                     $colitems,
                 array( 'style' => 'chat-column-3' ));
             $column4 = $this->factoryobj->getColumn(array(
-                    $this->factoryobj->getImage('arrow-right.png')
+                    $rightArrow
                 ), array( 'style' => 'chat-column-2' ));
             $column5 = $this->factoryobj->getColumn(
                     $colitems,
