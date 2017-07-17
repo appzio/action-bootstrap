@@ -137,6 +137,9 @@ class ArticleController {
     /* @var MobilematchingModel */
     public $mobilematchingobj;
 
+    /* @var MobilematchingmetaModel */
+    public $mobilematchingmetaobj;
+
     /* @var Aechat */
     public $mobilechatobj;
 
@@ -170,6 +173,8 @@ class ArticleController {
     /* this is either client_iphone or client_android */
     public $client_device;
 
+    /* Disable the bottom notifications for some controllers */
+    public $disable_bottom_notifications;
 
 
     public function __construct($obj){
@@ -1127,6 +1132,8 @@ class ArticleController {
         $this->mobilematchingobj->uservars = $this->varcontent;
         $this->mobilematchingobj->factoryInit($this);
         $this->mobilematchingobj->initMatching($otheruserid,true);
+
+        $this->mobilematchingmetaobj = new MobilematchingmetaModel();
     }
 
     public function initMobileChat( $context, $context_key, $otheruserid = false, $chat_id = 0 ){
@@ -1208,6 +1215,11 @@ class ArticleController {
     }
 
     public function getBottomNotifications($count){
+
+        if ( $this->disable_bottom_notifications ) {
+            return false;
+        }
+
         return $this->returnComponent('bottomnotifications','module',$count);
     }
 

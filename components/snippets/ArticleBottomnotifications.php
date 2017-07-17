@@ -110,10 +110,6 @@ class ArticleBottomnotifications extends ArticleComponent {
             return $this->factoryobj->getColumn($row,array('width' => $width,'text-align' => 'center','onclick' => $onclick,'height' => '60'));
         }
 
-
-
-
     }
-
 
 }

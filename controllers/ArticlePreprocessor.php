@@ -57,7 +57,9 @@ class ArticlePreprocessor {
         $output = array();
 
         foreach ($data as $node){
-            if(isset($node->style_content)){
+            
+            if (isset($node->style_content)) {
+
                 $md5 = md5(serialize($node->style_content));
                 if(isset($this->styles[$md5])){
                     unset($node->style_content);
@@ -79,8 +81,6 @@ class ArticlePreprocessor {
                     $node->swipe_content = $this->doProcessing($node->swipe_content);
                 }
 
-
-
             }
 
             $output[] = $node;
@@ -96,5 +96,3 @@ class ArticlePreprocessor {
     }
 
 }
-
-
