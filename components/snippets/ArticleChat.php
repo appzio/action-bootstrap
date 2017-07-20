@@ -29,6 +29,7 @@ class ArticleChat extends ArticleComponent {
     public $use_server_time;
     
     public $pic_permission;
+    public $hide_pic_button;
     public $strip_urls;
 
     public $required_params = array( 'context', 'context_key' );
@@ -99,6 +100,7 @@ class ArticleChat extends ArticleComponent {
         $this->use_server_time = $this->addParam('use_server_time',$this->options,false);
 
         $this->pic_permission = $this->addParam('pic_permission',$this->options,false);
+        $this->hide_pic_button = $this->addParam('hide_pic_button',$this->options,false);
         $this->strip_urls = $this->addParam('strip_urls',$this->options,false);
         $this->chat_id = $this->addParam('chat_id',$this->options,false);
 
@@ -851,6 +853,10 @@ class ArticleChat extends ArticleComponent {
     }
 
     private function getPhotoUploadButton(){
+
+        if ( $this->hide_pic_button ) {
+            return $this->factoryobj->getVerticalSpacer(50);
+        }
 
         /* if permission is required from both users for sending pictures */
         if($this->pic_permission){
