@@ -197,7 +197,7 @@ class ArticleChat extends ArticleComponent {
         }
 
         /* NOTE: header might also return false */
-        $headerdata = $this->getMyMatchItem( $this->other_user_play_id );
+        $headerdata = $this->getPersonInfo();
 
         if($headerdata){
             $object->header[] = $headerdata;
@@ -221,7 +221,11 @@ class ArticleChat extends ArticleComponent {
             $object->scroll = $this->getChatError();
         } else {
             $object->scroll = $this->getChat();
-            $object->footer = $this->getFooter();
+
+            if ( !$this->userUnmatched() ) {
+                $object->footer = $this->getFooter();
+            }
+
         }
 
         $this->factoryobj->initMobileMatching( $this->other_user_play_id, true );
@@ -296,16 +300,28 @@ class ArticleChat extends ArticleComponent {
 
         $output[] = $this->factoryobj->getSpacer( 10 );
 
+        if ( $this->userUnmatched() ) {
+            $userinfo = $this->getUserInfo();
+            $output[] = $this->factoryobj->getText($userinfo['name'] . ' {#unmatched_you#}', array(
+                'padding' => '10 0 10 0',
+                'font-size' => '16',
+                'text-align' => 'center',
+                'color' => '#808080',
+            ));
+        }
+
         return $output;
     }
 
-    public function getMyMatchItem( $id ){
+    public function getPersonInfo(){
 
         if($this->userlist){
             return $this->getGroupChatHeader($this->userlist);
         }
 
-        $userinfo = $this->getUserInfo($id);
+        $userinfo = $this->getUserInfo();
+        $id = $this->other_user_play_id;
+
         $name = ucfirst($userinfo['name']);
         $profilepic = $userinfo['profilepic'];
         $vars = $userinfo['vars'];
@@ -315,10 +331,10 @@ class ArticleChat extends ArticleComponent {
             return false;
         } else {
             $string = $this->factoryobj->localizationComponent->smartLocalize('{#chat_with#}');
-            $this->factoryobj->rewriteActionField('subject',$string.' ' .$name);
+            $this->factoryobj->rewriteActionField('subject', $string . ' ' . $name);
         }
 
-        $name = isset($vars['city']) ? $name.', '.$vars['city'] : $name;
+        $name = isset($vars['city']) ? $name . ', ' . $vars['city'] : $name;
 
         $imageparams['crop'] = 'round';
         $imageparams['width'] = '40';
@@ -332,6 +348,10 @@ class ArticleChat extends ArticleComponent {
         $imageparams['onclick']->back_button = true;
         $imageparams['onclick']->sync_open = true;
         $imageparams['onclick']->action_config = $this->factoryobj->getConfigParam('detail_view');
+
+        if ( $this->userUnmatched( $id ) ) {
+            $imageparams['blur'] = '1';
+        }
 
         $rowparams['padding'] = '0 0 5 15';
         $rowparams['height'] = '50';
@@ -349,7 +369,6 @@ class ArticleChat extends ArticleComponent {
                 $profilepic = 'sila-private-photos.png';
             }
         }
-
 
         $columns[] = $this->factoryobj->getImage($profilepic, $imageparams);
         $columns[] = $this->factoryobj->getText($name, $textparams);
@@ -475,14 +494,13 @@ class ArticleChat extends ArticleComponent {
         $onclick->action = 'submit-form-content';
         $onclick->viewport = 'bottom';
 
-
         // $msgs = (object) array_reverse( $this->chat_content['msgs'] );
         $msgs = (object) $this->chat_content['msgs'];
         $count = count( $this->chat_content['msgs'] );
 
-         if ( $count < $this->total_messages ) {
-             $output[] = $this->factoryobj->getText( '{#load_more#}', array( 'style' => 'load-more-btn', 'onclick' => $onclick ) );
-         }
+        if ( $count < $this->total_messages ) {
+            $output[] = $this->factoryobj->getText( '{#load_more#}', array( 'style' => 'load-more-btn', 'onclick' => $onclick ) );
+        }
 
         foreach ($msgs as $i => $msg) {
 
@@ -492,19 +510,16 @@ class ArticleChat extends ArticleComponent {
                 continue;
             }
 
-
             $seen_text = '';
             if ( $count == ($i+1) AND $this->userIsOwner() ) {
                 $seen_text = $this->checkIfSeen();
             }
-
 
             $userInfo = $this->getUserInfo( $this->current_msg['user'] );
 
             if ( $this->msgadded === true) {
                 $this->msgadded = false;
             }
-
 
             $date = $this->factoryobj->getLocalizedDate( $this->current_msg['date'] );
             if ( $this->hide_time ) {
@@ -574,18 +589,21 @@ class ArticleChat extends ArticleComponent {
         return false;
     }
 
-    private function getUserInfo( $id ) {
+    private function getUserInfo( $id = null ) {
+
+        if ( empty($id) ) {
+            $id = $this->other_user_play_id;
+        }
         
         $profilepic = 'anonymous2.png';
 
-        $cachename = 'uservars-'.$id;
+        $cachename = 'uservars-' . $id;
         $vars = Appcaching::getGlobalCache($cachename);
         
-        if(!$vars){
+        if ( !$vars ) {
             $vars = AeplayVariable::getArrayOfPlayvariables($id);
             Appcaching::setGlobalCache($cachename,$vars,120);
         }
-
 
         switch($this->name_mode){
             case 'invisible';
@@ -614,16 +632,11 @@ class ArticleChat extends ArticleComponent {
                 break;
 
             case 'company':
-                $name = isset($vars['company']) ? $vars['company'] : false;
-                
-                if ( !$name ) {
-                    $name = isset($vars['real_name']) ? $vars['real_name'] : '{#anonymous#}';
-                }
-
+                $name = isset($vars['company']) ? $vars['company'] : $this->getFullname( $vars );
                 break;
 
             default:
-                $name = isset($vars['real_name']) ? $vars['real_name'] : '{#anonymous#}';
+                $name = $this->getFullname( $vars );
                 break;
         }
 
@@ -642,6 +655,19 @@ class ArticleChat extends ArticleComponent {
             'name'       => $name,
             'vars'       => $vars
         );
+    }
+
+    private function getFullname( $vars ) {
+        
+        if ( isset($vars['real_name']) AND $vars['real_name'] ) {
+            $name = $vars['real_name'];
+        } else if (  isset($vars['name']) AND $vars['name'] ) {
+            $name = $vars['name'];
+        } else {
+            $name = '{#anonymous#}';
+        }
+
+        return $name;
     }
 
     private function saveChatMsg(){
@@ -762,16 +788,13 @@ class ArticleChat extends ArticleComponent {
             return $name;
         }
 
-        if ( $name ) {
-            $name_pieces = explode(' ', trim($name));
+        $name_pieces = explode(' ', trim($name));
 
-            if ( $type == 'first' ) {
-                return $name_pieces[0];
-            } else if ( $type == 'last' AND isset($name_pieces[1]) ) {
-                return $name_pieces[1];
-            }
-
-        }        
+        if ( $type == 'first' ) {
+            return $name_pieces[0];
+        } else if ( $type == 'last' AND isset($name_pieces[1]) ) {
+            return $name_pieces[1];
+        }    
     }
 
     private function handlePicPermission(){
@@ -1072,6 +1095,27 @@ class ArticleChat extends ArticleComponent {
         foreach ($options as $option) {
             if ( isset($this->varcontent[$option]) AND !empty($this->varcontent[$option]) ) {
                 return $this->varcontent[$option];
+            }
+        }
+
+        return false;
+    }
+
+    private function userUnmatched( $play_id = null ) {
+
+        if ( empty($play_id) ) {
+            $play_id = $this->other_user_play_id;
+        }
+
+        $unmatched_list = json_decode($this->factoryobj->getVariable('unmatched_me'));
+
+        if ( empty($unmatched_list) ) {
+            return false;
+        }
+
+        foreach ($unmatched_list as $user) {
+            if ($user[0] == $play_id) {
+                return true;
             }
         }
 
