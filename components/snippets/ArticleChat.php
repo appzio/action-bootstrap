@@ -80,7 +80,7 @@ class ArticleChat extends ArticleComponent {
     public function template() {
 
         $this->factoryobj->rewriteActionField( 'keep_scroll_in_bottom', 1 );
-        $this->factoryobj->rewriteActionField( 'poll_update_view', 'scroll' );
+        $this->factoryobj->rewriteActionField( 'poll_update_view', 'all' );
 
         // Init the Chat based on the currently requested context
         $this->custom_play_id = isset($this->options['custom_play_id']) ? $this->options['custom_play_id'] : $this->playid;
@@ -215,9 +215,6 @@ class ArticleChat extends ArticleComponent {
         ));
 
         if ( !empty($chat_flag) AND $chat_flag->value == '1' AND !$matches ) {
-            // $complete = new StdClass();
-            // $complete->action = 'list-branches';
-            // $this->data->onload[] = $complete;
             $object->scroll = $this->getChatError();
         } else {
             $object->scroll = $this->getChat();
@@ -303,7 +300,7 @@ class ArticleChat extends ArticleComponent {
         if ( $this->userUnmatched() ) {
             $userinfo = $this->getUserInfo();
             $output[] = $this->factoryobj->getText($userinfo['name'] . ' {#unmatched_you#}', array(
-                'padding' => '10 0 10 0',
+                'padding' => '10 0 20 0',
                 'font-size' => '16',
                 'text-align' => 'center',
                 'color' => '#808080',
@@ -1042,11 +1039,12 @@ class ArticleChat extends ArticleComponent {
         $use_blur = false;
 
         if ( !$this->userIsOwner() ) {
+            $offset = 0; // Use offset as per the difference between the Apache local time and MySQL time
             $time_to_read = 300;
-            $enter_time = $this->factoryobj->getSavedVariable( 'entered_chat_timestamp' );
+            $enter_time = $this->getChatEnterTime();
             $seconds_left = $time_to_read - ( time() - $enter_time );
 
-            if ( $seconds_left < $this->current_msg['date'] ) {
+            if ( $seconds_left < ( $this->current_msg['date'] + $offset ) ) {
                 $use_blur = true;
             }
         }
@@ -1120,6 +1118,22 @@ class ArticleChat extends ArticleComponent {
         }
 
         return false;
+    }
+
+    private function getChatEnterTime() {
+        $db_times = $this->factoryobj->getSavedVariable( 'entered_chat_timestamp' );
+
+        if ( empty($db_times) ) {
+            return 0;
+        }
+
+        $times_array = json_decode( $db_times, true );
+
+        if ( isset($times_array[$this->context_key]) ) {
+            return $times_array[$this->context_key];
+        }
+
+        return 0;
     }
 
 }

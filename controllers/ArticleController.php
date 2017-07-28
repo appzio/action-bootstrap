@@ -269,30 +269,45 @@ class ArticleController {
     /* this function treats variable as a json list where it adds a value
         note that if variable includes a string, it will overwrite it */
 
-    public function addToVariable($variable,$value){
+    public function addToVariable($variable, $value, $is_assoc = false) {
 
         $var = $this->getSavedVariable($variable);
 
-        if($var){
+        if ($var) {
+            
             $var = json_decode($var,true);
             if(is_array($var) AND !empty($var)){
-                if(in_array($value,$var)){
+                if ( $is_assoc ) {
+                    foreach ($value as $k => $v) {
+                        $var[$k] = $v;
+                    }
+                } else if ( in_array($value, $var) ) {
                     return false;
                 } else {
-                    array_push($var,$value);
+                    array_push( $var, $value );
                 }
             }
+
         }
 
-        if(!is_array($var) OR empty($var)){
+        if (!is_array($var) OR empty($var)) {
+
             $var = array();
-            array_push($var,$value);
+
+            if ( $is_assoc AND is_array($value) ) {
+                foreach ($value as $k => $v) {
+                    $var[$k] = $v;
+                }
+            } else {
+                array_push($var,$value);
+            }
+
         }
 
         $var = json_encode($var);
         $this->saveVariable($variable,$var);
 
-
+        return true;
     }
 
     /* by default, this */
