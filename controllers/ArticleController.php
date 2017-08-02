@@ -1443,6 +1443,10 @@ class ArticleController {
         return $this->returnComponent('fieldtext','field',$content,$params);
     }
 
+    public function getCalendar($content, $params=array()){
+        return $this->returnComponent('calendar','field',$content,$params);
+    }
+
 
     /* this will produce a simple alert box with default styles
         user has an option to close it and it will not be shown again
