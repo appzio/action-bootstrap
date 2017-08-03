@@ -1808,7 +1808,6 @@ class ArticleController {
         }
     }
 
-
     public function getInstagramSignInButton($actionid){
 
         $onclick1 = new StdClass();
@@ -1834,7 +1833,6 @@ class ArticleController {
         return $this->getButtonWithIcon('twitter-icon.png', 'insta', '{#sign_in_with_twitter#}', array('style' => 'twitter_button_style'),array('style' => 'fbbutton_text_style'),$onclick2);
     }
 
-
     public function getOauthSignIn(){
 
         // myapp://open?action_id=12329&menuid=menuid
@@ -1851,9 +1849,6 @@ class ArticleController {
         return $onclick2;
     }
 
-
-
-
     public function getButtonWithIcon($image,$id,$text,$buttonparams=array(),$textparams=array(),$onclick=false){
         $params['priority'] = 1;
         $params['height'] = '28';
@@ -1869,8 +1864,7 @@ class ArticleController {
             $buttonparams['onclick']->config = $this->addParam('config',$buttonparams,'');
             $buttonparams['onclick']->sync_open = $this->addParam('sync_open',$buttonparams,'');
         }
-
-        $img = $this->getImage($image,$params);
+        
         if(!isset($buttonparams['style']) AND !isset($buttonparams['background-color'])){
             $buttonparams['background-color'] = $this->color_topbar;
             $buttonparams['text-align'] = 'center';
@@ -1883,12 +1877,10 @@ class ArticleController {
             $textparams['color'] = $this->colors['top_bar_text_color'];
         }
 
-
         //$column[] = $this->getColumn(array($img),array('vertical-align' => 'middle','width' => '30'));
-        $column[] = $img;
+        $column[] = $this->getImage($image,$params);
         $column[] = $this->getVerticalSpacer('10');
         $column[] = $this->getText($text,$textparams);
-
 
         if($params['image']){
             return $this->getRow($column,$buttonparams);
@@ -1896,7 +1888,6 @@ class ArticleController {
             return $this->getError('Image not found');
         }
     }
-
 
     public function getImagebutton($image,$id,$fallbackimage=false,$params=array()){
 

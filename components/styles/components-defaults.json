@@ -1,5 +1,4 @@
 {
-
   "datepicker": {
     "font-size": "14",
     "font-style": "normal",
@@ -333,8 +332,8 @@
     "background-color": "#3b5998",
     "text-align": "center",
     "border-radius": "4",
-    "height": "45",
     "vertical-align": "middle",
+    "padding": "8 0 8 0",
     "margin": "5 40 0 40"
   },
   "google_button_style": {
