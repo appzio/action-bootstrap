@@ -1599,7 +1599,9 @@ class ArticleController {
         $textfieldparams['hint'] = $fieldname;
         $textfieldparams['id'] = $id;
         $textfieldparams['variable'] = $id;
+        $textfieldparams['input_type'] = $type;
 
+        
         if($textfield_inputtype){
             $textfieldparams['input_type'] = $textfield_inputtype;
         }
