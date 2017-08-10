@@ -59,6 +59,7 @@ class ArticleChat extends ArticleComponent {
     public $top_button;
 
     private $current_msg;
+    private $current_user_unmatched;
 
     protected function requiredOptions() {
         return array();
@@ -105,6 +106,7 @@ class ArticleChat extends ArticleComponent {
         $this->hide_pic_button = $this->addParam('hide_pic_button',$this->options,false);
         $this->strip_urls = $this->addParam('strip_urls',$this->options,false);
         $this->chat_id = $this->addParam('chat_id',$this->options,false);
+        $this->current_user_unmatched = $this->addParam('current_user_unmatched',$this->options,false);
 
         if($this->factoryobj->getConfigParam('name_mode')){
             $this->name_mode = $this->factoryobj->getConfigParam('name_mode');
@@ -134,7 +136,7 @@ class ArticleChat extends ArticleComponent {
             $this->factoryobj->mobilechatobj->addChat($this->context,$this->context_key,$this->otheruser,'fromarticle');
         }
 
-        /* we look for the user's playid using from the chat id */
+        /* we look for the user's playid using the chat id */
         $otheruser = explode('-chat-',$this->context_key);
 
         if(count($otheruser) == 2){
@@ -203,7 +205,6 @@ class ArticleChat extends ArticleComponent {
             $object->header[] = $headerdata;
         }
 
-
         $storage = new AeplayKeyvaluestorage();
         $storage->play_id = $this->playid;
         $matches = $storage->valueExists('two-way-matches',$this->other_user_play_id);
@@ -219,7 +220,7 @@ class ArticleChat extends ArticleComponent {
         } else {
             $object->scroll = $this->getChat();
 
-            if ( !$this->userUnmatched() ) {
+            if ( !$this->current_user_unmatched ) {
                 $object->footer = $this->getFooter();
             }
 
@@ -297,7 +298,7 @@ class ArticleChat extends ArticleComponent {
 
         $output[] = $this->factoryobj->getSpacer( 10 );
 
-        if ( $this->userUnmatched() ) {
+        if ( $this->current_user_unmatched ) {
             $userinfo = $this->getUserInfo();
             $output[] = $this->factoryobj->getText($userinfo['name'] . ' {#unmatched_you#}', array(
                 'padding' => '10 0 20 0',
@@ -346,7 +347,7 @@ class ArticleChat extends ArticleComponent {
         $imageparams['onclick']->sync_open = true;
         $imageparams['onclick']->action_config = $this->factoryobj->getConfigParam('detail_view');
 
-        if ( $this->userUnmatched( $id ) ) {
+        if ( $this->current_user_unmatched ) {
             $imageparams['blur'] = '1';
         }
 
@@ -1093,27 +1094,6 @@ class ArticleChat extends ArticleComponent {
         foreach ($options as $option) {
             if ( isset($this->varcontent[$option]) AND !empty($this->varcontent[$option]) ) {
                 return $this->varcontent[$option];
-            }
-        }
-
-        return false;
-    }
-
-    private function userUnmatched( $play_id = null ) {
-
-        if ( empty($play_id) ) {
-            $play_id = $this->other_user_play_id;
-        }
-
-        $unmatched_list = json_decode($this->factoryobj->getVariable('unmatched_me'));
-
-        if ( empty($unmatched_list) ) {
-            return false;
-        }
-
-        foreach ($unmatched_list as $user) {
-            if ($user[0] == $play_id) {
-                return true;
             }
         }
 
