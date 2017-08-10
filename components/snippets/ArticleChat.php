@@ -79,7 +79,7 @@ class ArticleChat extends ArticleComponent {
     }
 
     public function template() {
-
+        
         $this->factoryobj->rewriteActionField( 'keep_scroll_in_bottom', 1 );
         $this->factoryobj->rewriteActionField( 'poll_update_view', 'all' );
 
@@ -1005,8 +1005,22 @@ class ArticleChat extends ArticleComponent {
     }
 
     public function markMsgsAsRead() {
+        
+        if ( empty($this->chat_content['msgs']) OR !isset($this->submit['poll']) OR !isset($this->submit['actionid']) ) {
+            return false;
+        }
 
-        if ( empty($this->chat_content['msgs']) ) {
+        $play_action_obj = AeplayAction::model()->findByPk( $this->submit['actionid'] );
+
+        if ( empty($play_action_obj) ) {
+            return false;
+        }
+
+        $db_chat_action_id = $play_action_obj['action_id'];
+        $chat_action_id = $this->factoryobj->getActionidByPermaname( 'chat' );
+
+        // Check if this is a "chat poll" request
+        if ( $db_chat_action_id != $chat_action_id ) {
             return false;
         }
 
