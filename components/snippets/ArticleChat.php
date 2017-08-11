@@ -1054,12 +1054,17 @@ class ArticleChat extends ArticleComponent {
         $use_blur = false;
 
         if ( !$this->userIsOwner() ) {
-            $offset = 0; // Use offset as per the difference between the Apache local time and MySQL time
             $time_to_read = 300;
             $enter_time = $this->getChatEnterTime();
-            $seconds_left = $time_to_read - ( time() - $enter_time );
 
-            if ( $seconds_left < ( $this->current_msg['date'] + $offset ) ) {
+            $seconds_left = $time_to_read - ( time() - $enter_time );
+            // $message_visible_until = $enter_time + $time_to_read;
+
+            // This is the difference between the actual time, when the message was originally sent
+            // and the time when the person entered the chat section
+            $msg_diff = $enter_time - $this->current_msg['date'];
+
+            if ( $seconds_left < $msg_diff ) {
                 $use_blur = true;
             }
         }
