@@ -970,6 +970,23 @@ class ArticleController {
                 $onclick->action = 'open-url';
                 $onclick->action_config = $param;
                 break;
+
+            case 'purchase':
+
+                $onclick->action = 'inapp-purchase';
+                $onclick->id = 'inapp-product-id';
+                $onclick->producttype_android = 'inapp';
+                $onclick->producttype_ios = 'inapp';
+
+                if(isset($param['product_id_ios'])) {
+                    $onclick->product_id_ios = $param['product_id_ios'];
+                }
+
+                if(isset($param['product_id_android'])) {
+                    $onclick->product_id_android = $param['product_id_android'];
+                }
+
+                break;
             
             /* this is a special case where we can save also id's or some other info with the request */
             case 'submit':
@@ -1135,9 +1152,6 @@ class ArticleController {
         // }
 
         Yii::import('application.modules.aelogic.packages.actionMobilematching.models.*');
-
-        if($debug){
-        }
 
         $this->mobilematchingobj = new MobilematchingModel();
         $this->mobilematchingobj->playid_thisuser = $this->playid;
