@@ -245,24 +245,33 @@ class ArticleController {
 
 
     /* this function treats variable as a json list where it removes a value if it exists */
-
-    public function removeFromVariable($variable,$value){
+    public function removeFromVariable($variable, $value, $is_assoc = false){
         $var = $this->getSavedVariable($variable);
 
-        if($var){
-            $var = json_decode($var,true);
-            if(is_array($var) AND !empty($var)){
-                if(in_array($value,$var)){
-                    $key = array_search($value,$var);
-                    unset($var[$key]);
-                    $var = json_encode($var);
-                    $this->saveVariable($variable,$var);
-                } else {
-                    return false;
-                }
-            }
+        if ( empty($var) ) {
+            return false;
         }
-        
+
+        $var = json_decode($var,true);
+
+        if( !is_array($var) OR empty($var) ) {
+            return false;
+        }
+
+        if ( $is_assoc AND isset($var[$value]) ) {
+            unset($var[$value]);
+            $var = json_encode($var);
+            $this->saveVariable($variable,$var);
+        } else if ( in_array($value,$var) ) {
+            $key = array_search($value,$var);
+            unset($var[$key]);
+            $var = json_encode($var);
+            $this->saveVariable($variable,$var);
+        } else {
+            return false;
+        }
+
+        return true;
     }
 
 
