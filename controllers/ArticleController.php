@@ -1976,6 +1976,10 @@ class ArticleController {
     public function moduleChat($params){
         return $this->returnComponent('chat','module',false,$params);
     }
+
+    public function getChatMessage($params){
+        return $this->returnComponent('chatmessage','module', false, $params);
+    }
     
     public function moduleGroupChatList($params){
         return $this->returnComponent('groupchatlist','module',false,$params);

@@ -6,8 +6,6 @@
     "color": "#474747",
     "margin": "60 15 60 15"
   },
-
-
   "chat-column-1": {
     "width": "50",
     "height": "50",
@@ -29,7 +27,6 @@
     "color": "#ffffff",
     "border-radius": "8"
   },
-
   "chat-column-5": {
     "width": "73%",
     "vertical-align": "top",
@@ -38,7 +35,6 @@
     "background-color": "#f4f4f4",
     "border-radius": "8"
   },
-
   "chat-row-msg": {
     "vertical-align": "top",
     "margin": "0 10 0 0",
@@ -62,7 +58,6 @@
     "margin": "3 7 7 7",
     "vertical-align": "top"
   },
-
   "chat-msg-text-centered": {
     "font-size": "13",
     "font-style": "normal",
@@ -71,9 +66,8 @@
     "vertical-align": "top",
     "text-align": "center"
   },
-
   "chat-comment-field-wrap": {
-    "width" : "60%",
+    "width": "60%",
     "margin": "3 8 5 8"
   },
   "chat-comment-field": {
@@ -91,12 +85,10 @@
     "color": "#474747",
     "margin": "5 15 5 15"
   },
-
   "message-status-text": {
     "font-size": "10",
     "color": "#949494",
     "text-align": "right",
     "margin": "2 80 2 15"
   }
-  
 }
