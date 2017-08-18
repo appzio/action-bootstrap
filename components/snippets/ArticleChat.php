@@ -203,6 +203,9 @@ class ArticleChat extends ArticleComponent {
 
         if($headerdata){
             $data->header[] = $headerdata;
+            $data->header[] = $this->factoryobj->getImage( 'chat-heading-line.png', array(
+                'width' => '100%',
+            ));
         }
 
         $storage = new AeplayKeyvaluestorage();
@@ -288,13 +291,12 @@ class ArticleChat extends ArticleComponent {
         $items = $this->renderChatMsgs();
 
         // Still some work to be done here ..
-         $next_page_id = 2;
+        $next_page_id = 2;
 
-         if ( isset($this->submit['next_page_id']) ) {
-             $next_page_id = $this->submit['next_page_id'] + 1;
-         }
-         $output[] = $this->factoryobj->getInfinitescroll( $items, array( 'next_page_id' => $next_page_id ) );
-
+        if ( isset($this->submit['next_page_id']) ) {
+            $next_page_id = $this->submit['next_page_id'] + 1;
+        }
+        $output[] = $this->factoryobj->getInfinitescroll( $items, array( 'next_page_id' => $next_page_id ) );
 
         $output = array();
 
@@ -391,8 +393,7 @@ class ArticleChat extends ArticleComponent {
         }
 
         return $this->factoryobj->getRow($columns, array(
-            'padding' => ( $this->factoryobj->getConfigParam('hide_menubar') ? '5 0 5 15' : '0 0 5 15' ),
-            'height' => '50',
+            'padding' => ( $this->factoryobj->getConfigParam('hide_menubar') ? '10 0 10 15' : '0 0 5 15' ),
             'vertical-align' => 'middle',
             'background-color' => $this->factoryobj->color_topbar,
         ));
