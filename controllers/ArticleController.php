@@ -1980,6 +1980,10 @@ class ArticleController {
     public function getChatMessage($params){
         return $this->returnComponent('chatmessage','module', false, $params);
     }
+
+    public function getFooter($params){
+        return $this->returnComponent('chatfooter','module', false, $params);
+    }
     
     public function moduleGroupChatList($params){
         return $this->returnComponent('groupchatlist','module',false,$params);

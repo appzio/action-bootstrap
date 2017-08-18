@@ -6,6 +6,12 @@
     "color": "#474747",
     "margin": "60 15 60 15"
   },
+  "chat-error": {
+    "margin": "0 14 10 14",
+    "color": "#F41416",
+    "text-align": "center",
+    "font-size": "13"
+  },
   "chat-column-1": {
     "width": "50",
     "height": "50",
