@@ -16,6 +16,8 @@ class ArticleChatMessage extends ArticleComponent
         $this->user_is_owner = $this->addParam('user_is_owner',$this->options,false);
         $this->context_key = $this->addParam('context_key',$this->options,false);
 
+        $total_msgs = $this->addParam('total_msgs',$this->options,false);
+        $current_msg_index = $this->addParam('current_msg_index',$this->options,false);
         $userinfo = $this->addParam('userinfo',$this->options,false);
         $hide_time = $this->addParam('hide_time',$this->options,false);
 
@@ -31,8 +33,6 @@ class ArticleChatMessage extends ArticleComponent
             $colitems[] = $this->getMessageAttachment();
         }
 
-        $rightArrow = $this->factoryobj->getImage('arrow-right-yellow.png');
-
         $column1 = $this->factoryobj->getColumn(array(
             $this->factoryobj->getImage($userinfo['profilepic'], array('defaultimage' => 'anonymous2.png', 'crop' => 'round',
                 'priority' => 9,'imgwidth' => 300, 'imgheight' => 300) )
@@ -44,18 +44,25 @@ class ArticleChatMessage extends ArticleComponent
             $colitems,
             array( 'style' => 'chat-column-3' ));
         $column4 = $this->factoryobj->getColumn(array(
-            $rightArrow
+            $this->factoryobj->getImage('arrow-right.png'),
         ), array( 'style' => 'chat-column-2' ));
         $column5 = $this->factoryobj->getColumn(
             $colitems,
             array( 'style' => 'chat-column-5' ));
 
         if ( $this->user_is_owner ) {
-            return $this->factoryobj->getRow(array($column3, $column4, $column1), array( 'style' => 'chat-row-msg-mine' ));
+            $output[] = $this->factoryobj->getRow(array($column3, $column4, $column1), array( 'style' => 'chat-row-msg-mine' ));
         } else {
-            return $this->factoryobj->getRow(array($column1, $column2, $column5),array( 'style' => 'chat-row-msg' ));
+            $output[] = $this->factoryobj->getRow(array($column1, $column2, $column5),array( 'style' => 'chat-row-msg' ));
         }
 
+        if ( $total_msgs == ($current_msg_index+1) AND $this->user_is_owner ) {
+            $output[] = $this->checkIfSeen();
+        }
+
+        return $this->factoryobj->getRow(array(
+            $this->factoryobj->getColumn($output)
+        ));
     }
 
     public function getMessageAttachment() {
@@ -127,6 +134,21 @@ class ArticleChatMessage extends ArticleComponent
         }
 
         return 0;
+    }
+
+    public function checkIfSeen() {
+
+        if(!isset($this->current_msg['id'])){
+            return false;
+        }
+
+        $is_seen = $this->factoryobj->mobilechatobj->checkMessageStatus( $this->current_msg['id'] );
+
+        if ( $is_seen ) {
+            return $this->factoryobj->getText( '{#seen#}', array( 'style' => 'message-status-text' ) );
+        }
+
+        return $this->factoryobj->getText( '{#delivered#}', array( 'style' => 'message-status-text' ) );
     }
 
 }

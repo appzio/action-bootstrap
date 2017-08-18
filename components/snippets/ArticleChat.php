@@ -519,16 +519,9 @@ class ArticleChat extends ArticleComponent {
                 'user_is_owner' => $this->userIsOwner(),
                 'hide_time' => $this->hide_time,
                 'context_key' => $this->context_key,
+                'current_msg_index' => $i,
+                'total_msgs' => $count,
             ));
-
-            $seen_text = '';
-            if ( $count == ($i+1) AND $this->userIsOwner() ) {
-                $seen_text = $this->checkIfSeen();
-            }
-
-            if ( $seen_text ) {
-                $output[] = $seen_text;
-            }
 
         }
 
@@ -550,21 +543,6 @@ class ArticleChat extends ArticleComponent {
         }
 
         return false;
-    }
-
-    public function checkIfSeen() {
-
-        if(!isset($this->current_msg['id'])){
-            return false;
-        }
-
-        $is_seen = $this->factoryobj->mobilechatobj->checkMessageStatus( $this->current_msg['id'] );
-
-        if ( $is_seen ) {
-            return $this->factoryobj->getText( '{#seen#}', array( 'style' => 'message-status-text' ) );
-        }
-
-        return $this->factoryobj->getText( '{#delivered#}', array( 'style' => 'message-status-text' ) );
     }
 
     private function getUserInfo( $id = null ) {
