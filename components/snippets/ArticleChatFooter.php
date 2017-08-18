@@ -135,7 +135,6 @@ class ArticleChatFooter extends ArticleComponent
         } else {
             $camera = 'chat-icon-photo.png';
             return $this->getBtn( $camera,$onclick,true);
-
         }
 
     }
