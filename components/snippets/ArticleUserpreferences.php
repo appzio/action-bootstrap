@@ -62,16 +62,15 @@ class ArticleUserpreferences extends ArticleComponent
                 )),
                 $this->factoryobj->getImage('arrow.png', array(
                     'width' => '10',
-                    'margin' => '17 0 0 0'
                 ))
             ), array(
                 'floating' => 1,
                 'float' => 'right',
-                'margin' => '0 20 0 0'
+                'vertical-align' => 'middle',
+                'margin' => '0 20 0 0',
             ))
         ), array(
             'onclick' => $onclick,
-            'padding' => '0 0 0 0',
             'background-color' => '#FFFFFF'
         ));
     }
