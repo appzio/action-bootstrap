@@ -2195,10 +2195,6 @@ class ArticleController {
         return $output;
     }
 
-
-
-
-
     /* depreceated */
     public function getUserVariables($userid){
         $cache = Appcaching::getUserCache($userid,$this->gid,'variables');
@@ -2211,6 +2207,73 @@ class ArticleController {
         Appcaching::setUserCache($userid,$this->gid,'variables',$vars);
         
         return $vars;
+    }
+
+    /* Custom re-usable functionality */
+    public function registerProductDiv( $div_id, $icon, $text, $return_output = false ) {
+
+        $output = $this->getColumn(array(
+            $this->getRow(array(
+                $this->getImage($icon, array(
+                    'width' => '150',
+                    'margin' => '25 0 0 0',
+                )),
+            ), array(
+                'text-align' => 'center',
+                'margin' => '5 20 5 20',
+            )),
+            $this->getRow(array(
+                $this->getText($text, array(
+                    'text-align' => 'center',
+                )),
+            ), array(
+                'width' => '100%',
+                'padding' => '15 30 15 30',
+            )),
+            $this->getRow(array(
+                $this->getText('{#buy_now#}', array(
+                    'width' => '100%',
+                    'background-color' => '#fec02e',
+                    'color' => '#1d0701',
+                    'padding' => '13 5 13 5',
+                    'text-align' => 'center',
+                )),
+            ), array(
+                'width' => '100%',
+                'text-align' => 'center',
+            )),
+        ), array(
+            'width' => '100%',
+            'background-color' => '#FFFFFF',
+            'border-radius' => '8',
+            'shadow-color' => '#33000000',
+            'shadow-radius' => 3,
+            'shadow-offset' => '0 1',
+        ));
+
+        if ( $return_output ) {
+            return $output;
+        }
+
+        $this->data->divs[$div_id] = $output;
+
+        return true;
+    }
+
+    public function showProductDiv( $div_id ) {
+
+        $onclick = new stdClass();
+        $onclick->action = 'show-div';
+        $onclick->div_id = $div_id;
+        $onclick->tap_to_close = 1;
+        $onclick->transition = 'fade';
+        $onclick->background = 'blur';
+        $onclick->layout = new stdClass();
+        $onclick->layout->top = ($this->screen_height / 2) - 150;
+        $onclick->layout->right = 0;
+        $onclick->layout->left = 0;
+
+        return $onclick;
     }
 
 }
