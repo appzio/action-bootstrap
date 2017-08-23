@@ -2272,8 +2272,8 @@ class ArticleController {
         $onclick->background = 'blur';
         $onclick->layout = new stdClass();
         $onclick->layout->top = ($this->screen_height / 2) - 150;
-        $onclick->layout->right = 0;
-        $onclick->layout->left = 0;
+        $onclick->layout->right = 25;
+        $onclick->layout->left = 25;
 
         return $onclick;
     }
