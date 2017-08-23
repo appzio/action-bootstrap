@@ -2252,7 +2252,9 @@ class ArticleController {
         ));
 
         if ( $return_output ) {
-            return $output;
+            return array(
+                $div_id => $output,
+            );
         }
 
         $this->data->divs[$div_id] = $output;
