@@ -58,6 +58,8 @@ class ArticleChat extends ArticleComponent {
     public $total_messages;
     public $top_button;
 
+    public $name_suffix;
+
     private $current_msg;
     private $current_user_unmatched;
 
@@ -107,6 +109,8 @@ class ArticleChat extends ArticleComponent {
         $this->strip_urls = $this->addParam('strip_urls',$this->options,false);
         $this->chat_id = $this->addParam('chat_id',$this->options,false);
         $this->current_user_unmatched = $this->addParam('current_user_unmatched',$this->options,false);
+
+        $this->name_suffix = $this->addParam('name_suffix',$this->options,false);
 
         if($this->factoryobj->getConfigParam('name_mode')){
             $this->name_mode = $this->factoryobj->getConfigParam('name_mode');
@@ -370,7 +374,7 @@ class ArticleChat extends ArticleComponent {
         }
 
         $columns[] = $this->factoryobj->getImage($profilepic, $imageparams);
-        $columns[] = $this->factoryobj->getText($name, array(
+        $columns[] = $this->factoryobj->getText($name . $this->name_suffix, array(
             'color' => $this->factoryobj->colors['top_bar_text_color'],
             'font-size' => 15,
             'text-align' => 'left',
