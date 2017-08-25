@@ -2210,17 +2210,17 @@ class ArticleController {
     }
 
     /* Custom re-usable functionality */
-    public function registerProductDiv( $div_id, $icon, $text, $return_output = false ) {
+    public function     registerProductDiv( $div_id, $icon, $text, $product_id_ios, $product_id_android, $return_output = false ) {
 
         $output = $this->getColumn(array(
             $this->getRow(array(
                 $this->getImage($icon, array(
-                    'width' => '150',
+                    'width' => '130',
                     'margin' => '25 0 0 0',
                 )),
             ), array(
                 'text-align' => 'center',
-                'margin' => '5 20 5 20',
+                'margin' => '10 20 10 20',
             )),
             $this->getRow(array(
                 $this->getText($text, array(
@@ -2228,7 +2228,7 @@ class ArticleController {
                 )),
             ), array(
                 'width' => '100%',
-                'padding' => '15 30 15 30',
+                'margin' => '15 30 25 30',
             )),
             $this->getRow(array(
                 $this->getText('{#buy_now#}', array(
@@ -2241,6 +2241,10 @@ class ArticleController {
             ), array(
                 'width' => '100%',
                 'text-align' => 'center',
+                'onclick' => $this->getOnclick('purchase', false, array(
+                    'product_id_ios' => $product_id_ios,
+                    'product_id_android' => $product_id_android,
+                )),
             )),
         ), array(
             'width' => '100%',
