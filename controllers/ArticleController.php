@@ -2210,7 +2210,7 @@ class ArticleController {
     }
 
     /* Custom re-usable functionality */
-    public function     registerProductDiv( $div_id, $icon, $text, $product_id_ios, $product_id_android, $return_output = false ) {
+    public function registerProductDiv( $div_id, $icon, $text, $product_id_ios, $product_id_android, $return_output = false ) {
 
         $output = $this->getColumn(array(
             $this->getRow(array(
