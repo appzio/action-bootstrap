@@ -399,6 +399,7 @@ class ArticleChat extends ArticleComponent {
         return $this->factoryobj->getRow($columns, array(
             'padding' => ( $this->factoryobj->getConfigParam('hide_menubar') ? '10 0 10 15' : '0 0 5 15' ),
             'vertical-align' => 'middle',
+            'height' => '60',
             'background-color' => $this->factoryobj->color_topbar,
         ));
     }
