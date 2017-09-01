@@ -11,6 +11,8 @@ class ArticleUserpreferences extends ArticleComponent
     {
         $this->prefix = isset($this->options['variable_prefix']) ? $this->options['variable_prefix'] : '';
 
+        $this->registerDivs();
+
         $this->getAdditionalInformationFields();
     }
 
@@ -41,19 +43,30 @@ class ArticleUserpreferences extends ArticleComponent
 
     protected function renderAdditionalInformationField(string $identifier, string $field)
     {
-        $onclick = new StdClass();
-        $onclick->action = 'open-action';
-        $onclick->action_config = $this->factoryobj->getActionidByPermaname('profilestatusselect');
-        $onclick->id = $identifier . '|' . $this->prefix;
-        $onclick->open_popup = 1;
-        $onclick->sync_open = 1;
-        $onclick->sync_close = 1;
-        $onclick->back_button = 1;
-        $onclick->keep_user_data = 1;
+//        $onclick = new StdClass();
+//        $onclick->action = 'open-action';
+//        $onclick->action_config = $this->factoryobj->getActionidByPermaname('profilestatusselect');
+//        $onclick->id = $identifier . '|' . $this->prefix;
+//        $onclick->open_popup = 1;
+//        $onclick->sync_open = 1;
+//        $onclick->sync_close = 1;
+//        $onclick->back_button = 1;
+//        $onclick->keep_user_data = 1;
+
+        $onclick = new stdClass();
+        $onclick->action = 'show-div';
+        $onclick->div_id = $identifier . '_div';
+        $onclick->tap_to_close = 1;
+        $onclick->transition = 'from-bottom';
+        $onclick->background = 'blur';
+        $onclick->layout = new stdClass();
+        $onclick->layout->top = 50;
+        $onclick->layout->right = 10;
+        $onclick->layout->left = 10;
 
         $content = $this->getContent($identifier);
 
-        $this->factoryobj->data->scroll[] = $this->factoryobj->getHairline('#e8e9f2');
+        $this->factoryobj->data->scroll[] = $this->factoryobj->getHairline('#DADADA');
         $this->factoryobj->data->scroll[] = $this->factoryobj->getRow(array(
             $this->factoryobj->getText($field, array('style' => 'profile_field_label_additional_info')),
             $this->factoryobj->getRow(array(
@@ -76,9 +89,124 @@ class ArticleUserpreferences extends ArticleComponent
         ));
     }
 
+    public function registerDivs()
+    {
+        $fields = $this->getAdditionalInformationFieldNames();
+
+        foreach ($fields as $key => $title) {
+            $options = $this->getStatusData($key);
+            $this->registerDiv($key, $title, $options);
+        }
+    }
+
+    public function registerDiv($identifier, $title, $options)
+    {
+        $this->factoryobj->copyAssetWithoutProcessing('circle_non_bg.png');
+        $this->factoryobj->copyAssetWithoutProcessing('circle_selected_bg.png');
+
+        $selectedState = array('style' => 'radio_selected_state', 'allow_unselect' => 1, 'animation' => 'fade');
+        $column = array();
+
+        foreach ($options as $option) {
+            $selectedState['variable_value'] = $option;
+            $selectedState['active'] = $this->getActiveStatus($this->factoryobj->getVariable($this->prefix . $identifier), $option);
+
+            $variable = $this->getStatusVariable($identifier, $option);
+
+            $column[] = $this->factoryobj->getRow(array(
+                $this->factoryobj->getText(ucfirst($option), array(
+                    'padding' => '10 10 10 20'
+                )),
+                $this->factoryobj->getRow(array(
+                    $this->factoryobj->getText('', array(
+                        'style' => 'radio_default_state',
+                        'selected_state' => $selectedState,
+                        'variable' => $variable
+                    ))
+                ), array(
+                    'width' => '40%',
+                    'floating' => 1,
+                    'float' => 'right'
+                ))
+            ), array(
+                'padding' => '5 0 5 0',
+                'margin' => '0 0 0 0'
+            ));
+            $column[] = $this->factoryobj->getHairline('#DADADA');
+        }
+
+        $save = new stdClass();
+        $save->id = 'save-status-' . $identifier;
+        $save->action = 'submit-form-content';
+
+        $close = new stdClass();
+        $close->action = 'hide-div';
+        $close->div_id = $identifier . '_div';
+
+        $this->factoryobj->data->divs[$identifier . '_div'] = $this->factoryobj->getColumn(array(
+            $this->factoryobj->getText(ucfirst($title), array(
+                'text-align' => 'center',
+                'background-color' => '#FF6600',
+                'color' => '#FFFFFF',
+                'padding' => '20 0 20 0',
+                'margin' => '0 0 0 0',
+            )),
+            $this->factoryobj->getColumn($column, array(
+                'background-color' => '#ffffff'
+            )),
+            $this->factoryobj->getRow(array(
+                $this->factoryobj->getText('Cancel', array(
+                    'onclick' => $close,
+                    'id' => 'id',
+                    'style' => 'desee_general_button_style_footer_half_default'
+                )),
+                $this->factoryobj->getText('Submit', array(
+                    'onclick' => array($save, $close),
+                    'id' => 'id',
+                    'style' => 'desee_general_button_style_footer_half'
+                ))
+            ))
+        ), array(
+            'border-radius' => '3'
+        ));
+    }
+
+    protected function getStatusVariable($identifier, $field)
+    {
+        if (!empty($this->prefix)) {
+            // Prefixed variables use checkboxes, return unique variable name
+            return $this->prefix . $identifier . '_' . $field;
+        }
+
+        return $identifier;
+    }
+
+    protected function getActiveStatus($status, string $field)
+    {
+        // If status is not set and we're accessing this NOT from the user profile
+        if (!empty($this->prefix) && empty($status)) {
+            return '1';
+        }
+
+        if (!empty($this->prefix) && !empty($status)) {
+            $status = json_decode($status);
+            return in_array($field, $status) ? '1' : '0';
+        }
+
+        if (empty($this->prefix) && $status) {
+            return $status == $field;
+        }
+
+        if (is_null($status)) {
+            return '0';
+        }
+
+        return in_array($field, json_decode($status)) ? '1' : '0';
+    }
+
     protected function getContent($identifier)
     {
-        $content = $this->factoryobj->getVariable($identifier);
+        $content = $this->factoryobj->getSavedVariable($this->prefix . $identifier);
 
         if (!empty($this->prefix)) {
             $content = $this->factoryobj->getVariable($this->prefix . $identifier);
