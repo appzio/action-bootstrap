@@ -53,7 +53,7 @@ class ArticleUserpreferences extends ArticleComponent
 
         $content = $this->getContent($identifier);
 
-        $this->factoryobj->data->scroll[] = $this->factoryobj->getHairline('#DADADA');
+        $this->factoryobj->data->scroll[] = $this->factoryobj->getHairline('#e8e9f2');
         $this->factoryobj->data->scroll[] = $this->factoryobj->getRow(array(
             $this->factoryobj->getText($field, array('style' => 'profile_field_label_additional_info')),
             $this->factoryobj->getRow(array(
