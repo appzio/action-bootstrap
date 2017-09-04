@@ -6,10 +6,12 @@ Yii::import('application.modules.aechat.models.*');
 class ArticleUserpreferences extends ArticleComponent
 {
     public $prefix;
+    public $fields;
 
     public function template()
     {
         $this->prefix = isset($this->options['variable_prefix']) ? $this->options['variable_prefix'] : '';
+        $this->fields = isset($this->options['fields']) ? $this->options['fields'] : $this->getAdditionalInformationFieldNames();
 
         $this->registerDivs();
 
@@ -21,9 +23,7 @@ class ArticleUserpreferences extends ArticleComponent
      */
     protected function getAdditionalInformationFields()
     {
-        $fields = $this->getAdditionalInformationFieldNames();
-
-        foreach ($fields as $identifier => $field) {
+        foreach ($this->fields as $identifier => $field) {
             $this->renderAdditionalInformationField($identifier, $field);
         }
     }
@@ -31,13 +31,13 @@ class ArticleUserpreferences extends ArticleComponent
     protected function getAdditionalInformationFieldNames()
     {
         return array(
-            'relationship_status' => 'Status',
-            'seeking' => 'They are seeking',
-            'religion' => 'Religion',
-            'diet' => 'Diet',
-            'tobacco' => 'Tobacco',
-            'alcohol' => 'Alcohol',
-            'zodiac_sign' => 'Zodiac Sign'
+            'relationship_status' => '{#status#}',
+            'seeking' => '{#i_am_seeking#}',
+            'religion' => '{#religino#}',
+            'diet' => '{#diet#}',
+            'tobacco' => '{#tobacco#}',
+            'alcohol' => '{#alcohol#}',
+            'zodiac_sign' => '{#zodiac_sign#}',
         );
     }
 
@@ -93,9 +93,7 @@ class ArticleUserpreferences extends ArticleComponent
 
     public function registerDivs()
     {
-        $fields = $this->getAdditionalInformationFieldNames();
-
-        foreach ($fields as $key => $title) {
+        foreach ($this->fields as $key => $title) {
             $options = $this->getStatusData($key);
             $this->registerDiv($key, $title, $options);
         }
