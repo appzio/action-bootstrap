@@ -43,26 +43,28 @@ class ArticleUserpreferences extends ArticleComponent
 
     protected function renderAdditionalInformationField(string $identifier, string $field)
     {
-//        $onclick = new StdClass();
-//        $onclick->action = 'open-action';
-//        $onclick->action_config = $this->factoryobj->getActionidByPermaname('profilestatusselect');
-//        $onclick->id = $identifier . '|' . $this->prefix;
-//        $onclick->open_popup = 1;
-//        $onclick->sync_open = 1;
-//        $onclick->sync_close = 1;
-//        $onclick->back_button = 1;
-//        $onclick->keep_user_data = 1;
-
-        $onclick = new stdClass();
-        $onclick->action = 'show-div';
-        $onclick->div_id = $identifier . '_div';
-        $onclick->tap_to_close = 1;
-        $onclick->transition = 'from-bottom';
-        $onclick->background = 'blur';
-        $onclick->layout = new stdClass();
-        $onclick->layout->top = 50;
-        $onclick->layout->right = 10;
-        $onclick->layout->left = 10;
+        if ($identifier === 'zodiac_sign') {
+            $onclick = new StdClass();
+            $onclick->action = 'open-action';
+            $onclick->action_config = $this->factoryobj->getActionidByPermaname('profilestatusselect');
+            $onclick->id = $identifier . '|' . $this->prefix;
+            $onclick->open_popup = 1;
+            $onclick->sync_open = 1;
+            $onclick->sync_close = 1;
+            $onclick->back_button = 1;
+            $onclick->keep_user_data = 1;
+        } else {
+            $onclick = new stdClass();
+            $onclick->action = 'show-div';
+            $onclick->div_id = $identifier . '_div';
+            $onclick->tap_to_close = 1;
+            $onclick->transition = 'from-bottom';
+            $onclick->background = 'blur';
+            $onclick->layout = new stdClass();
+            $onclick->layout->top = 50;
+            $onclick->layout->right = 10;
+            $onclick->layout->left = 10;
+        }
 
         $content = $this->getContent($identifier);
 
