@@ -2210,9 +2210,20 @@ class ArticleController {
     }
 
     /* Custom re-usable functionality */
-    public function registerProductDiv( $div_id, $icon, $text, $product_id_ios, $product_id_android, $return_output = false ) {
+    public function registerProductDiv( $div_id, $icon, $title, $text, $product_id_ios, $product_id_android, $return_output = false ) {
+
+        $close_click = new stdClass();
+        $close_click->action = 'hide-div';
 
         $output = $this->getColumn(array(
+            $this->getImage('icon-close.png', array(
+                'width' => '30',
+                'height' => '30',
+                'floating' => '1',
+                'float' => 'right',
+                'margin' => '10 10 0 0',
+                'onclick' => $close_click,
+            )),
             $this->getRow(array(
                 $this->getImage($icon, array(
                     'width' => '130',
@@ -2220,7 +2231,18 @@ class ArticleController {
                 )),
             ), array(
                 'text-align' => 'center',
-                'margin' => '10 20 10 20',
+                'margin' => '10 20 15 20',
+            )),
+            $this->getRow(array(
+                $this->getText($title, array(
+                    'font-size' => '24',
+                    'text-align' => 'center',
+                    'font-android' => 'Roboto-bold',
+                )),
+            ), array(
+                'width' => '100%',
+                'text-align' => 'center',
+                'margin' => '0 30 15 30',
             )),
             $this->getRow(array(
                 $this->getText($text, array(
@@ -2228,7 +2250,7 @@ class ArticleController {
                 )),
             ), array(
                 'width' => '100%',
-                'margin' => '15 30 25 30',
+                'margin' => '0 30 25 30',
             )),
             $this->getRow(array(
                 $this->getText('{#buy_now#}', array(
@@ -2275,7 +2297,7 @@ class ArticleController {
         $onclick->transition = 'fade';
         $onclick->background = 'blur';
         $onclick->layout = new stdClass();
-        $onclick->layout->top = ($this->screen_height / 2) - 150;
+        $onclick->layout->top = ($this->screen_height / 2) - 175;
         $onclick->layout->right = 25;
         $onclick->layout->left = 25;
 
