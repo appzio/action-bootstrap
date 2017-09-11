@@ -1623,7 +1623,6 @@ class ArticleController {
         $textfieldparams['id'] = $id;
         $textfieldparams['variable'] = $id;
         $textfieldparams['input_type'] = $type;
-
         
         if($textfield_inputtype){
             $textfieldparams['input_type'] = $textfield_inputtype;
@@ -1802,7 +1801,11 @@ class ArticleController {
     }
 
     public function getHairline($color, $params=array()){
-        $params['height'] = '1';
+
+        if ( !isset($params['height']) ) {
+            $params['height'] = '1';
+        }
+
         $params['width'] = '100%';
         $params['background-color'] = $color;
         return $this->returnComponent('text','field','',$params);
@@ -2240,7 +2243,7 @@ class ArticleController {
                     'font-android' => 'Roboto-bold',
                 )),
             ), array(
-                'width' => '100%',
+                'width' => 'auto',
                 'text-align' => 'center',
                 'margin' => '0 30 15 30',
             )),
@@ -2249,7 +2252,7 @@ class ArticleController {
                     'text-align' => 'center',
                 )),
             ), array(
-                'width' => '100%',
+                'width' => 'auto',
                 'margin' => '0 30 25 30',
             )),
             $this->getRow(array(
