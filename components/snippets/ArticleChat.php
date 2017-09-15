@@ -208,6 +208,7 @@ class ArticleChat extends ArticleComponent {
         if($headerdata){
             $data->header[] = $headerdata;
             $data->header[] = $this->factoryobj->getImage( 'chat-heading-line.png', array(
+                'imgwidth' => '1440',
                 'width' => '100%',
             ));
         }
