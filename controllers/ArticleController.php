@@ -243,6 +243,18 @@ class ArticleController {
         $this->appkeyvaluestorage->game_id = $this->gid;
     }
 
+    public function getGlobalVariableByName($varname){
+        $var = AegameKeyvaluestorage::model()->findByAttributes(array(
+            'game_id' => $this->gid,
+            'key' => $varname
+        ));
+
+        if(isset($var->value)){
+            return $var->value;
+        } else {
+            return false;
+        }
+    }
 
     /* this function treats variable as a json list where it removes a value if it exists */
     public function removeFromVariable($variable, $value, $is_assoc = false){
