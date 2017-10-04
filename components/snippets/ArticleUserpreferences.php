@@ -33,7 +33,7 @@ class ArticleUserpreferences extends ArticleComponent
         return array(
             'relationship_status' => '{#status#}',
             'seeking' => '{#i_am_seeking#}',
-            'religion' => '{#religino#}',
+            'religion' => '{#religion#}',
             'diet' => '{#diet#}',
             'tobacco' => '{#tobacco#}',
             'alcohol' => '{#alcohol#}',
