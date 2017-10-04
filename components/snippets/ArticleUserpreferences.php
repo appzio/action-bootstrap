@@ -57,7 +57,7 @@ class ArticleUserpreferences extends ArticleComponent
             $onclick = new stdClass();
             $onclick->action = 'show-div';
             $onclick->div_id = $identifier . '_div';
-            $onclick->tap_to_close = 1;
+//            $onclick->tap_to_close = 1;
             $onclick->transition = 'from-bottom';
             $onclick->background = 'blur';
             $onclick->layout = new stdClass();
@@ -143,6 +143,10 @@ class ArticleUserpreferences extends ArticleComponent
         $close->action = 'hide-div';
         $close->div_id = $identifier . '_div';
 
+        $cancel = new stdClass();
+        $cancel->id = 'discard';
+        $cancel->action = 'submit-form-content';
+
         $this->factoryobj->data->divs[$identifier . '_div'] = $this->factoryobj->getColumn(array(
             $this->factoryobj->getText(ucfirst($title), array(
                 'text-align' => 'center',
@@ -156,7 +160,7 @@ class ArticleUserpreferences extends ArticleComponent
             )),
             $this->factoryobj->getRow(array(
                 $this->factoryobj->getText('Cancel', array(
-                    'onclick' => $close,
+                    'onclick' => array($close, $cancel),
                     'id' => 'id',
                     'style' => 'desee_general_button_style_footer_half_default'
                 )),
