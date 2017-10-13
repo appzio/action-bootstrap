@@ -227,7 +227,7 @@ class ArticleChat extends ArticleComponent {
             $data->scroll = $this->getChatError();
         } else {
             $data->scroll = $this->getChat();
-            
+
             if ( !$this->current_user_unmatched ) {
                 $data->footer = $this->factoryobj->getFooter(array(
                     'chatid' => $this->chatid,
