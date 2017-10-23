@@ -4,7 +4,6 @@ Yii::import('application.modules.aelogic.article.components.*');
 
 class ArticleBottomnotifications extends ArticleComponent {
 
-
     public function template(){
 
         if(!$this->factoryobj->getActionidByPermaname('chats')){
@@ -27,43 +26,6 @@ class ArticleBottomnotifications extends ArticleComponent {
         $col[] = $this->factoryobj->getText('{#you_have#} ' .$count .' {#new_messages#}',array('color' => $txtcolor,'padding' => '2 4 2 4','font-size' => '13'));
 
         return $this->factoryobj->getRow($col,array('background-color' => $bg,'padding' => '9 0 9 0','text-align' => 'center','onclick' => $onclick));
-
-
-
-        return $this->factoryobj->getText($this->content,array('height' => '40','onclick' => $onclick));
-
-        foreach ($this->factoryobj->menus['menus'] as $menu){
-            if($menu['id'] == $this->factoryobj->bottom_menu_id){
-                $menudata = $menu['items'];
-            }
-        }
-
-        if(!isset($menudata)){
-            $output[] = $this->factoryobj->getText('Menu not defined correctly',array('text-align' => 'center'));
-            return $output;
-        }
-
-        $count = count($menudata);
-        $counter = 1;
-
-        foreach($menudata as $menuitem){
-            /* show flag */
-            if($menuitem['slug'] == 'mailbox' AND $this->factoryobj->msgcount){
-                $menuitem['flag'] = $this->factoryobj->msgcount;
-            }
-            $column[] = $this->getItem($menuitem,$count,$counter);
-            $counter++;
-        }
-
-        if(isset($column)){
-            $row[] = $this->factoryobj->getText('',array('height' => '2', 'background-color' => $this->factoryobj->color_topbar_hilite));
-            $row[] = $this->factoryobj->getRow($column,array('background-color' => $this->factoryobj->color_topbar));
-        } else {
-            $row[] = $this->factoryobj->getText('No menu items found',array('height' => '2', 'background-color' => $this->factoryobj->color_topbar_hilite));
-        }
-
-        $output[] = $this->factoryobj->getColumn($row,array('height' => '60'));
-        return $output;
 
     }
 

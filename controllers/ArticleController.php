@@ -1904,7 +1904,7 @@ class ArticleController {
             $buttonparams['onclick']->config = $this->addParam('config',$buttonparams,'');
             $buttonparams['onclick']->sync_open = $this->addParam('sync_open',$buttonparams,'');
         }
-        
+
         if(!isset($buttonparams['style']) AND !isset($buttonparams['background-color'])){
             $buttonparams['background-color'] = $this->color_topbar;
             $buttonparams['text-align'] = 'center';
