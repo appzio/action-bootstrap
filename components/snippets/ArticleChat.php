@@ -576,7 +576,7 @@ class ArticleChat extends ArticleComponent {
                 break;
 
             case 'nickname';
-                $name = isset($vars['screen_name']) ? $vars['screen_name'] : '{#anonymous#}';
+                $name = isset($vars['screen_name']) ? $vars['screen_name'] : $this->factoryobj->localizationComponent->smartLocalize('{#anonymous#}');
                 break;
 
             case 'firstname';
