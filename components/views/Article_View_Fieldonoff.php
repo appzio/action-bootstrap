@@ -14,9 +14,15 @@ class Article_View_Fieldonoff extends ArticleComponent {
         $obj->type = ( $type == 'toggle' ? 'toggle' : 'field-checkbox' );
         $obj->content = $this->content;
 
-        if(isset($this->options['value'])){
-            $obj->value = $this->options['value'];
-        }
+	    $params = array(
+		    'value', 'listbranches_on_change'
+	    );
+
+	    foreach ($params as $param) {
+		    if ( isset($this->options[$param]) ) {
+			    $obj->$param  = $this->options[$param];
+		    }
+	    }
 
         return $obj;
 	}
