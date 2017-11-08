@@ -707,14 +707,15 @@ class ArticleChat extends ArticleComponent {
 
             $blocked = isset($this->chat_info->blocked) ? $this->chat_info->blocked : 0;
 
-            if(!$blocked){
-                if($this->factoryobj->getConfigParam('save_match_when_chatting')){
+	        if(!$blocked){
+	        	
+		        if($this->factoryobj->getConfigParam('save_match_when_chatting')){
                     $this->factoryobj->mobilematchingobj->saveMatch();
                 }
 
-                $notify = AeplayVariable::fetchWithName($this->other_user_play_id, 'notify', $this->gid);
+                $stop_notifications = AeplayVariable::fetchWithName($this->other_user_play_id, 'stop_notifications', $this->gid);
 
-                if ( $notify ) {
+                if ( !$stop_notifications ) {
                     $notification_text = $this->getChatName($msg['name']) . ': ' . $message_text;
                     $title = $this->factoryobj->localizationComponent->smartLocalize('{#message_from#} ') . $this->getChatName($msg['name']);
                     Aenotification::addUserNotification( $this->other_user_play_id, $title, $notification_text, 1, $this->gid );

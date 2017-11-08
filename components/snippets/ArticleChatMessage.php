@@ -67,33 +67,11 @@ class ArticleChatMessage extends ArticleComponent
 
     public function getMessageAttachment() {
 
-        $use_blur = false;
-
-        if ( !$this->user_is_owner ) {
-            $time_to_read = 300;
-            $enter_time = $this->getChatEnterTime();
-
-            $seconds_left = $time_to_read - ( time() - $enter_time );
-            // $message_visible_until = $enter_time + $time_to_read;
-
-            // This is the difference between the actual time, when the message was originally sent
-            // and the time when the person entered the chat section
-            $msg_diff = $enter_time - $this->current_msg['date'];
-
-            if ( $seconds_left < $msg_diff ) {
-                $use_blur = true;
-            }
-        }
-
         $big_img_params = array(
             'imgwidth' => '900',
             'imgheight' => '900',
             'priority' => 9,
         );
-
-        if ( $use_blur ) {
-            $big_img_params['blur'] = 1;
-        }
 
         $image = $this->factoryobj->getImage($this->current_msg['attachment'], $big_img_params);
 
@@ -113,27 +91,7 @@ class ArticleChatMessage extends ArticleComponent
             $img_params['tap_image'] = $bigimage;
         }
 
-        if ( $use_blur ) {
-            $img_params['blur'] = 1;
-        }
-
         return $this->factoryobj->getImage($this->current_msg['attachment'], $img_params);
-    }
-
-    private function getChatEnterTime() {
-        $db_times = $this->factoryobj->getSavedVariable( 'entered_chat_timestamp' );
-
-        if ( empty($db_times) ) {
-            return 0;
-        }
-
-        $times_array = json_decode( $db_times, true );
-
-        if ( isset($times_array[$this->context_key]) ) {
-            return $times_array[$this->context_key];
-        }
-
-        return 0;
     }
 
     public function checkIfSeen() {
