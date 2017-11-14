@@ -335,16 +335,15 @@ class ArticleChat extends ArticleComponent {
         $userinfo = $this->getUserInfo();
         $id = $this->other_user_play_id;
 
-        $name = ucfirst($userinfo['name']);
-        $profilepic = $userinfo['profilepic'];
-        $vars = $userinfo['vars'];
+	    $string = $this->factoryobj->localizationComponent->smartLocalize('{#chat_with#}');
+	    $name = ucfirst($userinfo['name']);
+	    $profilepic = $userinfo['profilepic'];
+	    $vars = $userinfo['vars'];
 
-        if($this->disable_header){
-            $this->factoryobj->rewriteActionConfigField('subject',$name);
+	    $this->factoryobj->rewriteActionField('subject', $string . ' ' . $name);
+
+	    if ($this->disable_header) {
             return false;
-        } else {
-            $string = $this->factoryobj->localizationComponent->smartLocalize('{#chat_with#}');
-            $this->factoryobj->rewriteActionField('subject', $string . ' ' . $name);
         }
 
         $name = isset($vars['city']) ? $name . ', ' . $vars['city'] : $name;
