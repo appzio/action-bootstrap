@@ -11,7 +11,7 @@ class Article_View_Column extends ArticleComponent {
         $obj->column_content = $this->content;
 
         $params = array(
-            'rightswipeid', 'leftswipeid', 'backswipeid', 'noanimate', 'onclick', 'id', 'swipe_id'
+            'rightswipeid', 'leftswipeid', 'backswipeid', 'noanimate', 'onclick', 'id', 'swipe_id', 'lazy'
         );
 
         foreach ($params as $param) {
