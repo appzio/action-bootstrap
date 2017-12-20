@@ -2277,7 +2277,9 @@ class ArticleController {
                     'width' => '100%',
                     'background-color' => '#fec02e',
                     'color' => '#1d0701',
-                    'padding' => '13 5 13 5',
+                    'padding' => '0 5 0 5',
+                    'height' => '45',
+                    'vertical-align' => 'middle',
                     'text-align' => 'center',
                 )),
             ), array(
