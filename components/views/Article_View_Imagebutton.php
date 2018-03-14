@@ -27,6 +27,10 @@ class Article_View_Imagebutton extends ArticleComponent {
         $context = $this->addParam('context',$this->options,false);
         $send_ids = $this->addParam('send_ids',$this->options,false);
 
+        $imgparams['width'] = $this->addParam('imgwidth',$this->options,false);
+        $imgparams['height'] = $this->addParam('imgheight',$this->options,false);
+        $imgparams['crop'] = $this->addParam('imgcrop',$this->options,false);
+
         $item = new StdClass;
         $item->id = $id;
 
@@ -46,6 +50,7 @@ class Article_View_Imagebutton extends ArticleComponent {
         if($send_ids){
             $item->send_ids = $send_ids;
         }
+
 
         if($action == 'upload-image'){
             $item->max_dimensions = $max_dimensions;
