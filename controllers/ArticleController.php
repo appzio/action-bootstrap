@@ -532,8 +532,13 @@ class ArticleController {
 
         $defaultimage = $this->addParam('defaultimage',$params,false);
         $debug = $this->addParam('debug',$params,false);
-        $width = $this->addParam('imgwidth',$params,640);
-        $height = $this->addParam('imgheight',$params,640);
+        $width = $this->addParam('imgwidth',$params,false);
+        $height = $this->addParam('imgheight',$params,false);
+        $format = $this->addParam('format',$params,false);
+
+        if(!$width AND !$height){
+            $width = 640;
+        }
 
         if($this->addParam('imgcrop',$params,false)){
             $crop = $this->addParam('imgcrop',$params,false);
@@ -545,6 +550,7 @@ class ArticleController {
         $params['width'] = $width;
         $params['height'] = $height;
         $params['actionid'] = $this->addParam('actionid',$params,$this->actionid);
+        $params['format'] = $format;
         
         if(isset($this->branchobj->id)){
             $params['branchid'] = $this->branchobj->id;
@@ -578,7 +584,7 @@ class ArticleController {
             if(isset($this->varcontent[$image])){
                 $basename = basename($this->varcontent[$image]);
                 // we need to rewrite the params not to include "isvar"
-                return $this->getImageFileName($basename,array('imgwidth'=>$width,'imgheight'=>$height,'imgcrop'=>$crop,'debug' => $debug));
+                return $this->getImageFileName($basename,array('imgwidth'=>$width,'imgheight'=>$height,'imgcrop'=>$crop,'debug' => $debug,'format' => $format));
             } else {
                 return $defaultimage;
             }
@@ -586,7 +592,7 @@ class ArticleController {
             if(isset($this->configobj->$image)){
                 $basename = basename($this->configobj->$image);
 
-                return $this->getImageFileName($basename,array('imgwidth'=>$width,'imgheight'=>$height,'imgcrop'=>$crop,'debug' => $debug));
+                return $this->getImageFileName($basename,array('imgwidth'=>$width,'imgheight'=>$height,'imgcrop'=>$crop,'debug' => $debug,'format' => $format));
             } else {
                 return $defaultimage;
             }
