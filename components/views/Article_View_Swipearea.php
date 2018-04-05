@@ -10,8 +10,8 @@ class Article_View_Swipearea extends ArticleComponent {
         $obj->swipe_content = $this->content;
 
         $params = array(
-        	'swipe_content', 'text_content', 'progress_image', 'track_image','animate','remember_position','position',
-            'item_width','dynamic','id','items','animation','container_id','item_scale','transition','world_ending'
+        	'swipe_content', 'text_content', 'progress_image', 'track_image', 'animate', 'remember_position', 'position',
+            'item_width', 'dynamic', 'id', 'items', 'animation', 'container_id', 'item_scale', 'transition', 'world_ending', 'dynamic_content'
         );
 
         foreach ($params as $param) {
