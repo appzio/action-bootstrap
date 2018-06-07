@@ -1842,10 +1842,12 @@ class ArticleController {
     public function getFacebookSignInButton($id,$submitmenu=false){
         $styles = array( 'style' => 'fbbutton_text_style' );
 
+        $perms = ['email','public_profile'];
+
         if($submitmenu){
-            return $this->getButtonWithIcon('f-icon.png', $id, '{#sign_in_with_facebook#}', array('style' => 'facebook_button_style'), $styles);
+            return $this->getButtonWithIcon('f-icon.png', $id, '{#sign_in_with_facebook#}', array('style' => 'facebook_button_style','read_permissions' => $perms), $styles);
         } else {
-            return $this->getButtonWithIcon('f-icon.png', $id, '{#sign_in_with_facebook#}', array('style' => 'facebook_button_style','action' => 'fb-login','sync_open' => true), $styles);
+            return $this->getButtonWithIcon('f-icon.png', $id, '{#sign_in_with_facebook#}', array('style' => 'facebook_button_style','action' => 'fb-login','sync_open' => true,'read_permissions' => $perms), $styles);
         }
     }
 
@@ -1906,14 +1908,22 @@ class ArticleController {
         $params['vertical-align'] = 'middle';
         $params['image'] = $this->getImageFileName($image,$params);
 
+
         if($onclick) {
             $buttonparams['onclick'] = $onclick;
         } else {
             $buttonparams['onclick'] = new StdClass();
             $buttonparams['onclick']->id = $id;
+
+            if(isset($buttonparams['read_permissions'])){
+                $buttonparams['onclick']->read_permissions = $buttonparams['read_permissions'];
+                unset ($buttonparams['read_permissions']);
+            }
+
             $buttonparams['onclick']->action = $this->addParam('action',$buttonparams,'submit-form-content');
             $buttonparams['onclick']->config = $this->addParam('config',$buttonparams,'');
             $buttonparams['onclick']->sync_open = $this->addParam('sync_open',$buttonparams,'');
+
         }
 
         if(!isset($buttonparams['style']) AND !isset($buttonparams['background-color'])){
