@@ -1090,9 +1090,9 @@ class ArticleController {
 
     public function getFullPageLoader($color='#000000',$text=false){
         $color = $color ? $color : '#000000';
-        $text = $text ? $text : '{#loading#}';
+        $text = $text ? $text : '';
         $col[] = $this->getSpacer('80');
-        $col[] = $this->getLoader('',array('color' => $color));
+        $col[] = $this->getImage('uikit_balls_loader.gif',['width' => '180']);
         $col[] = $this->getText($text,array('style' => 'loader-text'));
         return $this->getColumn($col,array('text-align' => 'center','width' => '100%','align' => 'center'));
     }
