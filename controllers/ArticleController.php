@@ -205,12 +205,27 @@ class ArticleController {
      */
 
     public function permanameCache(){
-        $cachename = 'permaname-cache-'.$this->gid;
-        // Appcaching::removeGlobalCache( $cachename );
-        $cache = Appcaching::getGlobalCache($cachename);
 
-        if(!empty($cache)){
-            $this->permanames = $cache;
+        if(!$this->permanames){
+            $cachename = 'permaname-cache-'.$this->gid;
+            $cache = Appcaching::getGlobalCache($cachename);
+
+            if(!empty($cache) AND isset($cache['data']) AND !empty($cache['data'])){
+                $this->permanames = $cache;
+            } else {
+                $actions = AeplayAction::getActions($this->gid);
+
+                foreach($actions as $action){
+                    if(isset($action['permaname']) AND $action['permaname']){
+                        $name = $action['permaname'];
+                        $this->permanames[$name] = $action['action_id'];
+                    }
+                }
+
+                $cache['time'] = time();
+                $cache['data'] = $this->permanames;
+                Appcaching::setGlobalCache($cachename, $cache);
+            }
         }
     }
 
