@@ -984,7 +984,6 @@ class ArticleController {
 
             case 'permaname':
                 $onclick->action = 'open-action';
-                $onclick->action_config = $this->getActionidByPermaname($param);
                 break;
 
             case 'push-permission':
@@ -1055,6 +1054,10 @@ class ArticleController {
 
         if($back){
             $onclick->back_button = 1;
+        }
+
+        if(isset($param['sync_open'])){
+            $onclick->sync_open = 1;
         }
 
         return $onclick;
