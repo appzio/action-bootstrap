@@ -1110,7 +1110,7 @@ class ArticleController {
         $color = $color ? $color : '#000000';
         $text = $text ? $text : '';
         $col[] = $this->getSpacer('80');
-        $col[] = $this->getImage('uikit_balls_loader.gif',['width' => '180']);
+        // $col[] = $this->getImage('uikit_balls_loader.gif',['width' => '180']);
         $col[] = $this->getText($text,array('style' => 'loader-text'));
         return $this->getColumn($col,array('text-align' => 'center','width' => '100%','align' => 'center'));
     }
