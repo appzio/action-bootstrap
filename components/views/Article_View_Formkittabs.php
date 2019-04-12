@@ -8,7 +8,7 @@ class Article_View_Formkittabs extends ArticleComponent {
     public $origin_tab;
 
     public function template() {
-
+        
         $content = $this->addParam('content',$this->options,false);
         $indicator_mode = $this->addParam('indicator_mode',$this->options,'bottom');
         $divider = $this->addParam('divider',$this->options,false);
@@ -16,16 +16,18 @@ class Article_View_Formkittabs extends ArticleComponent {
         $btn_padding = $this->addParam('btn_padding',$this->options,'10 10 10 10');
         $color_topbar = $this->addParam('color_topbar',$this->options,$this->factoryobj->color_topbar);
         $color_topbar_hilite = $this->addParam('color_topbar_hilite',$this->options,$this->factoryobj->color_topbar_hilite);
+        $color = $this->addParam('color',$this->options,$this->factoryobj->colors['top_bar_text_color']);
+        $custom_fontsize = $this->addParam('font-size',$this->options,false);
         $this->origin_tab = $this->addParam('origin_tab',$this->options,false);
 
         $params = $this->getTabParams( $content );
 
-        $fontsize = $params['fontsize'];
+        $fontsize = ( $custom_fontsize ? $custom_fontsize : $params['fontsize'] );
         $width = $params['width'];
 
         $btn_params = array(
             'padding' => $btn_padding,
-            'color' => $this->factoryobj->colors['top_bar_text_color'],
+            'color' => $color,
             'text-align' => 'center',
             'font-size' => $fontsize
         );
@@ -74,7 +76,9 @@ class Article_View_Formkittabs extends ArticleComponent {
         }
 
         if(isset($col)){
-            $row = $this->factoryobj->getRow($col,array('bakcground-color' => $this->factoryobj->color_topbar));
+            $row = $this->factoryobj->getRow($col, array(
+                'bakcground-color' => $this->factoryobj->color_topbar,
+            ));
             return $row;
         }
     }

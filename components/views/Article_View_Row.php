@@ -11,7 +11,7 @@ class Article_View_Row extends ArticleComponent {
         $obj->row_content = $this->content;
 
         $params = array(
-            'noanimate','id'
+            'noanimate', 'id', 'lazy', 'dynamic_content'
         );
 
         foreach ($params as $param) {

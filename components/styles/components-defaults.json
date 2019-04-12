@@ -1,8 +1,6 @@
 {
-
   "datepicker": {
     "font-size": "14",
-    "font-style": "normal",
     "alignment": "center",
     "color": "#000000",
     "width": "32%",
@@ -193,7 +191,6 @@
     "margin": "0 14 3 14"
   },
   "profile-field-label": {
-    "font-style": "normal",
     "font-size": "14"
   },
   "form-field-textarea": {
@@ -246,7 +243,6 @@
   },
   "loader-text": {
     "font-size": "16",
-    "font-style": "normal",
     "text-align": "center",
     "color": "#000000",
     "padding": "4 4 0 4",
@@ -315,17 +311,11 @@
     "width": "25%",
     "vertical-align": "middle"
   },
-  "fbbutton_text_style": {
-    "font-size": "12",
-    "font-style": "normal",
-    "text-align": "center",
-    "color": "#ffffff"
-  },
   "oauth_button_style": {
     "background-color": "#22a085",
     "text-align": "center",
     "border-radius": "4",
-    "height": "45",
+    "padding": "8 0 8 0",
     "vertical-align": "middle",
     "margin": "5 40 0 40"
   },
@@ -333,15 +323,20 @@
     "background-color": "#3b5998",
     "text-align": "center",
     "border-radius": "4",
-    "height": "45",
     "vertical-align": "middle",
+    "padding": "8 0 8 0",
     "margin": "5 40 0 40"
+  },
+  "fbbutton_text_style": {
+    "font-size": "12",
+    "text-align": "center",
+    "color": "#ffffff"
   },
   "google_button_style": {
     "background-color": "#df4a32",
     "text-align": "center",
     "border-radius": "4",
-    "height": "45",
+    "padding": "8 0 8 0",
     "vertical-align": "middle",
     "margin": "5 40 0 40"
   },
@@ -349,7 +344,7 @@
     "background-color": "#ffffff",
     "text-align": "center",
     "border-radius": "4",
-    "height": "45",
+    "padding": "8 0 8 0",
     "vertical-align": "middle",
     "margin": "5 40 0 40"
   },
@@ -358,13 +353,12 @@
     "color": "#ffffff",
     "text-align": "center",
     "border-radius": "4",
-    "height": "45",
+    "padding": "8 0 8 0",
     "vertical-align": "middle",
     "margin": "5 40 0 40"
   },
   "instagram_text_style": {
     "font-size": "12",
-    "font-style": "normal",
     "text-align": "center",
     "color": "#000000"
   },
@@ -399,7 +393,6 @@
   },
   "general_textfield": {
     "font-size": "12",
-    "font-style": "normal",
     "background-color": "#ffffff",
     "text-align": "center",
     "color": "#000000",
@@ -432,7 +425,6 @@
   },
   "register-text-step-error": {
     "font-size": "13",
-    "font-style": "normal",
     "text-align": "center",
     "color": "#e12929",
     "padding": "4 4 0 4",
@@ -476,7 +468,6 @@
   },
   "button-join-chat": {
     "font-size": "12",
-    "font-style": "normal",
     "background-color": "#459a35",
     "text-align": "center",
     "color": "#ffffff",

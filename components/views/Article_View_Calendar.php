@@ -2,16 +2,16 @@
 
 Yii::import('application.modules.aelogic.article.components.*');
 
-class Article_View_Column extends ArticleComponent {
-
+class Article_View_Calendar extends ArticleComponent {
 
     public function template() {
+
         $obj = new StdClass;
-        $obj->type = 'column';
-        $obj->column_content = $this->content;
+        $obj->type = 'calendar';
+        $obj->date = $this->content;
 
         $params = array(
-            'rightswipeid', 'leftswipeid', 'backswipeid', 'noanimate', 'onclick', 'id', 'swipe_id', 'lazy', 'dynamic_content'
+            'selection_style'
         );
 
         foreach ($params as $param) {
@@ -21,6 +21,7 @@ class Article_View_Column extends ArticleComponent {
         }
 
         return $obj;
+
     }
 
 }

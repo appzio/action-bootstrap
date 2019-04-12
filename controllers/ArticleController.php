@@ -205,12 +205,27 @@ class ArticleController {
      */
 
     public function permanameCache(){
-        $cachename = 'permaname-cache-'.$this->gid;
-        // Appcaching::removeGlobalCache( $cachename );
-        $cache = Appcaching::getGlobalCache($cachename);
 
-        if(!empty($cache)){
-            $this->permanames = $cache;
+        if(!$this->permanames){
+            $cachename = 'permaname-cache-'.$this->gid;
+            $cache = Appcaching::getGlobalCache($cachename);
+
+            if(!empty($cache) AND isset($cache['data']) AND !empty($cache['data'])){
+                $this->permanames = $cache;
+            } else {
+                $actions = AeplayAction::getActions($this->gid);
+
+                foreach($actions as $action){
+                    if(isset($action['permaname']) AND $action['permaname']){
+                        $name = $action['permaname'];
+                        $this->permanames[$name] = $action['action_id'];
+                    }
+                }
+
+                $cache['time'] = time();
+                $cache['data'] = $this->permanames;
+                Appcaching::setGlobalCache($cachename, $cache);
+            }
         }
     }
 
@@ -243,56 +258,92 @@ class ArticleController {
         $this->appkeyvaluestorage->game_id = $this->gid;
     }
 
+    public function getGlobalVariableByName($varname){
+        $var = AegameKeyvaluestorage::model()->findByAttributes(array(
+            'game_id' => $this->gid,
+            'key' => $varname
+        ));
+
+        if(isset($var->value)){
+            return $var->value;
+        } else {
+            return false;
+        }
+    }
 
     /* this function treats variable as a json list where it removes a value if it exists */
-
-    public function removeFromVariable($variable,$value){
+    public function removeFromVariable($variable, $value, $is_assoc = false){
         $var = $this->getSavedVariable($variable);
 
-        if($var){
-            $var = json_decode($var,true);
-            if(is_array($var) AND !empty($var)){
-                if(in_array($value,$var)){
-                    $key = array_search($value,$var);
-                    unset($var[$key]);
-                    $var = json_encode($var);
-                    $this->saveVariable($variable,$var);
-                } else {
-                    return false;
-                }
-            }
+        if ( empty($var) ) {
+            return false;
         }
-        
+
+        $var = json_decode($var,true);
+
+        if( !is_array($var) OR empty($var) ) {
+            return false;
+        }
+
+        if ( $is_assoc AND isset($var[$value]) ) {
+            unset($var[$value]);
+            $var = json_encode($var);
+            $this->saveVariable($variable,$var);
+        } else if ( in_array($value,$var) ) {
+            $key = array_search($value,$var);
+            unset($var[$key]);
+            $var = json_encode($var);
+            $this->saveVariable($variable,$var);
+        } else {
+            return false;
+        }
+
+        return true;
     }
 
 
     /* this function treats variable as a json list where it adds a value
         note that if variable includes a string, it will overwrite it */
 
-    public function addToVariable($variable,$value){
+    public function addToVariable($variable, $value, $is_assoc = false) {
 
         $var = $this->getSavedVariable($variable);
 
-        if($var){
+        if ($var) {
+            
             $var = json_decode($var,true);
             if(is_array($var) AND !empty($var)){
-                if(in_array($value,$var)){
+                if ( $is_assoc ) {
+                    foreach ($value as $k => $v) {
+                        $var[$k] = $v;
+                    }
+                } else if ( in_array($value, $var) ) {
                     return false;
                 } else {
-                    array_push($var,$value);
+                    array_push( $var, $value );
                 }
             }
+
         }
 
-        if(!is_array($var) OR empty($var)){
+        if (!is_array($var) OR empty($var)) {
+
             $var = array();
-            array_push($var,$value);
+
+            if ( $is_assoc AND is_array($value) ) {
+                foreach ($value as $k => $v) {
+                    $var[$k] = $v;
+                }
+            } else {
+                array_push($var,$value);
+            }
+
         }
 
         $var = json_encode($var);
         $this->saveVariable($variable,$var);
 
-
+        return true;
     }
 
     /* by default, this */
@@ -496,8 +547,13 @@ class ArticleController {
 
         $defaultimage = $this->addParam('defaultimage',$params,false);
         $debug = $this->addParam('debug',$params,false);
-        $width = $this->addParam('imgwidth',$params,640);
-        $height = $this->addParam('imgheight',$params,640);
+        $width = $this->addParam('imgwidth',$params,false);
+        $height = $this->addParam('imgheight',$params,false);
+        $format = $this->addParam('format',$params,false);
+
+        if(!$width AND !$height){
+            $width = 640;
+        }
 
         if($this->addParam('imgcrop',$params,false)){
             $crop = $this->addParam('imgcrop',$params,false);
@@ -509,6 +565,7 @@ class ArticleController {
         $params['width'] = $width;
         $params['height'] = $height;
         $params['actionid'] = $this->addParam('actionid',$params,$this->actionid);
+        $params['format'] = $format;
         
         if(isset($this->branchobj->id)){
             $params['branchid'] = $this->branchobj->id;
@@ -542,7 +599,7 @@ class ArticleController {
             if(isset($this->varcontent[$image])){
                 $basename = basename($this->varcontent[$image]);
                 // we need to rewrite the params not to include "isvar"
-                return $this->getImageFileName($basename,array('imgwidth'=>$width,'imgheight'=>$height,'imgcrop'=>$crop,'debug' => $debug));
+                return $this->getImageFileName($basename,array('imgwidth'=>$width,'imgheight'=>$height,'imgcrop'=>$crop,'debug' => $debug,'format' => $format));
             } else {
                 return $defaultimage;
             }
@@ -550,7 +607,7 @@ class ArticleController {
             if(isset($this->configobj->$image)){
                 $basename = basename($this->configobj->$image);
 
-                return $this->getImageFileName($basename,array('imgwidth'=>$width,'imgheight'=>$height,'imgcrop'=>$crop,'debug' => $debug));
+                return $this->getImageFileName($basename,array('imgwidth'=>$width,'imgheight'=>$height,'imgcrop'=>$crop,'debug' => $debug,'format' => $format));
             } else {
                 return $defaultimage;
             }
@@ -927,7 +984,6 @@ class ArticleController {
 
             case 'permaname':
                 $onclick->action = 'open-action';
-                $onclick->action_config = $this->getActionidByPermaname($param);
                 break;
 
             case 'push-permission':
@@ -955,6 +1011,23 @@ class ArticleController {
                 $onclick->action = 'open-url';
                 $onclick->action_config = $param;
                 break;
+
+            case 'purchase':
+
+                $onclick->action = 'inapp-purchase';
+                $onclick->id = 'inapp-product-id';
+                $onclick->producttype_android = 'inapp';
+                $onclick->producttype_ios = 'inapp';
+
+                if(isset($param['product_id_ios'])) {
+                    $onclick->product_id_ios = $param['product_id_ios'];
+                }
+
+                if(isset($param['product_id_android'])) {
+                    $onclick->product_id_android = $param['product_id_android'];
+                }
+
+                break;
             
             /* this is a special case where we can save also id's or some other info with the request */
             case 'submit':
@@ -981,6 +1054,10 @@ class ArticleController {
 
         if($back){
             $onclick->back_button = 1;
+        }
+
+        if(isset($param['sync_open'])){
+            $onclick->sync_open = 1;
         }
 
         return $onclick;
@@ -1031,9 +1108,9 @@ class ArticleController {
 
     public function getFullPageLoader($color='#000000',$text=false){
         $color = $color ? $color : '#000000';
-        $text = $text ? $text : '{#loading#}';
+        $text = $text ? $text : '';
         $col[] = $this->getSpacer('80');
-        $col[] = $this->getLoader('',array('color' => $color));
+        // $col[] = $this->getImage('uikit_balls_loader.gif',['width' => '180']);
         $col[] = $this->getText($text,array('style' => 'loader-text'));
         return $this->getColumn($col,array('text-align' => 'center','width' => '100%','align' => 'center'));
     }
@@ -1120,9 +1197,6 @@ class ArticleController {
         // }
 
         Yii::import('application.modules.aelogic.packages.actionMobilematching.models.*');
-
-        if($debug){
-        }
 
         $this->mobilematchingobj = new MobilematchingModel();
         $this->mobilematchingobj->playid_thisuser = $this->playid;
@@ -1292,14 +1366,19 @@ class ArticleController {
         return $this->returnComponent('formkitcheckbox','field','',$params);
     }
 
-    public function formkitField($variable,$title,$hint,$type=false,$error=false,$value=false,$popup_action_id=false){
+    public function formkitField($variable,$title,$hint,$type=false,$error=false,$value=false,$popup_action_id=false,$onclick=false){
         $params['title'] = $title;
         $params['hint'] = $hint;
         $params['variable'] = $variable;
         $params['type'] = $type;
         $params['error'] = $error;
         $params['popup_action_id'] = $popup_action_id;
-        return $this->returnComponent('formkitfield','field',$value,$params);
+
+        if ( $onclick ) {
+	        $params['onclick'] = $onclick;
+        }
+
+	    return $this->returnComponent('formkitfield','field',$value,$params);
     }
 
     public function formkitTextarea($variable,$title,$hint,$type=false,$error=false){
@@ -1426,6 +1505,10 @@ class ArticleController {
 
     public function getFieldtext($content,$params=array()){
         return $this->returnComponent('fieldtext','field',$content,$params);
+    }
+
+    public function getCalendar($content, $params=array()){
+        return $this->returnComponent('calendar','field',$content,$params);
     }
 
 
@@ -1580,7 +1663,8 @@ class ArticleController {
         $textfieldparams['hint'] = $fieldname;
         $textfieldparams['id'] = $id;
         $textfieldparams['variable'] = $id;
-
+        $textfieldparams['input_type'] = $type;
+        
         if($textfield_inputtype){
             $textfieldparams['input_type'] = $textfield_inputtype;
         }
@@ -1758,7 +1842,11 @@ class ArticleController {
     }
 
     public function getHairline($color, $params=array()){
-        $params['height'] = '1';
+
+        if ( !isset($params['height']) ) {
+            $params['height'] = '1';
+        }
+
         $params['width'] = '100%';
         $params['background-color'] = $color;
         return $this->returnComponent('text','field','',$params);
@@ -1772,10 +1860,12 @@ class ArticleController {
     public function getFacebookSignInButton($id,$submitmenu=false){
         $styles = array( 'style' => 'fbbutton_text_style' );
 
+        $perms = ['email','public_profile'];
+
         if($submitmenu){
-            return $this->getButtonWithIcon('f-icon.png', $id, '{#sign_in_with_facebook#}', array('style' => 'facebook_button_style'), $styles);
+            return $this->getButtonWithIcon('f-icon.png', $id, '{#sign_in_with_facebook#}', array('style' => 'facebook_button_style','read_permissions' => $perms), $styles);
         } else {
-            return $this->getButtonWithIcon('f-icon.png', $id, '{#sign_in_with_facebook#}', array('style' => 'facebook_button_style','action' => 'fb-login','sync_open' => true), $styles);
+            return $this->getButtonWithIcon('f-icon.png', $id, '{#sign_in_with_facebook#}', array('style' => 'facebook_button_style','action' => 'fb-login','sync_open' => true,'read_permissions' => $perms), $styles);
         }
     }
 
@@ -1788,7 +1878,6 @@ class ArticleController {
             return $this->getButtonWithIcon('g-icon.png', $id, '{#sign_in_with_google#}', array('style' => 'google_button_style','action' => 'google-login','sync_open' => true), $styles);
         }
     }
-
 
     public function getInstagramSignInButton($actionid){
 
@@ -1815,7 +1904,6 @@ class ArticleController {
         return $this->getButtonWithIcon('twitter-icon.png', 'insta', '{#sign_in_with_twitter#}', array('style' => 'twitter_button_style'),array('style' => 'fbbutton_text_style'),$onclick2);
     }
 
-
     public function getOauthSignIn(){
 
         // myapp://open?action_id=12329&menuid=menuid
@@ -1832,26 +1920,30 @@ class ArticleController {
         return $onclick2;
     }
 
-
-
-
     public function getButtonWithIcon($image,$id,$text,$buttonparams=array(),$textparams=array(),$onclick=false){
         $params['priority'] = 1;
-        $params['height'] = '28';
+        $params['width'] = '28';
         $params['vertical-align'] = 'middle';
         $params['image'] = $this->getImageFileName($image,$params);
+
 
         if($onclick) {
             $buttonparams['onclick'] = $onclick;
         } else {
             $buttonparams['onclick'] = new StdClass();
             $buttonparams['onclick']->id = $id;
+
+            if(isset($buttonparams['read_permissions'])){
+                $buttonparams['onclick']->read_permissions = $buttonparams['read_permissions'];
+                unset ($buttonparams['read_permissions']);
+            }
+
             $buttonparams['onclick']->action = $this->addParam('action',$buttonparams,'submit-form-content');
             $buttonparams['onclick']->config = $this->addParam('config',$buttonparams,'');
             $buttonparams['onclick']->sync_open = $this->addParam('sync_open',$buttonparams,'');
+
         }
 
-        $img = $this->getImage($image,$params);
         if(!isset($buttonparams['style']) AND !isset($buttonparams['background-color'])){
             $buttonparams['background-color'] = $this->color_topbar;
             $buttonparams['text-align'] = 'center';
@@ -1864,12 +1956,10 @@ class ArticleController {
             $textparams['color'] = $this->colors['top_bar_text_color'];
         }
 
-
         //$column[] = $this->getColumn(array($img),array('vertical-align' => 'middle','width' => '30'));
-        $column[] = $img;
+        $column[] = $this->getImage($image,$params);
         $column[] = $this->getVerticalSpacer('10');
         $column[] = $this->getText($text,$textparams);
-
 
         if($params['image']){
             return $this->getRow($column,$buttonparams);
@@ -1877,7 +1967,6 @@ class ArticleController {
             return $this->getError('Image not found');
         }
     }
-
 
     public function getImagebutton($image,$id,$fallbackimage=false,$params=array()){
 
@@ -1940,6 +2029,14 @@ class ArticleController {
 
     public function moduleChat($params){
         return $this->returnComponent('chat','module',false,$params);
+    }
+
+    public function getChatMessage($params){
+        return $this->returnComponent('chatMessage','module', false, $params);
+    }
+
+    public function getFooter($params){
+        return $this->returnComponent('chatFooter','module', false, $params);
     }
     
     public function moduleGroupChatList($params){
@@ -2152,10 +2249,6 @@ class ArticleController {
         return $output;
     }
 
-
-
-
-
     /* depreceated */
     public function getUserVariables($userid){
         $cache = Appcaching::getUserCache($userid,$this->gid,'variables');
@@ -2168,6 +2261,103 @@ class ArticleController {
         Appcaching::setUserCache($userid,$this->gid,'variables',$vars);
         
         return $vars;
+    }
+
+    /* Custom re-usable functionality */
+    public function registerProductDiv( $div_id, $icon, $title, $text, $product_id_ios, $product_id_android, $return_output = false ) {
+
+        $close_click = new stdClass();
+        $close_click->action = 'hide-div';
+
+        $output = $this->getColumn(array(
+            $this->getImage('icon-close.png', array(
+                'width' => '30',
+                'height' => '30',
+                'floating' => '1',
+                'float' => 'right',
+                'margin' => '10 10 0 0',
+                'onclick' => $close_click,
+            )),
+            $this->getRow(array(
+                $this->getImage($icon, array(
+                    'width' => '130',
+                    'margin' => '25 0 0 0',
+                )),
+            ), array(
+                'text-align' => 'center',
+                'margin' => '10 20 15 20',
+            )),
+            $this->getRow(array(
+                $this->getText($title, array(
+                    'font-size' => '24',
+                    'text-align' => 'center',
+                    'font-android' => 'Roboto-bold',
+                )),
+            ), array(
+                'width' => 'auto',
+                'text-align' => 'center',
+                'margin' => '0 30 15 30',
+            )),
+            $this->getRow(array(
+                $this->getText($text, array(
+                    'text-align' => 'center',
+                )),
+            ), array(
+                'width' => 'auto',
+                'margin' => '0 30 25 30',
+            )),
+            $this->getRow(array(
+                $this->getText('{#buy_now#}', array(
+                    'width' => '100%',
+                    'background-color' => '#fec02e',
+                    'color' => '#1d0701',
+                    'padding' => '0 5 0 5',
+                    'height' => '45',
+                    'vertical-align' => 'middle',
+                    'text-align' => 'center',
+                )),
+            ), array(
+                'width' => '100%',
+                'text-align' => 'center',
+                'onclick' => $this->getOnclick('purchase', false, array(
+                    'product_id_ios' => $product_id_ios,
+                    'product_id_android' => $product_id_android,
+                )),
+            )),
+        ), array(
+            'width' => '100%',
+            'background-color' => '#FFFFFF',
+            'border-radius' => '8',
+            'shadow-color' => '#33000000',
+            'shadow-radius' => 3,
+            'shadow-offset' => '0 1',
+        ));
+
+        if ( $return_output ) {
+            return array(
+                $div_id => $output,
+            );
+        }
+
+        $this->data->divs[$div_id] = $output;
+
+        return true;
+    }
+
+    public function showProductDiv( $div_id ) {
+
+        $onclick = new stdClass();
+        $onclick->action = 'show-div';
+        $onclick->div_id = $div_id;
+        $onclick->tap_to_close = 1;
+        $onclick->transition = 'fade';
+        $onclick->background = 'blur';
+        $onclick->layout = new stdClass();
+        $onclick->layout->top = ($this->screen_height / 2) - 175;
+        $onclick->layout->right = 25;
+        $onclick->layout->left = 25;
+
+        return $onclick;
     }
 
 }
