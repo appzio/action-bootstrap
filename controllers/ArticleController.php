@@ -361,6 +361,7 @@ class ArticleController {
                 $new->game_id = $this->gid;
                 $new->name = $variable;
                 $new->insert();
+                Appcaching::removeGlobalCache('app-vars'.$gid);
                 $varid = $new->getPrimaryKey();
             }
         } else {
